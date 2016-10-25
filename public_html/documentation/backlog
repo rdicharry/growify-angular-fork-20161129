@@ -1,1 +1,22 @@
+ERD
 
+Classes
+  -how the classes will relate with each other
+  -what each class will do, what information will it contain and why will it be efficient to have this class
+      -methods this class will have
+        -what they will do 
+      -are they public/private/protected? Static/nonstatic? Will they override Magic methods
+
+-Data Design
+  -What values will we need to store (Entities(Classes), Behaviors(methods)
+    -What will our Primary Key be for all of our Entities? 
+    -What type of values will we need to store and how can we express this with mySQL to make sure we are efficient as possible
+    -What will our Foreign Keys be?
+    -Relational Tables?
+
+Brainstorming Methods we will need in all these classes
+
+Brainstorm Table Statements
+
+(NOT IN THE NEAR NEAR FUTURE (YET)): Brainstorm Front End 
+  -What information we will require from the user
