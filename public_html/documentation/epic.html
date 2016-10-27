@@ -59,6 +59,47 @@
       </section>
       <section>
          <h1>Conceptual Model</h1>
+         <h2>Profile</h2>
+         <ul>
+            <li>profileId - primary key</li>
+            <li>profileUserName</li>
+            <li>profileEmail</li>
+            <li>profileZipCode</li>
+            <li>profilePlantListId - foreign key</li>
+         </ul>
+         <h2>Plant</h2>
+         <ul>
+            <li>plantId - primary key</li>
+            <li>plantName</li>
+
+            <li>plantDaysToHarvest</li>
+            <li>plantMinTemp</li>
+            <li>plantMaxTemp</li>
+         </ul>
+         <h2>PlantList</h2>
+         <ul>
+            <li>plantListId - not unique</li>
+            <li>plantListUserId - foreign key</li>
+            <li>plantListPlantId - foreign key</li>
+            <li>plantListDatePlanted</li>
+         </ul>
+         <h2>PlantListList</h2> need to work out some issues here with plant list and plant list list.
+         <ul>
+            <li>plantListListId - foreign key</li>
+            <li>plantListUserId - foreign key</li>
+         </ul>
+         <h2>FirstPlantDate</h2>
+         <ul>
+            <li>firstPlantDatePlantId - foreign key</li>
+            <li>firstPlantDateClimateZone</li>
+            <li>firstPlantDateDate</li>
+            <li>firstPlantDateId - primary key</li>
+         </ul>
+         <h2>CompanionPlants</h2> is there a better way to associate two plants (unordered pairs)?
+         <ul>
+            <li>CompanionPlantsPlant1</li>
+            <li>CompanionPlantsPlant2</li>
+         </ul>
       </section>
       <section>
          <h1>Entity Relationship Diagram</h1>
