@@ -128,7 +128,7 @@
             <li>profileUserName</li>
             <li>profileEmail</li>
             <li>profileZipCode</li>
-            <li>profilePlantListId - foreign key</li>
+           <!-- <li>profilePlantListId - foreign key</li>-->
          </ul>
          <h2>Plant</h2>
          <ul>
@@ -139,18 +139,21 @@
             <li>plantMinTemp</li>
             <li>plantMaxTemp</li>
          </ul>
-         <h2>PlantList</h2>
+         <h2>Garden</h2>
          <ul>
-            <li>plantListId - not unique</li>
-            <li>plantListUserId - foreign key</li>
-            <li>plantListPlantId - foreign key</li>
-            <li>plantListDatePlanted</li>
+            <li>gardenId - primary key</li>
+            <li>gardenUserId - foreign key</li>
+
+            <li>gardenDatePlanted</li>
+            <li>gardenPlantId</li>
          </ul>
-         <h2>PlantListList</h2> need to work out some issues here with plant list and plant list list.
-         <ul>
-            <li>plantListListId - foreign key</li>
-            <li>plantListUserId - foreign key</li>
-         </ul>
+         <!--<h2>GardenList</h2> need to work out some issues here with plant list and plant list list.-->
+         <!--<ul>
+            <li>gardenListId - foreign key</li>
+            <!--<li>plantListUserId - foreign key</li>
+            <li>gardenPlantItem</li>
+            <li>gardenPlantDatePlanted</li>
+         </ul>-->
          <h2>FirstPlantDate</h2>
          <ul>
             <li>firstPlantDatePlantId - foreign key</li>
