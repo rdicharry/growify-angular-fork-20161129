@@ -154,13 +154,24 @@
             <li>gardenPlantItem</li>
             <li>gardenPlantDatePlanted</li>
          </ul>-->
-         <h2>FirstPlantDate</h2>
+	      
+         <h2>PlantDate (possibly remove)</h2> 
          <ul>
-            <li>firstPlantDatePlantId - foreign key</li>
-            <li>firstPlantDateClimateZone</li>
-            <li>firstPlantDateDate</li>
-            <li>firstPlantDateId - primary key</li>
+            <li>plantDatePlantId - foreign key</li>
+            <li>plantDateClimateZone</li>
+            <li>plantDateDay</li>
+            <li>plantDateId - primary key</li>
          </ul>
+	      <h2>Weather</h2>
+	  <ul>
+	    <li>weatherSummary</li> 
+            <li>weatherPrecipitation</li>
+	    <li>weatherTemperatureMin</li>
+            <li>weatherTemperatureMax</li>
+	    <li>weatherHumidity</li>
+	    <li>weatherWindSpeed</li>
+	    <li>weatherCloudCover</li>
+	 </ul>
          <h2>CompanionPlants</h2> is there a better way to associate two plants (unordered pairs)?
          <ul>
             <li>CompanionPlantsPlant1</li>
