@@ -128,54 +128,51 @@
             <li>profileUserName</li>
             <li>profileEmail</li>
             <li>profileZipCode</li>
-           <!-- <li>profilePlantListId - foreign key</li>-->
          </ul>
          <h2>Plant</h2>
          <ul>
-            <li>plantId - primary key</li>
+            <li>plantId primary key</li>
             <li>plantName</li>
-
             <li>plantDaysToHarvest</li>
-            <li>plantMinTemp</li>
-            <li>plantMaxTemp</li>
+            <li>plantMinTemperature</li>
+            <li>plantMaxTemperature</li>
+            <li>plantMinimumHumidity</li>
+            <li>plantMaximumHumidity</li>
+            <li>plantMinimumWind</li>
+            <li>plantMaximumWind</li>
+            <li>plantMinimumSunshine</li>
+            <li>plantMaximumSunshine</li>
          </ul>
          <h2>Garden</h2>
          <ul>
             <li>gardenId - primary key</li>
-            <li>gardenUserId - foreign key</li>
-
+            <li>gardenProfileId - foreign key to profileId</li>
             <li>gardenDatePlanted</li>
-            <li>gardenPlantId</li>
+            <li>gardenPlantId - foreign key to plantId</li>
          </ul>
-         <!--<h2>GardenList</h2> need to work out some issues here with plant list and plant list list.-->
-         <!--<ul>
-            <li>gardenListId - foreign key</li>
-            <!--<li>plantListUserId - foreign key</li>
-            <li>gardenPlantItem</li>
-            <li>gardenPlantDatePlanted</li>
-         </ul>-->
-	      
-         <h2>PlantDate (possibly remove)</h2> 
+
+         <h2>plantDate</h2>
          <ul>
-            <li>plantDatePlantId - foreign key</li>
+            <li>plantDatePlantId - foreign key to plant Id</li>
             <li>plantDateClimateZone</li>
-            <li>plantDateDay</li>
+            <li>plantDateMonth - </li>
             <li>plantDateId - primary key</li>
          </ul>
 	      <h2>Weather</h2>
 	  <ul>
-	    <li>weatherSummary</li> 
-            <li>weatherPrecipitation</li>
-	    <li>weatherTemperatureMin</li>
-            <li>weatherTemperatureMax</li>
-	    <li>weatherHumidity</li>
-	    <li>weatherWindSpeed</li>
-	    <li>weatherCloudCover</li>
+        <li>weatherId primary key</li>
+	     <li>weatherSummary </li>
+        <li>weatherPrecipitation</li>
+        <li>weatherTemperatureMin</li>
+        <li>weatherTemperatureMax</li>
+	     <li>weatherHumidity</li>
+        <li>weatherWindSpeed</li>
+        <li>weatherCloudCover</li>
 	 </ul>
-         <h2>CompanionPlants</h2> is there a better way to associate two plants (unordered pairs)?
+         <h2>CompanionPlantsWeakIdentity</h2>
          <ul>
-            <li>CompanionPlantsPlant1</li>
-            <li>CompanionPlantsPlant2</li>
+            <li>companionPlantId</li>
+            <li>companionPlantsId</li>
          </ul>
       </section>
       <section>
