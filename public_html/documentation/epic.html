@@ -104,7 +104,7 @@
                   </ul>
                <li><strong>Use Case for Mildred</strong>
                <ol>
-		<li>Mildred needs an application that lets her know how much water to feed her plants, how much space each garden plant needs, and how much sun each plant needs. Along with this she needs to know what time of year she should grow her plants.</li>
+		<li>Mildred needs an application that lets her know how much water to feed her plants, how much space each garden plant needs, and how much sun each plant needs. Along with this she needs to know what time of year she should grow her plants. She would like to use something with a user interface with as little clicks as possible, something that is very easy to use for those not familiar with using hard-to-use features. She wants a very minimalist GUI</li>
             </ul>
          <h2>User Stories:</h2>
          <ul>
@@ -129,27 +129,21 @@
          <ul>
             <li>plantId - primary key</li>
             <li>plantName</li>
-	    <li>f</li>
+	    <li>plantSpread</li>
+	    <li>plantHeight</li>
             <li>plantDaysToHarvest</li>
             <li>plantMinTemp</li>
             <li>plantMaxTemp</li>
+	    <li>plantWaterRequirement</li>
+	    <li>plantSoilMoisture</li>
          </ul>
          <h2>Garden</h2>
          <ul>
             <li>gardenId - primary key</li>
             <li>gardenUserId - foreign key</li>
-	    <li></li>
             <li>gardenDatePlanted</li>
             <li>gardenPlantId</li>
          </ul>
-         <!--<h2>GardenList</h2> need to work out some issues here with plant list and plant list list.-->
-         <!--<ul>
-            <li>gardenListId - foreign key</li>
-            <!--<li>plantListUserId - foreign key</li>
-            <li>gardenPlantItem</li>
-            <li>gardenPlantDatePlanted</li>
-         </ul>-->
-	      
          <h2>PlantDate (possibly remove)</h2> 
          <ul>
             <li>plantDatePlantId - foreign key</li>
