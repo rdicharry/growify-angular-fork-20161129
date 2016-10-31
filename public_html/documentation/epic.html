@@ -53,8 +53,7 @@
             <li>As a gardener, I want to find plants that grow well together.</li>
             <li>As a gardener, I want to find out when to harvest.</li>
             <li>As a gardener, I want to discover when to start planting.</li>
-            <li>As a gardener, I want to access the Growify app on my phone.</li>
-            <li>As a busy gardener, I want an app that is easy and fast to use.</li>
+
          </ul>
 			<div>
 				<h2>Persona 2</h2>
@@ -111,7 +110,6 @@
             <li>As a gardener, I want to create and edit a plant list.</li>
             <li>As a gardener, I want to know how rain and sunlight affect my garden.</li>
             <li>As a gardener, I want to be able to view weather information.</li>
-            <li>As someone who is less tech-savvy, I want an app that is easy to use.</li>
          </ul>
       </section>
 
@@ -123,12 +121,16 @@
             <li>profileUserName</li>
             <li>profileEmail</li>
             <li>profileZipCode</li>
+            <li>profileHash</li>
+            <li>profileSalt</li>
+            <li>profileActivation</li>
            <!-- <li>profilePlantListId - foreign key</li>-->
          </ul>
          <h2>Plant</h2>
          <ul>
             <li>plantId - primary key</li>
             <li>plantName</li>
+            <li>plantDescription</li>
 	    <li>plantSpread</li>
 	    <li>plantHeight</li>
             <li>plantDaysToHarvest</li>
@@ -142,15 +144,9 @@
             <li>gardenId - primary key</li>
             <li>gardenUserId - foreign key</li>
             <li>gardenDatePlanted</li>
-            <li>gardenPlantId</li>
+            <li>gardenPlantId - foreign key</li>
          </ul>
-         <h2>PlantDate (possibly remove)</h2> 
-         <ul>
-            <li>plantDatePlantId - foreign key</li>
-            <li>plantDateClimateZone</li>
-            <li>plantDateDay</li>
-            <li>plantDateId - primary key</li>
-         </ul>
+
 	      <h2>Weather</h2>
 	  <ul>
 	    <li>weatherSummary</li> 
@@ -160,11 +156,16 @@
 	    <li>weatherWindSpeed</li>
 	    <li>weatherCloudCover</li>
 	 </ul>
-         <h2>CompanionPlants</h2> is there a better way to associate two plants (unordered pairs)?
+         <h2>CompanionPlants</h2>
          <ul>
-            <li>CompanionPlantsPlant1</li>
-            <li>CompanionPlantsPlant2</li>
+            <li>CompanionPlantsPlant1id - foreign key</li>
+            <li>CompanionPlantsPlant2id - foreign key</li>
          </ul>
+			<h2>ZipCode</h2>
+			<ul>
+				<li>zipCodeCode - primary key</li>
+				<li>zipCodeZone</li>
+			</ul>
       </section>
       <section>
          <h1>Entity Relationship Diagram</h1>
