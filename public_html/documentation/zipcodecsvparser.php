@@ -12,10 +12,9 @@ $csv = str_getcsv($file);
 for($x = 0; $x < (count($csv) - 3); $x += 3){
 	if(substr($csv[$x],0,2) == "NM"){
 		echo('Zip Code: ');
-		print_r($csv[$x] . "<br />");
-		print_r("City: ". $csv[$x+1]."<br/>");
-		print_r("Additional Areas Covered: " . $csv[$x+2] . "<br/>");
+		print_r($csv[$x-3] . "<br />");
+		print_r("City: ". $csv[$x-2]."<br/>");
+		print_r("Additional Areas Covered: " . $csv[$x-1] . "<br/>");
 	}
 }
 
-?>
