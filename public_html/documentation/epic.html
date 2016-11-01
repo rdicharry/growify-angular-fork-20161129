@@ -127,19 +127,38 @@
 				<li>plantArea3BeginDate</li>
 				<li>plantArea3EndDate</li>
          </ul>
-         <h2>Garden</h2>
-         <ul>
-            <li>gardenId - primary key</li>
-            <li>gardenUserId - foreign key</li>
-            <li>gardenDatePlanted</li>
-            <li>gardenPlantId - foreign key</li>
-         </ul>
 
-         <h2>CompanionPlants</h2>
-         <ul>
-            <li>CompanionPlantsPlant1id - foreign key</li>
-            <li>CompanionPlantsPlant2id - foreign key</li>
-         </ul>
+
+
+                  <h2>Garden</h2>
+         			<ul>
+
+                     <li>gardenId - primary key</li>
+         				<li>gardenUserId - foreign key</li>
+                     <li>gardenUserId - foreign key</li>
+         				<li>gardenDatePlanted</li>
+                     <li>gardenDatePlanted</li>
+         				<li>gardenPlantId - foreign key</li>
+                     <li>gardenPlantId - foreign key</li>
+
+                  </ul>
+
+
+         			<h2>CompanionPlant</h2>
+
+         			<ul>
+
+         				<li>companionPlant1Id - foreign key</li>
+
+         				<li>companionPlant2Id - foreign key</li>
+
+
+                  </ul>
+         			<h2>CombativePlant</h2>
+         			<ul>
+         				<li>combativePlant1Id - foreign key</li>
+         				<li>combativePlant2Id - foreign key</li>
+         			</ul>
 			<h2>ZipCode</h2>
 			<ul>
 				<li>zipCodeCode - primary key</li>
