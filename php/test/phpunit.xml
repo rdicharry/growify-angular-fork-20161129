@@ -1,11 +1,18 @@
 <phpunit>
 	<testsuites>
 		<testsuite name="Growify Unit Tests">
-			<file>PlantTest</file>
-			<file>ProfileTest</file>
-			<file>CompanionPlantTest</file>
-			<file>CombativePlantTest</file>
-			<file>garden</file>
+			<file>PlantTest.php</file>
+			<file>ProfileTest.php</file>
+			<file>CompanionPlantTest.php</file>
+			<file>CombativePlantTest.php</file>
+			<file>GardenTest.php</file>
+			<file>PlantAreaTest.php</file>
+			<file>ZipCodeTest.php</file>
 		</testsuite>
 	</testsuites>
+	<filter>
+		<whitelist processUncoveredFilesFromWhiteList="true">
+			<directory suffix=".php">../classes</directory>
+		</whitelist>
+	</filter>
 </phpunit>
