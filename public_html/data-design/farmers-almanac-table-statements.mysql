@@ -68,7 +68,7 @@ CREATE TABLE plantArea(
 	plantAreaStartDate DATE NOT NULL,
 	plantAreaEndDate DATE NOT NULL,
 	plantAreaPlantId SMALLINT UNSIGNED,
-	plantAreaNumber TINYINT UNSIGNED,
+	plantAreaNumber VARCHAR(3),
 	-- index and create foreign key
 	INDEX(plantAreaPlantId),
 	FOREIGN KEY(plantAreaPlantId) REFERENCES plant(plantId)
@@ -76,7 +76,7 @@ CREATE TABLE plantArea(
 
 CREATE TABLE zipCode(
 	zipCodeCode VARCHAR(5)PRIMARY KEY NOT NULL, -- made a varchar for easier validation but can change to unsigned int
-	zipCodeZone TINYINT UNSIGNED NOT NULL,
+	zipCodeZone VARCHAR(3) NOT NULL,
 	-- foreign key
 	INDEX(zipCodeZone),
 	FOREIGN KEY(zipCodeZone) REFERENCES plantArea(plantAreaNumber) -- this may be incorrect
