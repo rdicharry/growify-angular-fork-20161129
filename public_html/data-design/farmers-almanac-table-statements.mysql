@@ -9,14 +9,14 @@ DROP TABLE IF EXISTS plantarea;
 
 CREATE TABLE plant(
 
-	classifications VARCHAR(6) NOT NULL ,
+	plantSoilMoisture VARCHAR(6) NOT NULL ,
 	plantWaterRequirement VARCHAR(3) NOT NULL,
 	plantId SMALLINT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	plantDescription VARCHAR(512),
 	plantSpread FLOAT UNSIGNED NOT NULL,
 	plantHeight FLOAT UNSIGNED NOT NULL,
 	-- maybe plantGrowthSpeed(1) NOT NULL
-	daysToHarvest SMALLINT UNSIGNED NOT NULL,
+	plantDaysToHarvest SMALLINT UNSIGNED NOT NULL,
 	plantVariety VARCHAR(9) NOT NULL,
 	plantName VARCHAR(26) UNIQUE NOT NULL,
 	plantMaxTemp TINYINT UNSIGNED NOT NULL,
