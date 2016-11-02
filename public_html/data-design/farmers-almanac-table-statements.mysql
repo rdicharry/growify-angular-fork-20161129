@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS plantArea;
 
 CREATE TABLE plant(
 
-	plantWaterRequirement VARCHAR(3) NOT NULL,
+	plantSoilMoisture VARCHAR(3) NOT NULL,
 	plantId SMALLINT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	plantDescription VARCHAR(512),
 	plantSpread FLOAT UNSIGNED NOT NULL,
