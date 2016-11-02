@@ -10,12 +10,10 @@ DROP TABLE IF EXISTS plantarea;
 CREATE TABLE plant(
 
 	plantSoilMoisture VARCHAR(6) NOT NULL ,
-	plantWaterRequirement VARCHAR(3) NOT NULL,
 	plantId SMALLINT UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	plantDescription VARCHAR(512),
 	plantSpread FLOAT UNSIGNED NOT NULL,
 	plantHeight FLOAT UNSIGNED NOT NULL,
-	-- maybe plantGrowthSpeed(1) NOT NULL - no!
 	plantDaysToHarvest SMALLINT UNSIGNED NOT NULL,
 	plantVariety VARCHAR(9) NOT NULL,
 	plantName VARCHAR(26) UNIQUE NOT NULL,
@@ -80,5 +78,5 @@ CREATE TABLE zipcode(
 	zipCodeZone TINYINT UNSIGNED NOT NULL,
 	-- foreign key
 	INDEX(zipCodeZone),
-	FOREIGN KEY(zipCodeZone) REFERENCES plantarea(plantAreaNumber) -- this may be incorrect
+	FOREIGN KEY(zipCodeCode) REFERENCES profile(profileZipCode)
 )
