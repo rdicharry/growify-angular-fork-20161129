@@ -1,0 +1,11 @@
+<phpunit>
+	<testsuites>
+		<testsuite name="Growify Unit Tests">
+			<file>PlantTest</file>
+			<file>ProfileTest</file>
+			<file>CompanionPlantTest</file>
+			<file>CombativePlantTest</file>
+			<file>garden</file>
+		</testsuite>
+	</testsuites>
+</phpunit>
