@@ -1,0 +1,78 @@
+CREATE TABLE STATEMENT NOTES:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::;
+
+----------------------------------PLANT----------------------------------------
+plantSoilMoisture
+	Classifications types for this: D , M , We, Wa, and can include all 6 chars because ive seen that contain both D and M and haven't seen any that are DMWeWa but there may be a plant with those characterstics that can survive. Also wasn't described as NOT NULL in table
+	varchar(6)
+
+plantWaterRequirement -
+	varchar(3) NOT NULL PROBLEM: NO DATA IN DATABASE BUT SOIL MOISTURE IS PRETTY MUCH SAME THING. CAN PROBABLY CORRELATE
+	IF WE FIND NUMERIC DATA
+	float NOT NULL
+
+plantId-
+	PRIMARY KEY AUTO-INCREMENT NOT NULL SMALLINT UNSIGNED
+
+plantDescription- varchar(512)
+	-optional so there is no NOT NULL
+
+plantSpread- float NOT NULL UNSIGNED
+	measured in feet
+plantGrowthSpeed- varchar(1) NOT NULL (SOLID INFO IF DAYS TO HARVEST ISNT 'FINDABLE'
+ -Days to Harvest is hard to tell but we can find another source as well.
+ -Can be S,M,or F for slow, moderate and fast.
+ -int if we can find a solid source
+ daysToHarvest- SMALLINT NOT NULL
+plantHeight- FLOAT NOT NULL UNSIGNED
+	measured in feet
+plantVariety- varchar(9) NOT NULL
+	Longest variety is "vegetable" is 9 characters long
+plantName- UNIQUE varchar(26) NOT NULL
+	Longest generic plant name is Brassosophrolaeliocattleya (26 characters), it is an orchid.
+plantMaxTemp- tinyint unsigned (up to 255) NOT NULL
+	0 degrees should be the max temp for some kind of arctic plant, highest is defintely less than 255
+plantMinTemp- tinyint signed NOT NULL
+	-127 degrees should be the min temp for some kind of arctic plant
+
+-----------------------------------------------------------PROFILE
+
+profileId smallint unsigned PRIMARY KEY AUTO INCREMENT
+profileZipCode varchar(5) NOT NULL FOREIGN KEY
+	-optional unsigned mediumint, figured this would be easier to work with because we can validate easier by checking first two numbers
+profileHash NOT NULL varchar(128) OR char(512)
+- looked up the longest version of SHA512 which i saw from the security slides, it looks like what we will be using.
+-http://stackoverflow.com/questions/18236106/what-is-the-length-of-a-hashed-string-with-sha512
+profileActivation- BIT(1)
+	boolean isnt a datatype in mysql so a bit which can only be 0 or 1 should suffice
+profileSalt- varchar(16) NOT NULL     maybe... UNIQUE
+-haven't learned too much about this however stack overflow says standard salt is either 64bits or 16 characters. Having a Unique salt per user seems to help
+profileUserName- varchar(16) UNIQUE NOT NULL
+- seems like an appropriate length
+profileEmail- UNIQUE varchar(160) NOT NULL
+	-max email length is something like 254 characters long but i thing 160 is definitely appropriate
+
+
+-----------------------------------------------------------COMBATIVE PLANT
+combativePlant1 SMALLINT UNSIGNED NOT NULL FOREIGN KEY
+combativePlant2 SMALLINT UNSIGNED NOT NULL FOREIGN KEY
+------------------------------------------------------------COMPANION PLANY
+companionPlant1 SMALLINT UNSIGNED NOT NULL FOREIGN KEY
+companionPlant2 SMALLINT UNSIGNED NOT NULL FOREIGN KEY
+
+------------------------------------------------------------GARDEN
+gardenProfileId smallint UNSIGNED FOREIGN KEY
+-changed name because it references profile table, not user
+gardenPlantId smallint UNSIGNED FOREIGN KEY
+gardenDatePlanted DATE
+-we could do that int idea for easier manipulation if you all want
+------------------------------------------------------------- PLANTAREA
+plantAreaId- SMALLINT UNSIGNED PRIMARY KEY AUTO INCREMENT
+plantAreaStartDate DATE NOT NULL
+plantAreaEndDate DATE NOT NULL
+plantAreaPlantId SMALLINT UNSIGNED FOREIGN KEY
+plantAreaNumber -TINYINT UNSIGNED
+
+------------------------------------------------------------- ZIPCODE
+zipCodeCode- VARCHAR(5) PRIMARY KEY NOT NULL
+zipCodeZone- TINYINT UNSIGNED FOREIGN KEY NOT NULL
+-made foreign key because the way im thinking this will work is that it will be referenced by plantarea when intialized
