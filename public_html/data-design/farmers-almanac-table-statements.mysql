@@ -14,7 +14,7 @@ CREATE TABLE plant(
 	plantDescription VARCHAR(512),
 	plantSpread FLOAT UNSIGNED NOT NULL,
 	plantHeight FLOAT UNSIGNED NOT NULL,
-	-- maybe plantGrowthSpeed(1) NOT NULL - no!
+	plantType VARCHAR(9) NOT NULL ,
 	plantDaysToHarvest SMALLINT UNSIGNED NOT NULL,
 	plantVariety VARCHAR(64) NOT NULL,
 	plantName VARCHAR(26) UNIQUE NOT NULL,
