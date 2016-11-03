@@ -13,14 +13,33 @@ class ZipCode{
 	private $zipCodeCode;
 
 	/**
-	 * @var int the zipCodeArea USDA GrowZone that corresponds to a United States Postal ZipCode
+	 * @var string the zipCodeArea USDA GrowZone that corresponds to a United States Postal ZipCode
 	 */
 	private $zipCodeArea;
 
-
+	/**
+	 * ZipCode constructor.
+	 *
+	 * @param $zipCodeCode string a five character string that is used as the primary key in the zipCode table, represents a new mexico zipcode.
+	 * @param $zipCodeArea string a 2 character string that is used as the zipCodeArea in the zipCode Table, represents a USDA grow zone in New Mexico
+	 * @throws TypeError if a type other than string was passed for either $zipCodeCode or $zipCodeArea.
+	 * @throws OutOfBoundsException if a string greater or less than 5 characters was passed through $zipCodeCode or greater than less than 2 was passed through $zipCodeArea
+	 * @throws InvalidArgumentException if a string passed through zipCodeCode or zipCodeArea has failed to validate (not legitimate grow area or zip code)
+	 * @throws Exception if an otherwise unspecified error was thrown.
+	 */
 	public function __construct($zipCodeCode, $zipCodeArea) {
-		$this->setZipCodeCode($zipCodeCode);
-		$this->setZipCodeArea($zipCodeArea);
+		try {
+			$this->setZipCodeCode($zipCodeCode);
+			$this->setZipCodeArea($zipCodeArea);
+		}catch(TypeError $typeError){
+			throw(new \TypeError($typeError->getMessage(),0,$typeError));
+		}catch(OutOfBoundsException $outOfBoundsException){
+			throw(new \TypeError($outOfBoundsException->getMessage(),0,$outOfBoundsException));
+		}catch(InvalidArgumentException $invalidArgumentException){
+			throw(new \InvalidArgumentException($invalidArgumentException->getMessage(),0,$invalidArgumentException));
+		}catch(Exception $exception){
+			throw(new \Exception($exception->getMessage(),0,$exception));
+		}
 	}
 
 	/**
@@ -48,25 +67,31 @@ class ZipCode{
 	/**
 	 * Sets the value of this ZipCode object's zipCodeArea to zipCodeArea
 	 *
-	 * @param int $zipCodeArea the zipCodeArea that will be set
-	 * @throws TypeError if the parameter $zipCodeArea is not an integer
-	 * @throws RangeException if the parameter $zipCodeArea is above the value of 3 (The highest New Mexico Growing Zone)
-	 * @throws RangeException if the parameter $zipCodeArea is below the value of 1 (The highest New Mexico Growing Zone)
+	 * @param string $zipCodeArea the zipCodeArea that will be set
+	 * @throws TypeError if the parameter $zipCodeArea is not a string
+	 * @throws OutOfBoundsException if the parameter $zipCodeArea is not 2 characters long
+	 * @throws InvalidArgumentException if the parameter $zipCodeArea does not start with the characters 4,5,6,7, or 8 (start of valid growing zone)
+	 * @throws InvalidArgumentException if the parameter $zipCodeArea does not end with the characters a or b.
+	 *
 	 */
 	public function setZipCodeArea($zipCodeArea) {
 		//Validates the Zip code area, making sure that it is an intenger and between 1-3 in value (The three NM growing zones)
-		if(!is_int($zipCodeArea)){
-			throw (new \TypeError("This zip code area is not an integer"));
-		}elseif($zipCodeArea > 3){
-			throw (new RangeException("This zip code area is not a valid New Mexco growing zone"));
-		}elseif($zipCodeArea < 1){
-			throw (new RangeException("This zip code area is not a valid New Mexco growing zone"));
+		if(!is_string($zipCodeArea)){
+			throw (new \TypeError("This zip code area is not an string"));
+		} elseif(strlen($zipCodeArea)!= 2){
+			throw (new \OutOfBoundsException("This is not a valid New Mexico growing Zone"));
+		} elseif(substr($zipCodeArea,0,0)!= '4' && substr($zipCodeArea,0,0)!= '5' && substr($zipCodeArea,0,0)!= '6' && substr($zipCodeArea,0,0)!= '7' && substr($zipCodeArea,0,0)!= '8'){
+			throw (new InvalidArgumentException("This zip code area is not a valid New Mexco growing zone"));
+		} elseif(substr($zipCodeArea,1) != 'a ' && substr($zipCodeArea,1) != 'b '){
+			throw (new InvalidArgumentException("This zip code area is not a valid New Mexco growing zone"));
 		}
 		//Set this object's value of zipCodeArea to the specified ZipCodeArea in the Parameter
 		$this->$zipCodeArea;
 	}
 
 	/**
+	 * Returns the value of a $zipCodeArea associated with this Zipcode instance
+	 *
 	 * @return int $zipCodeArea The area associated with a Zipcode Object
 	 */
 	public function getZipCodeArea() {
@@ -74,10 +99,73 @@ class ZipCode{
 	}
 
 	 /**
-	 * @return String $zipCodeCode The Zipcode of the a ZipCode Object
+	  * Returns the value of this ZipCode instance's zipCodeCode
+	  *
+	  * returns zipCodeCode of this ZipCode instance, represents a New Mexico Zip Code
 	 */
 	public function getZipCodeCode() {
 		return $this->zipCodeCode;
 	}
+
+	/**
+	 * Inserts a row into the zipCode table that represents this ZipCode instance
+	 *
+	 * @param PDO $pdo the php data object used to delete a row from the the zipCode table
+	 * @throws PDOException if an error regarding the php data object occured
+	 */
+	public function insert(\PDO $pdo){
+		try {
+			$query = "INSERT INTO zipCode(zipCodeCode, zipCodeArea) VALUES(:zipCodeCode, :zipCodeArea)";
+			$statement = $pdo->prepare($query);
+
+			$parameters = ["zipCodeCode" => $this->zipCodeCode, "zipCodeArea" => $this->zipCodeArea];
+			$statement->execute($parameters);
+		}catch(PDOException $pdoException){
+			throw(new \PDOException($pdoException->getMessage(),0,$pdoException));
+		}
+
+	}
+	/**
+	 * Deletes the row representing this ZipCode instance from the zipCode table
+	 *
+	 * @param PDO $pdo the php data object used to delete a row from the the zipCode table
+	 * @throws PDOException if an error regarding the php data object occured
+	 */
+	public function delete(\PDO $pdo) {
+		//checks if zipCodeCode exists.
+		if($this->zipCodeCode === null) {
+			throw(new \PDOException("This zipcode cannot be deleted because it doesn't exist"));
+		}
+		try {
+			$query = "DELETE FROM zipCode WHERE zipCodeCode = :zipCodeCode";
+			$statement = $pdo->prepare($query);
+			$parameters = ["zipCodeCode" => $this->zipCodeCode];
+			$statement->execute($parameters);
+		}catch(PDOException $pdoException){
+			throw(new \PDOException($pdoException->getMessage(),0,$pdoException));
+		}
+	}
+
+	/**
+	 * Updates the zipCode table with this zipCode instance's state variables
+	 *
+	 * @param PDO $pdo the php data object used to update the zipCode table
+	 * @throws PDOException if an error regarding the php data object occured
+	 */
+	public function update(\PDO $pdo) {
+		//Checks if the zipCodeCode exists
+		if($this->zipCodeCode === null) {
+			throw(new \PDOException("This zipcode cannot be updated because it doesnt exist."));
+		}
+		try {
+			$query = "UPDATE zipCode SET zipCodeCode = :zipCodeCode, zipCodeArea = :zipCodeArea";
+			$statement = $pdo->prepare($query);
+			$parameters = ["zipCodeCode" => $this->zipCodeCode, "zipCodeArea" => $this->zipCodeArea];
+			$statement->execute($parameters);
+		}catch(PDOException $pdoException){
+			throw(new \PDOException($pdoException->getMessage(),0,$pdoException));
+		}
+	}
+
 
 }
