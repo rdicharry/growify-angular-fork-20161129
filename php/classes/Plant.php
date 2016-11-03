@@ -214,7 +214,8 @@ class Plant{
 	/**
 	 * mutator method for plantName
 	 * @param string $newPlantName new value of plant name
-	 * @throws \UnexpectedValueException if $newPlantName is not a string
+	 * @throws \InvalidArgumentException if $newPlantName has invalid contents or is empty
+	 * @throws \RangeException if $newPlantName is too long
 	 */
 	public function setPlantName(string $newPlantName) {
 		$newPlantName = trim($newPlantName);
@@ -222,13 +223,17 @@ class Plant{
 		if(empty($newPlantName)){
 			throw (new \InvalidArgumentException("name is empty or has invalid contents"));
 		}
+		if(strlen($newPlantName) > 26) {
+			throw(new \RangeException("name is too large"));
+		}
 		$this->plantName = $newPlantName;
 	}
 
 	/**
 	 * mutator method for plantVariety
 	 * @param string $newPlantVariety  new value of plant variety
-	 * @throws \UnexpectedValueException if $newPlantVariety is not a string
+	 * @throws \InvalidArgumentException if $newPlantVariety has invalid contents or is empty
+	 * @throws \RangeException if $newPlantVariety is too long
 	 */
 	public function setPlantVariety($newPlantVariety) {
 		$newPlantVariety = trim($newPlantVariety);
@@ -236,13 +241,17 @@ class Plant{
 		if(empty($newPlantVariety)){
 			throw (new \InvalidArgumentException("variety is empty or has invalid contents"));
 		}
+		if(strlen($newPlantVariety) > 26) {
+			throw(new \RangeException("variety is too large"));
+		}
 		$this->plantVariety = $newPlantVariety;
 	}
 
 	/**
 	 * mutator method for plantDescription
 	 * @param string $newPlantDescription new value of plant description
-	 * @throws \UnexpectedValueException if $newPlantDescription is not a string
+	 * @throws \InvalidArgumentException if $newPlantDescription has invalid contents or is empty
+	 * @throws \RangeException if $newPlantDescription is too long
 	 */
 	public function setPlantDescription($newPlantDescription) {
 		$newPlantDescription = trim($newPlantDescription);
@@ -250,19 +259,26 @@ class Plant{
 		if(empty($newPlantDescription)){
 			throw (new \InvalidArgumentException("description is empty or has invalid contents"));
 		}
+		if(strlen($newPlantDescription) > 512) {
+			throw(new \RangeException("description is too large"));
+		}
 		$this->plantDescription = $newPlantDescription;
 	}
 
 	/**
 	 * mutator method for plantType
 	 * @param string $newPlantType new value of plant type
-	 * @throws \UnexpectedValueException if $newPlantType is not a string
+	 * @throws \InvalidArgumentException if $newPlantType has invalid contents or is empty
+	 * @throws \RangeException if $newPlantType is too long
 	 */
 	public function setPlantType($newPlantType) {
 		$newPlantType = trim($newPlantType);
 		$newPlantType = filter_var($newPlantType,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($newPlantType)){
 			throw (new \InvalidArgumentException("type is empty or has invalid contents"));
+		}
+		if(strlen($newPlantType) > 9) {
+			throw(new \RangeException("type is too large"));
 		}
 		$this->plantType = $newPlantType;
 	}
@@ -335,13 +351,17 @@ class Plant{
 	/**
 	 * mutator method for plantSoilMoisture
 	 * @param string $newPlantSoilMoisture new value of plant soil moisture
-	 * @throws \UnexpectedValueException if $newPlantSoilMoisture is not a string
+	 * @throws \InvalidArgumentException if $newPlantSoilMoisture has invalid contents or is empty
+	 * @throws \RangeException if $newPlantSoilMoisture is too long
 	 */
 	public function setPlantSoilMoisture($newPlantSoilMoisture) {
 		$newPlantSoilMoisture = trim($newPlantSoilMoisture);
 		$newPlantSoilMoisture = filter_var($newPlantSoilMoisture,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($newPlantSoilMoisture)){
 			throw (new \InvalidArgumentException("soil moisture is empty or has invalid contents"));
+		}
+		if(strlen($newPlantSoilMoisture) > 6) {
+			throw(new \RangeException("soil moisture is too large"));
 		}
 		$this->plantSoilMoisture = $newPlantSoilMoisture;
 	}
