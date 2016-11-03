@@ -287,11 +287,15 @@ class Plant{
 	 * mutator method for plantSpread
 	 * @param float $newPlantSpread new value of plant spread
 	 * @throws \UnexpectedValueException if $newPlantSpread is not a float
+	 * @throws \RangeException if $newPlantSpread is negative
 	 */
 	public function setPlantSpread($newPlantSpread) {
 		$newPlantSpread = filter_var($newPlantSpread,FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
 		if($newPlantSpread === false){
 			throw (new \UnexpectedValueException("spread is not a valid float"));
+		}
+		if($newPlantSpread >= 0){
+			throw (new \RangeException("spread is not positive"));
 		}
 		$this->plantSpread = $newPlantSpread;
 	}
@@ -300,11 +304,15 @@ class Plant{
 	 * mutator method for plantDaysToHarvest
 	 * @param int $newPlantDaysToHarvest new value of plant days to harvest
 	 * @throws \UnexpectedValueException if $newPlantDaysToHarvest is not an int
+	 * @throws \RangeException if $newPlantDaysToHarvest is negative
 	 */
 	public function setPlantDaysToHarvest($newPlantDaysToHarvest) {
 		$newPlantDaysToHarvest = filter_var($newPlantDaysToHarvest,FILTER_VALIDATE_INT);
 		if($newPlantDaysToHarvest === false){
 			throw (new \UnexpectedValueException("days to harvest is not a valid int"));
+		}
+		if($newPlantDaysToHarvest >= 0){
+			throw (new \RangeException("days to harvest is not positive"));
 		}
 		$this->plantDaysToHarvest = $newPlantDaysToHarvest;
 	}
@@ -313,11 +321,15 @@ class Plant{
 	 * mutator method for plantHeight
 	 * @param float $newPlantHeight new value of plant mature height
 	 * @throws \UnexpectedValueException if $newPlantHeight is not a float
+	 * @throws \RangeException if $newPlantHeight is negative
 	 */
 	public function setPlantHeight($newPlantHeight) {
 		$newPlantHeight = filter_var($newPlantHeight,FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
 		if($newPlantHeight === false){
 			throw (new \UnexpectedValueException("height is not a valid float"));
+		}
+		if($newPlantHeight >= 0){
+			throw (new \RangeException("height is not positive"));
 		}
 		$this->plantHeight = $newPlantHeight;
 	}
