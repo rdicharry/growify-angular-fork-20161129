@@ -167,5 +167,44 @@ class ZipCode{
 		}
 	}
 
+	/**
+	 * gets a ZipCode from a zipCodeCode
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param string $zipCodeCode The zipCodeCode to search for
+	 * @return ZipCode|null ZipCode found or null if not found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	public static function getZipCodeByZipCodeCode(\PDO $pdo, $zipCodeCode) {
+		// sanitize the tweetId before searching
+		if(!is_string($zipCodeCode)) {
+			throw(new \PDOException("Zip Code is not a String"));
+		}
+
+		// create query template
+		$query = "SELECT zipCodeCode,zipCodeArea FROM zipCode WHERE zipCodeCode = :zipCodeCode";
+		$statement = $pdo->prepare($query);
+
+		// bind the tweet id to the place holder in the template
+		$parameters = ["zipCodeCode" => $zipCodeCode];
+		$statement->execute($parameters);
+
+		// grab the tweet from mySQL
+		try {
+			$zipCode = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$zipCode = new ZipCode($row["zipCodeCode"], $row["zipCodeArea"]);
+			}
+		} catch(\Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($zipCode);
+	}
+
+
 
 }
