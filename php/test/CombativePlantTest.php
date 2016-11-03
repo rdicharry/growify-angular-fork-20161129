@@ -52,6 +52,7 @@ class CombativePlantTest extends GrowifyTest {
 	/**
 	 * insert a combative plant entry and verify that the
 	 * mySQL entry data matches.
+	 * @expectedException PDOException
 	 */
 	public function testInsertValidCombativePlantEntry(){
 
@@ -86,6 +87,7 @@ class CombativePlantTest extends GrowifyTest {
 
 	/**
 	 * test updating a Combative plant entry that does not exist
+	 * @expectedException PDOException
 	 */
 	public function testUpdateInvalidCombativePlantEntry(){
 
@@ -100,6 +102,7 @@ class CombativePlantTest extends GrowifyTest {
 
 	/**
 	 * test deleting a Combative plant entry that does not exist
+	 * @expectedException PDOException
 	 */
 	public function testDeleteInvalidCombativePlantEntry(){
 
