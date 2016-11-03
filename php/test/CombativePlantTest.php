@@ -74,9 +74,11 @@ class CombativePlantTest extends GrowifyTest {
 	/**
 	 * test inserting an invalid plant entry (one that has an invalid (non-null) id)
 	 */
+	/* don't use this - it makes more sense to test attempt to
+	 add duplicate entry - see testInsertDuplicateValidCombativePlantEntry()
 	public function testInsertInvalidCombativePlantEntry(){
 
-	}
+	}*/
 
 	/**
 	 * test updating a combative plant entry.
