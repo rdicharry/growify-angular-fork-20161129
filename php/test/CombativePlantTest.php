@@ -33,7 +33,7 @@ class CombativePlantTest extends GrowifyTest {
 	protected $combativePlant2 = null;
 
 	/**
-	 * Create objects necessary for test.
+	 * Create objects necessary for test (dependencies).
 	 */
 	public final function setUp(){
 		// run default setUp() method
@@ -49,4 +49,71 @@ class CombativePlantTest extends GrowifyTest {
 
 	}
 
+	public function testInsertValidCombativePlantEntry(){
+
+	}
+
+	public function testInsertDuplicateValidCombativePlantEntry(){
+
+	}
+
+	/**
+	 * test inserting an invalid plant entry (one that has an invalid (non-null) id)
+	 */
+	public function testInsertInvalidCombativePlantEntry(){
+
+	}
+
+	/**
+	 * test updating a combative plant entry.
+	 */
+	public function testUpdateValidCombativePlantEntry(){
+
+	}
+
+	/**
+	 * test updating a Combative plant entry that does not exist
+	 */
+	public function testUpdateInvalidCombativePlantEntry(){
+
+	}
+
+	/**
+	 * test deleting a valid plant entry
+	 */
+	public function testDeleteValidCombativePlantEntry(){
+
+	}
+
+	/**
+	 * test deleting a Combative plant entry that does not exist
+	 */
+	public function testDeleteInvalidCombativePlantEntry(){
+
+	}
+
+	public function testGetValidCombativePlantEntryByPlantId(){
+
+		// we shouldn't know what order the plants will be inside the DB
+		// so need to test against either one (two plant id's)
+
+		// a query for a particular combative plant should return all
+		// valid plants that it is paired with - so we might need to use
+		// more than one Plant entry to test against.
+
+	}
+
+	/**
+	 * Attempt to get a plant for which no entry exists.
+	 */
+	public function testGetInvalidCombativePlantEntryByPlantId(){
+
+		// we shouldn't know what order the plants will be inside the DB
+		// so need to test against either one (two plant id's)
+
+	}
+	
+	public function testGetAllValidCombativePlants(){
+		
+	}
 }
