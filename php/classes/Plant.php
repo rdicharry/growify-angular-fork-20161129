@@ -2,7 +2,7 @@
 /**
  * Plant Information Class
  *
- * This Plant will access and store data. This can be extended to include further attributes that may be needed.
+ * This Plant will access and store data.
  *
  * @author Greg Bloom <gbloomdev@gmail.com>
  * @version 0.1.0
