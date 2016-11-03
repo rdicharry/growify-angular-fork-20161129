@@ -28,7 +28,7 @@ CREATE TABLE profile(
 	profileHash VARCHAR(128) NOT NULL, -- char(512) and UNIQUE????
 	profileActivation BIT(1) NOT NULL, -- tinyint(1) or varchar(1) maybe??
 	profileSalt VARCHAR(16) NOT NULL, -- larger? smaller? UNIQUE?
-	profileUserName VARCHAR(16) UNIQUE NOT NULL,
+	profileUserName VARCHAR(24) UNIQUE NOT NULL,
 	profileEmail VARCHAR(160) NOT NULL -- we can make it smaller and UNIQUE according to our decision
 );
 
