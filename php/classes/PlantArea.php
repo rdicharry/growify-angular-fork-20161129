@@ -8,8 +8,8 @@
  * @author Ana Vela <avela7@cnm.edu>
  * @version 1.0.0
  *
- * attributes -
- *plantAreaId, plantAreaPlantId, plantAreaStartDate, plantAreaEndDate, plantAreaAreaNum
+ *
+ *
  */
 class PlantArea {
 	/**
