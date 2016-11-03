@@ -217,9 +217,10 @@ class Plant{
 	 * @throws \UnexpectedValueException if $newPlantName is not a string
 	 */
 	public function setPlantName(string $newPlantName) {
-		$newPlantName = filter_var($newPlantName,FILTER_SANITIZE_STRING);
-		if($newPlantName === false){
-			throw (new \UnexpectedValueException("name is not a valid string"));
+		$newPlantName = trim($newPlantName);
+		$newPlantName = filter_var($newPlantName,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newPlantName)){
+			throw (new \InvalidArgumentException("name is empty or has invalid contents"));
 		}
 		$this->plantName = $newPlantName;
 	}
@@ -230,9 +231,10 @@ class Plant{
 	 * @throws \UnexpectedValueException if $newPlantVariety is not a string
 	 */
 	public function setPlantVariety($newPlantVariety) {
-		$newPlantVariety = filter_var($newPlantVariety,FILTER_SANITIZE_STRING);
-		if($newPlantVariety === false){
-			throw (new \UnexpectedValueException("variety is not a valid string"));
+		$newPlantVariety = trim($newPlantVariety);
+		$newPlantVariety = filter_var($newPlantVariety,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newPlantVariety)){
+			throw (new \InvalidArgumentException("variety is empty or has invalid contents"));
 		}
 		$this->plantVariety = $newPlantVariety;
 	}
@@ -243,9 +245,10 @@ class Plant{
 	 * @throws \UnexpectedValueException if $newPlantDescription is not a string
 	 */
 	public function setPlantDescription($newPlantDescription) {
-		$newPlantDescription = filter_var($newPlantDescription,FILTER_SANITIZE_STRING);
-		if($newPlantDescription === false){
-			throw (new \UnexpectedValueException("description is not a valid string"));
+		$newPlantDescription = trim($newPlantDescription);
+		$newPlantDescription = filter_var($newPlantDescription,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newPlantDescription)){
+			throw (new \InvalidArgumentException("description is empty or has invalid contents"));
 		}
 		$this->plantDescription = $newPlantDescription;
 	}
@@ -256,9 +259,10 @@ class Plant{
 	 * @throws \UnexpectedValueException if $newPlantType is not a string
 	 */
 	public function setPlantType($newPlantType) {
-		$newPlantType = filter_var($newPlantType,FILTER_SANITIZE_STRING);
-		if($newPlantType === false){
-			throw (new \UnexpectedValueException("type is not a valid string"));
+		$newPlantType = trim($newPlantType);
+		$newPlantType = filter_var($newPlantType,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newPlantType)){
+			throw (new \InvalidArgumentException("type is empty or has invalid contents"));
 		}
 		$this->plantType = $newPlantType;
 	}
@@ -334,9 +338,10 @@ class Plant{
 	 * @throws \UnexpectedValueException if $newPlantSoilMoisture is not a string
 	 */
 	public function setPlantSoilMoisture($newPlantSoilMoisture) {
-		$newPlantSoilMoisture = filter_var($newPlantSoilMoisture,FILTER_SANITIZE_STRING);
-		if($newPlantSoilMoisture === false){
-			throw (new \UnexpectedValueException("soil moisture is not a valid string"));
+		$newPlantSoilMoisture = trim($newPlantSoilMoisture);
+		$newPlantSoilMoisture = filter_var($newPlantSoilMoisture,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newPlantSoilMoisture)){
+			throw (new \InvalidArgumentException("soil moisture is empty or has invalid contents"));
 		}
 		$this->plantSoilMoisture = $newPlantSoilMoisture;
 	}
