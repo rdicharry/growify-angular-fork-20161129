@@ -122,6 +122,8 @@ class Profile {
 	/**
 	 * mutator method for profile id
 	 * @param int $newProfileId
+	 * @throws \RangeException if $newProfileId is negative
+	 * @throws \TypeError if $newProfileId is not an integer
 	 **/
 	public function setProfileId($newProfileId) {
 		// if the plant id is null, this is a new plant without an id from mySQL
@@ -139,6 +141,8 @@ class Profile {
 	/**
 	 * mutator method for profile user name
 	 * @param string $newProfileUserName
+	 * @throws \InvalidArgumentException if $newProfileUserName is empty or is not a string
+	 * @throws \RangeException if $newProfileUserName is too long
 	 **/
 	public function setProfileUserName($newProfileUserName) {
 		$newProfileUserName = trim($newProfileUserName);
@@ -155,6 +159,8 @@ class Profile {
 	/**
 	 * mutator method for profile email
 	 * @param string $newProfileEmail
+	 * @throws \InvalidArgumentException if $newProfileEmail is empty or is not a string
+	 * @throws \RangeException if $newProfileEmail is too long
 	 **/
 	public function setProfileEmail($newProfileEmail) {
 		$newProfileEmail = trim($newProfileEmail);
@@ -171,6 +177,8 @@ class Profile {
 	/**
 	 * mutator method for profile zip code
 	 * @param int $newProfileZipCode
+	 * @throws \UnexpectedValueException if $newProfileZipCode is not an int
+	 * @throws \RangeException if $newProfileZipCode is not positive
 	 **/
 	public function setProfileZipCode($newProfileZipCode) {
 		$newProfileZipCode = filter_var($newProfileZipCode,FILTER_VALIDATE_INT);
