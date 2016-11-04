@@ -2,6 +2,7 @@
 namespace Edu\Cnm\Growify\Test;
 
 use Edu\Cnm\Growify\{Plant};
+use Plant;
 
 //grab the project test parameters
 require_once("GrowifyTest.php");
@@ -41,7 +42,7 @@ class CompanionPlantTest extends GrowifyTest {
 
 		// create and insert a Plant1
 		$this->companionPlant1 = new Plant(/*TODO add parameters */);
-		$this->companionPlant2->insert($this->getPDO());
+		$this->companionPlant1->insert($this->getPDO());
 
 		// create and insert a Plant2
 		$this->companionPlant2 = new Plant(/*TODO add parameters */)
@@ -70,9 +71,10 @@ class CompanionPlantTest extends GrowifyTest {
 
 	/**
 	 * test inserting an invalid plant entry (one that has an invalid (non-null) id)
-	 *
-	 *
-	 */
+	 **/
+	/**
+	 * don't use this - it makes more sense to test attempt to add duplicate entry - see testInsertDuplicateValidCompanionPlantEntry() public function testInsertInvalidCompanionPlantEntry()
+	 **/
 
 /**
  *  test updating a companion plant entry
@@ -95,4 +97,45 @@ public function testUpdateValidCompanionPlantEntry(){
 
 	}
 
+	/**
+	 * test deleting a companion plant entry that does not exist
+	 * @expectecException PDOException
+	 **/
+	public function testDeleteValidCompanionPlantEntry(){
+
+	}
+	/**
+	 * test deleting a companion plant entry that does not exist
+	 * @expectedException PDOException
+	 **/
+	public function testInvalidCompanionPlantEntry() {
+
+	}
+
+	/**
+	 * do we get expected data?
+	 **/
+	public function testGetValidCompanionPlantEntryByPlantId(){
+
+		// we shouldn't know what order the plants will be inside the DB
+		// so need to test against either one (two plant id's)
+
+		// a query for a particular companion plant should return all
+		// valid plants that it is paired with - so we might need to use
+		// more than one Plant entry to test against
+	}
+	/**
+	 * attempt to get a plant for which no entry exists
+	 **/
+	public function testGetInvalidCompanionPlantEntryByPlantId(){
+
+		// we shouldn't know what order th plants will be inside the DB
+		// so need to test against either one (two plant id's)
+	}
+	/**
+	 * test getting a list of ALL companion plants
+	 **/
+	public function testGetAllValidCompanionPlants(){
+
+	}
 }
