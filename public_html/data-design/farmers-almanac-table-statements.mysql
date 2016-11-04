@@ -65,10 +65,10 @@ CREATE TABLE garden (
 
 CREATE TABLE plantArea(
 	plantAreaId SMALLINT UNSIGNED PRIMARY KEY AUTO_INCREMENT,
-	plantAreaStartDate DATE NOT NULL,
-	plantAreaEndDate DATE NOT NULL,
+	plantAreaStartDate VARCHAR(5) NOT NULL,
+	plantAreaEndDate VARCHAR(5) NOT NULL,
 	plantAreaPlantId SMALLINT UNSIGNED,
-	plantAreaNumber VARCHAR(3),
+	plantAreaNumber VARCHAR(2),
 	-- index and create foreign key
 	INDEX(plantAreaPlantId),
 	FOREIGN KEY(plantAreaPlantId) REFERENCES plant(plantId)

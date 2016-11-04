@@ -76,16 +76,16 @@ class ZipCode{
 	public function setZipCodeArea($zipCodeArea) {
 		//Validates the Zip code area, making sure that it is an intenger and between 1-3 in value (The three NM growing zones)
 		if(!is_string($zipCodeArea)){
-			throw (new \TypeError("This zip code area is not an string"));
+			throw (new \TypeError("This zip code area is not a string"));
 		} elseif(strlen($zipCodeArea)!= 2){
 			throw (new \OutOfBoundsException("This is not a valid New Mexico growing Zone"));
 		} elseif(substr($zipCodeArea,0,0)!= '4' && substr($zipCodeArea,0,0)!= '5' && substr($zipCodeArea,0,0)!= '6' && substr($zipCodeArea,0,0)!= '7' && substr($zipCodeArea,0,0)!= '8'){
 			throw (new InvalidArgumentException("This zip code area is not a valid New Mexco growing zone"));
-		} elseif(substr($zipCodeArea,1) != 'a ' && substr($zipCodeArea,1) != 'b '){
+		} elseif(substr($zipCodeArea,1) != 'a' && substr($zipCodeArea,1) != 'b'){
 			throw (new InvalidArgumentException("This zip code area is not a valid New Mexco growing zone"));
 		}
 		//Set this object's value of zipCodeArea to the specified ZipCodeArea in the Parameter
-		$this->$zipCodeArea;
+		$this->$zipCodeArea = $zipCodeArea;
 	}
 
 	/**
