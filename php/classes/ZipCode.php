@@ -16,7 +16,6 @@ class ZipCode{
 	 * @var string the zipCodeArea USDA GrowZone that corresponds to a United States Postal ZipCode
 	 */
 	private $zipCodeArea;
-
 	/**
 	 * ZipCode constructor.
 	 *
@@ -100,8 +99,7 @@ class ZipCode{
 
 	 /**
 	  * Returns the value of this ZipCode instance's zipCodeCode
-	  *
-	  * returns zipCodeCode of this ZipCode instance, represents a New Mexico Zip Code
+	  * @returns string zipCodeCode of this ZipCode instance, represents a New Mexico Zip Code
 	 */
 	public function getZipCodeCode() {
 		return $this->zipCodeCode;
@@ -177,20 +175,15 @@ class ZipCode{
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
 	public static function getZipCodeByZipCodeCode(\PDO $pdo, $zipCodeCode) {
-		// sanitize the tweetId before searching
 		if(!is_string($zipCodeCode)) {
-			throw(new \PDOException("Zip Code is not a String"));
+			throw(new \TypeError("Zip Code is not a String"));
 		}
 
-		// create query template
 		$query = "SELECT zipCodeCode,zipCodeArea FROM zipCode WHERE zipCodeCode = :zipCodeCode";
 		$statement = $pdo->prepare($query);
-
-		// bind the tweet id to the place holder in the template
 		$parameters = ["zipCodeCode" => $zipCodeCode];
 		$statement->execute($parameters);
 
-		// grab the tweet from mySQL
 		try {
 			$zipCode = null;
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
@@ -205,6 +198,31 @@ class ZipCode{
 		return($zipCode);
 	}
 
+	/**
+	 * gets all zipCodes
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @return \SplFixedArray SplFixedArray of zipcodes found, returns null if empty
+	 * @throws \PDOException if an error regarding the php data object occurs
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	public static function getAllZipCodes(\PDO $pdo) {
+		$query = "SELECT zipCodeCode, zipCodeArea FROM zipCode";
+		$statement = $pdo->prepare($query);
+		$statement->execute();
+		$zipCodes = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$zipCode = new ZipCode($row["zipCodeCode"], $row["zipCodeArea"]);
+				$zipCodes[$zipCodes->key()] = $zipCode;
+				$zipCodes->next();
+			} catch(\Exception $exception) {
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($zipCodes);
+	}
 
 
 }
