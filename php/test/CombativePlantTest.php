@@ -87,6 +87,10 @@ class CombativePlantTest extends GrowifyTest {
 
 	}
 
+	public function testUpdateValidCombativePlantEntryOrderInsensitive(){
+
+	}
+
 	/**
 	 * test updating a Combative plant entry that does not exist
 	 * @expectedException PDOException
@@ -103,6 +107,13 @@ class CombativePlantTest extends GrowifyTest {
 	}
 
 	/**
+	 * Insert combative plant object into mySQL as combativePlant1, combativePlant2, check that doing delete on combativePlant2, combativePlant1 removes that object.
+	 */
+	public function testDeleteValidCombativePlantEntryOrderInsensitive(){
+		// create object
+	}
+
+	/**
 	 * test deleting a Combative plant entry that does not exist
 	 * @expectedException PDOException
 	 */
@@ -111,7 +122,7 @@ class CombativePlantTest extends GrowifyTest {
 	}
 
 	/**
-	 * Do we get expeced data?
+	 * Do we get expected data?
 	 */
 	public function testGetValidCombativePlantEntryByPlantId(){
 
@@ -120,7 +131,7 @@ class CombativePlantTest extends GrowifyTest {
 
 		// a query for a particular combative plant should return all
 		// valid plants that it is paired with - so we might need to use
-		// more than one Plant entry to test against.
+		// more than one Plant entry to test against. e.g. should be able to retrieve the entries with the plantId as either combativePlant2 or combativePlant2
 
 	}
 
@@ -135,7 +146,7 @@ class CombativePlantTest extends GrowifyTest {
 	}
 
 	/**
-	 * test getting a list of ALL combative plants
+	 * test getting a list of ALL combative plant entries
 	 */
 	public function testGetAllValidCombativePlants(){
 		
