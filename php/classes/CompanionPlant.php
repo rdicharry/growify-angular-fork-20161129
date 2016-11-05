@@ -107,4 +107,26 @@ class CompanionPlant {
 	 // convert and store the companion plant 2
 		$this->companionPlant2Id =$newCompanionPlant2Id;
 	}
+
+	/**
+	 * insert a new companion plant relationship ito mySQL
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException if mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object.
+	 **/
+	public function insert(\PDO $pdo) {
+
+		//create query template
+		$query = "INSERT INTO companionPlant(companionPlant1Id, companionPlant2Id) VALUES (:companionPlant1Id, :companionPlant2Id)";
+		$statement = $pdo->prepare($query);
+
+		//bind the member variables to the place holders in the template
+		$parameters = ["companionPlant1Id"=>$this->companionPlant1Id, "companionPlant2Id"=>$this->companionPlant2Id];
+		$statement->execute($parameters);
+
+
+	}
+
+
+
 }
