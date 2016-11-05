@@ -2,7 +2,7 @@
 namespace Edu\Cnm\Growify\Test;
 
 use Edu\Cnm\Growify\{Plant};
-use Plant;
+
 
 //grab the project test parameters
 require_once("GrowifyTest.php");
@@ -25,13 +25,13 @@ class CompanionPlantTest extends GrowifyTest {
 	 * Foreign key relationship to Plant
 	 * @var Plant companionPlant1
 	 ***/
-	protected $companionPlant1 = null;
+	protected $companionPlant1Id = null;
 	/**
 	 * Foreign key relationship to Plant
 	 *
 	 * @var Plant companionPlant2
 	 */
-	protected $companionPlant2 = null;
+	protected $companionPlant2Id = null;
 
 	/**
 	 * Create objects necessary for test (dependencies)
@@ -40,13 +40,13 @@ class CompanionPlantTest extends GrowifyTest {
 		//run default setUp() method
 		parent::setUp();
 
-		// create and insert a Plant1
-		$this->companionPlant1 = new Plant(/*TODO add parameters */);
-		$this->companionPlant1->insert($this->getPDO());
+		// create and insert a Plant1Id
+		$this->companionPlant1Id = new Plant(/*TODO add parameters */);
+		$this->companionPlant1Id->insert($this->getPDO());
 
-		// create and insert a Plant2
-		$this->companionPlant2 = new Plant(/*TODO add parameters */)
-		$this->companionPlant2->insert($this->getPDO());
+		// create and insert a Plant2Id
+		$this->companionPlant2Id = new Plant(/*TODO add parameters */)
+		$this->companionPlant2Id->insert($this->getPDO());
 	}
  	/**
 	 * insert a companion plant entry and verify that the mySQL entry data matches.
@@ -61,8 +61,8 @@ class CompanionPlantTest extends GrowifyTest {
 	 * in other words, we expect NOT to be able to insert an identical entry
 	 *
 	 * this includes reversing the fields
-	 * e.g. (companionPlantId1 = 1, companionPlantId2 = 2) and
-	 *      (companionPlantId1 = 2, companionPlantId2 = 2)
+	 * e.g. (companionPlant1Id = 1, companionPlant2Id = 2) and
+	 *      (companionPlant1Id = 2, companionPlant2Id = 2)
 	 * are really the same entry, and we neither require nor do we want to have BOTH
 	 **/
 	public function testInsertDuplicateValidCompanionPlantEntry() {
