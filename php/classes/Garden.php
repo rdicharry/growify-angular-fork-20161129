@@ -182,6 +182,33 @@ class Garden implements \JsonSerializable {
 
 	public function getGardenByGardenProfileId(\PDO $pdo, int $gardenProfileId){
 		// could return many values (an array of garden entries
+		// sanatize the profile id before searching
+		if($gardenProfileId <=0){
+			throw(new RangeExceptin("Garden profile id must be positive."));
+		}
+
+		// create query template
+		$query = "SELECT gardenDatePlanted, gardenPlantId FROM garden WHERE gardenProfileId= :gardenProfileId";
+		$statement = $pdo->prepare($query);
+
+		// bind the garden profile id to place holder in the template
+		$parameters = ["gardenProfileId" => $gardenProfileId];
+		$statement->execute($parameters);
+
+		// build an array of gardens
+		$gardens = new \SplFixedArray($statement->rowCount() );
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false){
+			try{
+				$garden = new Garden($row["gardenProfileId"], $row["gardenDatePlanted"], $row["gardenPlantId"] );
+				$gardens[$gardens->key()] = $garden;
+				$gardens->next();
+			} catch(\Exception $exception){
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($gardens);
 	}
 
 	public function getAllGardens(\PDO $pdo){
