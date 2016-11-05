@@ -33,23 +33,23 @@ CREATE TABLE profile(
 );
 
 CREATE TABLE companionPlant(
-	companionPlant1 SMALLINT UNSIGNED NOT NULL,
-	companionPlant2 SMALLINT UNSIGNED NOT NULL,
+	companionPlant1Id SMALLINT UNSIGNED NOT NULL,
+	companionPlant2Id SMALLINT UNSIGNED NOT NULL,
 	-- index and create foreign keys
-	INDEX(companionPlant1),
-	INDEX(companionPlant2),
-	FOREIGN KEY(companionPlant1) REFERENCES plant(plantId),
-	FOREIGN KEY(companionPlant2) REFERENCES plant(plantId)
+	INDEX(companionPlant1Id),
+	INDEX(companionPlant2Id),
+	FOREIGN KEY(companionPlant1Id) REFERENCES plant(plantId),
+	FOREIGN KEY(companionPlant2Id) REFERENCES plant(plantId)
 );
 
 CREATE TABLE combativePlant(
 	combativeplant1 SMALLINT UNSIGNED NOT NULL,
 	combativeplant2 SMALLINT UNSIGNED NOT NULL,
 	-- index foreign keys
-	INDEX(combativePlant1),
-	INDEX(combativePlant2),
-	FOREIGN KEY(combativePlant1) REFERENCES plant(plantId),
-	FOREIGN KEY(combativePlant2) REFERENCES plant(plantId)
+	INDEX(combativePlant1Id),
+	INDEX(combativePlant2Id),
+	FOREIGN KEY(combativePlant1Id) REFERENCES plant(plantId),
+	FOREIGN KEY(combativePlant2Id) REFERENCES plant(plantId)
 );
 
 CREATE TABLE garden (
