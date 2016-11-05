@@ -7,7 +7,7 @@ use Edu\Cnm\Growify\{Plant, PlantArea};
 require_once("GrowifyTest.php");
 
 // grab the class under scrutiny
-require_once("PlantAreaTest.php");
+require_once(dirname(__DIR__)."/classes/autoload.php");
 
 /**
  * Full PHPUnit test for the PlantArea class
