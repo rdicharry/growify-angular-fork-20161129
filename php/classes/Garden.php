@@ -29,9 +29,10 @@ class Garden implements \JsonSerializable {
 	 * @param int $newGardenProfileId required Id of the profile user who "owns" this garden.
 	 * @param \DateTime $newGardenDatePlanted User-entered planting date for the plant being added to the garden.
 	 * @param int $newGardenPlantId the Plant being added to the user's garden.
-	 * @throws
-	 * @throws
-	 * @throws
+	 * @throws \InvalidArgumentException if $newGardenDatePlanted is not a DateTime object.
+	 * @throws \RangeException if $newGardenProfileId or $newGardenPlantId are not valid (positive), or if $newGardenDatePlanted is not a valid date.
+	 * @throws \TypeError if the data types violate type hints
+	 * @throws \Exception if some other exception occurs.
 	 */
 	public function __construct(int $newGardenProfileId, \DateTime $newGardenDatePlanted, int $newGardenPlantId){
 
@@ -39,8 +40,14 @@ class Garden implements \JsonSerializable {
 			$this->setGardenProfileId($newGardenProfileId);
 			$this->setGardenDatePlanted($newGardenDatePlanted);
 			$this->setGardenPlantId($newGardenPlantId);
-		} catch(\InvalidArgumentException ) {
-			/* TODO add relevant exceptions, documentation */
+		} catch(\InvalidArgumentException $invalidArgument) {
+			throw(new \InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
+		} catch(\RangeException $range) {
+			throw(new \RangeException($range->getMessage(), 0, $range));
+		} catch(\TypeError $typeError){
+			throw(new \TypeError($typeError->getMessage(), 0, $typeError));
+		} catch(\Exception $exception){
+			throw(new \Exception($exception->getMessage(), 0, $exception));
 		}
 
 	}
