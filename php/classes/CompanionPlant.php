@@ -13,35 +13,35 @@
 class CompanionPlant {
 /**
  *
- *  first CompanionPlant
- * @var int $companionPlant1
+ *  id for first CompanionPlant
+ * @var int $companionPlant1Id
  **/
-	private $companionPlant1;
+	private $companionPlant1Id;
 
 	/**
 	 *
-	 * second CompanionPlant
-	 * @var int $companionPlant2
+	 * id for second CompanionPlant
+	 * @var int $companionPlant2Id
 	 *
 	 **/
 
-	private $companionPlant2;
+	private $companionPlant2Id;
 
 	/**
 	 * constructor for this CompanionPlant
 	 *
-	 * @param $newCompanionPlant1
-	 * @param $newCompanionPlant2
+	 * @param $newCompanionPlant1Id
+	 * @param $newCompanionPlant2Id
 	 * @throws Exception if some other exception occurs
 	 * @throws TypeError if data types violate type hints
-	 * @internal param int|null $companionPlant1 first CompanionPlant
-	 * @internal param int|null $companionPlant2 second CompanionPlant
+	 * @internal param int|null $companionPlant1Id first CompanionPlant
+	 * @internal param int|null $companionPlant2Id second CompanionPlant
 	 *
 	 **/
-	public function _construct($newCompanionPlant1, $newCompanionPlant2) {
+	public function _construct($newCompanionPlant1Id, $newCompanionPlant2Id) {
 		try {
-			$this->setCompanionPlant1($newCompanionPlant1);
-			$this->setCompanionPlant2($newCompanionPlant2);
+			$this->setCompanionPlant1Id($newCompanionPlant1Id);
+			$this->setCompanionPlant2Id($newCompanionPlant2Id);
 		} catch(\InvalidArgumentException $invalidArgument) {
 			// rethrow the execption to the caller
 			throw(new \InvalidArgumentException($invalidArgument->getMessage(), $invalidArgument));
@@ -57,54 +57,54 @@ class CompanionPlant {
 		}
 	}
 	/**
-	 * accessor method for companion plant 1
+	 * accessor method for companion plant 1 id
 	 *
-	 * @return int value of companion plant 1
+	 * @return int value of companion plant 1 id
 	 **/
-	public function getCompanionPlant1() {
-		return ($this->companionPlant1);
+	public function getCompanionPlant1Id() {
+		return ($this->companionPlant1Id);
 	}
 
 	/**
-	 * mutator method for this companion plant 1
+	 * mutator method for this companion plant 1 id
 	 *
-	 * @param int|null $newCompanionPlant1 new value of companion plant 1
-	 * @throws \RangeException if $newCompanionPlant1 is not positive
-	 * @throws \TypeError if $newCompanionPlant1 is not an integer
+	 * @param int|null $newCompanionPlant1 new value of companion plant 1 id
+	 * @throws \RangeException if $newCompanionPlant1Id is not positive
+	 * @throws \TypeError if $newCompanionPlant1Id is not an integer
 	 **/
-	public function setCompanionPlant1
-	($newCompanionPlant1) {
+	public function setCompanionPlant1Id
+	($newCompanionPlant1Id) {
 		// verify the companion plant 1 is positive
-		if($newCompanionPlant1<= 0) {
+		if($newCompanionPlant1Id<= 0) {
 			throw(new \RangeException("companion plant is not a positive"));
 		}
-		// convert and store the companion plant 1
-		$this->companionPlant1 =$newCompanionPlant1;
+		// convert and store the companion plant 1 id
+		$this->companionPlant1 =$newCompanionPlant1Id;
 	}
 	/**
-	 * accessor method for companion plant 2
+	 * accessor method for companion plant 2 id
 	 *
-	 * @return int value for companion plant 2
+	 * @return int value for companion plant 2 id
 	 **/
-	public function getCompanionPlant2() {
-		return ($this->companionPlant2);
+	public function getCompanionPlant2Id() {
+		return ($this->companionPlant2Id);
 	}
 	/**
 	 * mutator method for this companion plant 2
 	 *
-	 * @param int|null $newCompanionPlant2 new value of companion plant 2
-	 * @throws \RangeException if $newCompanionPlant2 is not positive
-	 * @throws \TypeError if $newCompanionPlant2 is not an integer
+	 * @param int|null $newCompanionPlant2Id new value of companion plant 2
+	 * @throws \RangeException if $newCompanionPlant2Id is not positive
+	 * @throws \TypeError if $newCompanionPlant2Id is not an integer
 	 *
 	 **/
 
-	public function setCompanionPlant2
-	($newCompanionPlant2) {
+	public function setCompanionPlant2Id
+	($newCompanionPlant2Id) {
 		// verify the companion plant 2 is positive
-		if($newCompanionPlant2<= 0) {
+		if($newCompanionPlant2Id<= 0) {
 			throw(new \RangeException("companion plant is not a positive"));
 	}
 	 // convert and store the companion plant 2
-		$this->companionPlant2 =$newCompanionPlant2;
+		$this->companionPlant2Id =$newCompanionPlant2Id;
 	}
 }
