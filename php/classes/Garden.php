@@ -117,5 +117,68 @@ class Garden implements \JsonSerializable {
 		$this->gardenPlantId = $newGardenPlantId;
 	}
 
+	/**
+	 * Insert a new Garden entry.
+	 * @param \PDO $pdo the PDO connection object.
+	 * @throws \PDOException if mySQL related errors occur.
+	 * @throws \TypeError if $pdo is not a PDO connection object.
+	 */
+	public function insert(\PDO $pdo){
+
+		//create query template
+		$query = "INSERT INTO garden(gardenProfileId, gardenDatePlanted, gardenPlantId) VALUES (:gardenProfileId, :gardenDatePlanted, :gardenPlantId)";
+		$statement = $pdo->prepare($query);
+
+		// bind member variables to placeholders in the template
+		// note: do not need to preserve any time information (there should not be any) as we are only interested in the planting date
+		$formattedDate = $this->gardenDatePlanted->format("Y-m-d");
+		$parameters = ["gardenProfileId"=>$this->gardenProfileId, "gardenDatePlanted"=>$formattedDate, "gardenPlantId"=>$this->gardenPlantId];
+		$statement->execute($parameters);
+
+	}
+
+	/**
+	 * Delete a Garden entry. This effective deletes one Plant from the collection that is
+	 * a user's garden. To delete an entire garden for a user, you must delete ALL garden
+	 * entries for that user.
+	 * @param \PDO $pdo PDO connection object.
+	 * @throws \PDOException if mySQL related errors occur.
+	 * @throws \TypeError if $pdo is not a PDO object.
+	 */
+	public function delete(\PDO $pdo){
+
+		// create query template
+		$query = "DELETE FROM garden WHERE gardenProfileId = :gardenProfileId AND gardenPlantId = :gardenPlantId";
+		$statement = $pdo->prepare($query);
+
+		// bind member variables to placeholder in template
+		$parameters = ["gardenProfileId"=>$this->gardenProfileId, "gardenPlantId"=>$this->gardenPlantId];
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * Updates the garden plant entry in mySQL. This method can effectively ONLY UPDATE THE DATE PLANTED. Changing the plantId would require deleting the old entry and creating a new one.
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object.
+	 */
+	public function update(\PDO $pdo){
+		//create query template
+		$query = "UPDATE garden SET gardenDatePlanted = :gardenDatePlanted WHERE gardenProfileId = :gardenProfileId AND gardenPlantId = :gardenPlantId";
+		$statement = $pdo->prepare($query);
+
+		// bind member variables to placeholders
+		$formattedDate = $this->gardenDatePlanted->format("Y-m-d");
+		$parameters = ["gardenDatePlanted"=>$formattedDate, "gardenProfileId"=>$this->gardenProfileId, "gardenPlantId"=>$this->gardenPlantId];
+		$statement->execute($parameters);
+	}
+
+	public function getGardenByGardenProfileId(\PDO $pdo, int $gardenProfileId){
+		// could return many values (an array of garden entries
+	}
+
+	public function getAllGardens(\PDO $pdo){
+
+	}
 
 }
