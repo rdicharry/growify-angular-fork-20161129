@@ -8,9 +8,9 @@ class Garden implements \JsonSerializable {
 
 	/**
 	 * the id of the User who "Owns" this garden
-	 * @var int $gardenuserId
+	 * @var int $gardenProfileId
 	 */
-	private $gardenUserId;
+	private $gardenProfileId;
 
 	/**
 	 * the (user entered) date and time the Garden was planted

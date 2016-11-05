@@ -84,9 +84,9 @@ class GardenTest extends GrowifyTest {
 
 		// grab data from mySQL and check that fields match
 		// TODO how to best attain adequate test coverage - could return multiple rows??
-		$pdoGarden = Garden::getGardenByProfileUserId($this->getPDO, $this->profile->getProfileUserId());
+		$pdoGarden = Garden::getGardenByProfileId($this->getPDO, $this->profile->getProfileUserId());
 		$this->assertEquals( $this->getConnection()->getRowCount("garden"), $numRows+1);
-		$this->assertEquals($pdoGarden->getGardenUserId(),$this->profile->getProfileId());
+		$this->assertEquals($pdoGarden->getGardenProfileId(),$this->profile->getProfileId());
 		$this->assertEquals($pdoGarden->getGardenPlantId(), $this->plant1->getPlantId());
 		$this->assertEquals($pdoGarden->getGardenDatePlanted(), $this->VALID_PLANTING_DATE);
 
@@ -117,9 +117,9 @@ class GardenTest extends GrowifyTest {
 		$garden->update($this->getPDO());
 
 		// grab the data from mySQL and enforce fields match expected
-		$pdoGarden = Garden::getGardenByUserId($this->getPDO(), $garden->getGardenId());
+		$pdoGarden = Garden::getGardenByProfileId($this->getPDO(), $garden->getGardenId());
 		$this->assertEquals( $this->getConnection()->getRowCount("garden"), $numRows+1);
-		$this->assertEquals($pdoGarden->getGardenUserId(),$this->profile->getProfileId());
+		$this->assertEquals($pdoGarden->getGardenProfileId(),$this->profile->getProfileId());
 		$this->assertEquals($pdoGarden->getGardenPlantId(), $this->plant2->getPlantId());
 		$this->assertEquals($pdoGarden->getGardenDatePlanted(), $this->VALID_PLANTING_DATE);
 	}
@@ -140,9 +140,9 @@ class GardenTest extends GrowifyTest {
 		$garden->update($this->getPDO());
 
 		// grab the data from mySQL and enforce fields match expected
-		$pdoGarden = Garden::getGardenByUserId($this->getPDO(), $garden->getGardenId());
+		$pdoGarden = Garden::getGardenByProfileId($this->getPDO(), $garden->getGardenId());
 		$this->assertEquals( $this->getConnection()->getRowCount("garden"), $numRows+1);
-		$this->assertEquals($pdoGarden->getGardenUserId(),$this->profile->getProfileId());
+		$this->assertEquals($pdoGarden->getGardenProfileId(),$this->profile->getProfileId());
 		$this->assertEquals($pdoGarden->getGardenPlantId(), $this->plant1->getPlantId());
 		$this->assertEquals($pdoGarden->getGardenDatePlanted(), $this->VALID_PLANTING_DATE2);
 
@@ -192,7 +192,7 @@ class GardenTest extends GrowifyTest {
 	 * do not anticipate referencing gardens by plantID or by date planted
 	 */
 	/*
-	public function testGetValidGardenByUserId(){
+	public function testGetValidGardenByProfileId(){
 
 	}*/
 
