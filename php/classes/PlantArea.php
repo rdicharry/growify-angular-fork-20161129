@@ -72,7 +72,7 @@ class PlantArea {
 	 * @internal param string $plantAreaEndDate end date for this PlantArea
 	 * @internal param int|null $plantAreaAreaNum the area number of this PlantArea
 	 */
-	public function _construct($newPlantAreaId, $newPlantAreaPlantId, $newPlantAreaStartDate, $newPlantAreaEndDate, $newPlantAreaAreaNum) {
+	public function __construct($newPlantAreaId, $newPlantAreaPlantId, $newPlantAreaStartDate, $newPlantAreaEndDate, $newPlantAreaAreaNum) {
 		try {
 			$this->setPlantAreaId($newPlantAreaId);
 			$this->setPlantAreaPlantId($newPlantAreaPlantId);
@@ -243,4 +243,3 @@ class PlantArea {
 	}
 
 }
-
