@@ -124,8 +124,26 @@ class CompanionPlant {
 		$parameters = ["companionPlant1Id"=>$this->companionPlant1Id, "companionPlant2Id"=>$this->companionPlant2Id];
 		$statement->execute($parameters);
 
-
 	}
+
+	/**
+	 * delete a companion plant from mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException if mySQL related errors occur
+	 * @throws \TypeError i $pdo is not a PDO connection object
+	 **/
+	public function delete(\PDO $pdo) {
+		// create query template
+		// note: need to check both cases: companionPlant1Id, companionPlant2Id, and companionPlant2Id, companion1Id since order does not matter
+		$query ="DELETE FROM garden WHERE ((companionPlant1Id= :companionPlant1Id AND companionPlant2Id= :companionPlant2Id) OR (companionPlant1Id = :companionPlant2Id AND companionPlant2Id = :companionPlant1Id))";
+		$statement = $pdo->prepare($query);
+
+		//bind parameters
+		$parameters = ["companionPlant1Id" =>$this->companionPlant1Id, "companionPlant2Id"=>$this->companionPlant2Id];
+		$statement->execute($parameters);
+	}
+
 
 
 
