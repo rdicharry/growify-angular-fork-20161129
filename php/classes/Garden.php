@@ -3,7 +3,7 @@ namespace Edu\Cnm\Growify;
 
 require_once("autoload.php");
 
-class Garden implements \JsonSerializable {
+class Garden  {
 	use ValidateDate;
 
 	/**
@@ -211,8 +211,25 @@ class Garden implements \JsonSerializable {
 		return($gardens);
 	}
 
-	public function getAllGardens(\PDO $pdo){
+	public static function getAllGardens(\PDO $pdo){
+		//create query template
+		$query = "SELECT gardenProfileId, gardenDatePlanted, gardenPlantId FROM garden ";
+		$statement = $pdo->prepare($query);
+		$statement->execute();
 
+		// build an array of garden entries
+		$gardens = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row=$statement->fetch())!== false){
+			try {
+				$garden = new Garden($row["gardenProfileId"], $row["gardenDatePlanted"], $row["gardenPlantId"]);
+				$gardens[$gardens->key()] = $garden;
+				$gardens->next();
+			} catch(\Exception $exception){
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
 	}
 
 }
