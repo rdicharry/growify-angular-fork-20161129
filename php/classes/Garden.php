@@ -180,6 +180,14 @@ class Garden  {
 		$statement->execute($parameters);
 	}
 
+	/**
+	 * Get all garden entries associated with the specified profile Id.
+	 * @param \PDO $pdo a PDO connection object
+	 * @param int $gardenProfileId a valid profile Id
+	 * @return \SplFixedArray SplFixedArray of all garden entries associated with the given profile Id, or null if no entries found.
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when parameters are not the correct data type.
+	 */
 	public function getGardensByGardenProfileId(\PDO $pdo, int $gardenProfileId){
 		// could return many values (an array of garden entries
 		// sanatize the profile id before searching
