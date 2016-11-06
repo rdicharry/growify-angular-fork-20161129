@@ -182,7 +182,44 @@ public static function getCompanionPlantByBothPlantIds(\PDO $pdo, int $plant1Id,
 		}
 		return $companionPlant;
 }
+	/**
+	 * Get all the Companion Plant entries that have the specified Plant Id.
+	 *
+	 * @param \PDO $pdo the PDO connection object.
+	 * @param int $plantId the ID of the plant we are searching for.
+	 * @return \SplFixedArray of SplFixedArray of Companion Plants or null if no matches found.
+	 * @throws \PDOException for mySQL related errors
+	 * @throws \TypeError if variables are not the correct data type.
+	 **/
+	public static function getCompanionPlantsByPlantId(\PDO $pdo, int $plantId) {
+		if($plantId <= 0) {
+			throw(new \RangeException("companion plant id must be postive"));
+		}
 
+		// create query template
+		$query = "SELECT companionPlant1Id, companionPlant2Id FROM companionPlant WHERE ((companionPlant1Id = :plantId) OR (companionPlant2Id = :plantId))";
+		$statement = $pdo->prepare($query);
+
+		// bind parameters
+		$parameters = ["plantId"=>$plantId];
+		$statment->execute($parameters);
+
+		//build an array of companionPlants
+		$companionPlants = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+
+		while(($row=$statement->fetch()) !== false){
+			try {
+				$companionPlant = new CompanionPlant ($row["companionPlant1Id"], $row["companionPlant2Id"]);
+				$companionPlants[$companionPlants->key()]=$companionPlant;
+				$companionPlants->next();
+			}catch(|Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($companionPlants);
+	}
 
 
 }
