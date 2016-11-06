@@ -59,8 +59,9 @@ class PlantArea {
 	/**
 	 * constructor for this PlantArea
 	 *
+	 * plantAreaId is not included in the parameters because it will be set once inserted into a table.
+	 *
 	 * @param int $newPlantAreaId
-	 * @param int $newPlantAreaPlantId
 	 * @param string $newPlantAreaStartDate
 	 * @param string $newPlantAreaEndDate
 	 * @param string $newPlantAreaAreaNum
@@ -72,9 +73,8 @@ class PlantArea {
 	 * @internal param string $plantAreaEndDate end date for this PlantArea
 	 * @internal param int|null $plantAreaAreaNum the area number of this PlantArea
 	 */
-	public function __construct($newPlantAreaId, $newPlantAreaPlantId, $newPlantAreaStartDate, $newPlantAreaEndDate, $newPlantAreaAreaNum) {
+	public function __construct($newPlantAreaPlantId, $newPlantAreaStartDate, $newPlantAreaEndDate, $newPlantAreaAreaNum) {
 		try {
-			$this->setPlantAreaId($newPlantAreaId);
 			$this->setPlantAreaPlantId($newPlantAreaPlantId);
 			$this->setPlantAreaStartDate($newPlantAreaStartDate);
 			$this->setPlantAreaEndDate($newPlantAreaEndDate);
@@ -242,4 +242,155 @@ class PlantArea {
 		$this->plantAreaAreaNum = $newPlantAreaAreaNum;
 	}
 
+	/**
+	 * Updates the plantArea table with this PlantArea instance's state variables
+	 *
+	 * @param PDO $pdo the php data object used to update the plantArea table
+	 * @throws PDOException if an error regarding the php data object occured
+	 */
+	public function update(\PDO $pdo) {
+		//Checks if the plantAreaId exists
+		if($this->plantAreaId === null) {
+			throw(new \PDOException("This plant area cannot be updated because it doesnt exist."));
+		}
+		try {
+			$query = "UPDATE plantArea SET plantAreaPlantId = :plantAreaPlantId, plantAreaStartDate = :plantAreaStartDate, plantAreaEndDate = :plantAreaEndDate, plantAreaAreaNum = :plantAreaAreaNum WHERE plantAreaId = :plantAreaId";
+			$statement = $pdo->prepare($query);
+			$parameters = ["plantAreaPlantId" => $this->plantAreaPlantId, "plantAreaStartDate" => $this->plantAreaStartDate, "plantAreaEndDate" => $this->plantAreaEndDate, "plantAreaAreaNum" => $this->plantAreaAreaNum];
+			$statement->execute($parameters);
+		}catch(PDOException $pdoException){
+			throw(new \PDOException($pdoException->getMessage(),0,$pdoException));
+		}
+	}
+
+	/**
+	 * Inserts a row into the plantArea table that represents this plantArea's instance
+	 *
+	 * @param PDO $pdo the php data object used to delete a row from the the plantArea table
+	 * @throws PDOException if an error regarding the php data object occured
+	 */
+	public function insert(\PDO $pdo){
+		if(is_null($this->plantAreaId)){
+			throw(new PDOException("This Plant Area cannot be inserted into plantArea table because it already exists in the plant area table"));
+		}
+
+		try {
+			$query = "INSERT INTO plantArea(plantAreaPlantId, plantAreaStartDate, plantAreaEndDate, plantAreaAreaNum) VALUES(:plantAreaPlantId, :plantAreaStartDate, plantAreaEndDate, :plantAreaAreaNum)";
+			$statement = $pdo->prepare($query);
+
+			$parameters = ["plantAreaPlantId" => $this->plantAreaPlantId, "plantAreaStartDate" => $this->plantAreaStartDate, "plantAreaEndDate"=> $this->plantAreaEndDate, "plantAreaAreaNum" => $this->plantAreaAreaNum];
+			$statement->execute($parameters);
+			//set plantAreaId to integer value given by mySql
+			$this->setPlantAreaId(intval($pdo->lastInsertId()));
+		}catch(PDOException $pdoException){
+			throw(new \PDOException($pdoException->getMessage(),0,$pdoException));
+		}
+	}
+
+	/**
+	 * Deletes the row representing this Plant Area instance from the Plant Area table
+	 *
+	 * @param PDO $pdo the php data object used to delete a row from the the Plant Area table
+	 * @throws PDOException if an error regarding the php data object occured
+	 */
+	public function delete(\PDO $pdo) {
+		if(is_null($this->plantAreaId)){
+			throw (new PDOException("Cannot delete plant area because it does not exist in the plant area table"));
+		}
+		try {
+			$query = "DELETE FROM plantArea WHERE plantAreaId = :plantAreaId";
+			$statement = $pdo->prepare($query);
+			$parameters = ["plantAreaId" => $this->plantAreaId];
+			$statement->execute($parameters);
+		}catch(PDOException $pdoException){
+			throw(new \PDOException($pdoException->getMessage(),0,$pdoException));
+		}
+	}
+
+	/**
+	 * gets all plant areas
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @return \SplFixedArray SplFixedArray of plant areas found, returns null if empty
+	 * @throws \PDOException if an error regarding the php data object occurs
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	public static function getAllPlantAreas(\PDO $pdo) {
+		$query = "SELECT plantAreaId, plantAreaPlantId, plantAreaStartDate, plantAreaEndDate, plantAreaAreaNum FROM plantArea";
+		$statement = $pdo->prepare($query);
+		$statement->execute();
+		$plantAreas = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$plantArea = new plantArea($row["plantAreaId"], $row["plantAreaPlantId"], $row["plantAreaStartDate"], $row["plantAreaEndDate"], $row["plantAreaAreaNum"]);
+				$plantAreas[$plantAreas->key()] = $plantArea;
+				$plantAreas->next();
+			} catch(\Exception $exception) {
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($plantAreas);
+	}
+
+	/**
+	 * gets a Plant Area instance from a plantAreaId
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param \int The plantAreaId to search for
+	 * @return PlantArea|null PlantArea found or null if not found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	public function getPlantAreaByPlantId(\PDO $pdo, $plantAreaId){
+		if(!is_int($plantAreaId || $plantAreaId < $this->MAX_PLANTAREAID)) {
+			throw(new \TypeError("plantAreaId is not valid"));
+		}
+
+		$query = "SELECT plantAreaId, plantAreaPlantId, plantAreaStartDate, plantAreaEndDate, plantAreaAreaNum FROM plantArea WHERE plantAreaId = :plantAreaId";
+		$statement = $pdo->prepare($query);
+		$parameters = ["plantAreaId" => $plantAreaId];
+		$statement->execute($parameters);
+
+		try {
+			$plantArea = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$plantArea = new PlantArea($row["plantAreaId"], $row["plantAreaPlantId"], $row["plantAreaStartDate"], $row["plantAreaEndDate"], $row["plantAreaAreaNum"]);
+			}
+		} catch(\Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($plantArea);
+	}
+
+	/**
+	 * gets all plant areas by a certain plant area plant Id
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @param int $plantAreaPlantId an id referencing a plantAreaPlantId to search for
+	 * @return \SplFixedArray SplFixedArray of plant areas found, returns null if empty
+	 * @throws \PDOException if an error regarding the php data object occurs
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	public static function getAllPlantAreasbyPlantAreaPlantId(\PDO $pdo, $plantAreaPlantId) {
+		$query = "SELECT plantAreaId, plantAreaPlantId, plantAreaStartDate, plantAreaEndDate, plantAreaAreaNum FROM plantArea WHERE plantAreaPlantId = :plantAreaPlantId";
+		$statement = $pdo->prepare($query);
+		$parameters = ["plantAreaPlantId"=> $plantAreaPlantId];
+		$statement->execute($parameters);
+		$plantAreas = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$plantArea = new plantArea($row["plantAreaId"], $row["plantAreaPlantId"], $row["plantAreaStartDate"], $row["plantAreaEndDate"], $row["plantAreaAreaNum"]);
+				$plantAreas[$plantAreas->key()] = $plantArea;
+				$plantAreas->next();
+			} catch(\Exception $exception) {
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($plantAreas);
+	}
 }
