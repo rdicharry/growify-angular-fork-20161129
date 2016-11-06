@@ -160,7 +160,7 @@ class CombativePlant {
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false){
-				$combativePlant = new CombativePlant($row["combativePlantId1"], $row["combativePlantId2"]);
+				$combativePlant = new CombativePlant($row["combativePlant1Id"], $row["combativePlant2Id"]);
 			}
 		} catch(\Exception $exception){
 				// if row couldn't be converted, rethrow it
