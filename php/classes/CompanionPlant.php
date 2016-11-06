@@ -90,7 +90,7 @@ class CompanionPlant {
 		return ($this->companionPlant2Id);
 	}
 	/**
-	 * mutator method for this companion plant 2
+	 * mutator method for this companion plant 2 id
 	 *
 	 * @param int|null $newCompanionPlant2Id new value of companion plant 2
 	 * @throws \RangeException if $newCompanionPlant2Id is not positive
@@ -144,6 +144,44 @@ class CompanionPlant {
 		$statement->execute($parameters);
 	}
 
+/**
+ * get a single companion plant entry by specifying BOTH plant ids.
+ *  order of plant ids does not matter
+ *
+ * @param \PDO $pdo a PDO connection object
+ * @param int $plant1Id a valid plant id
+ * @param int $plant2Id a valid plant id
+ * @return CompanionPlant|null return a CompanionPlant that has both specific plant ids (in any order), or none if there is not companion plant entry that has BOTH of the specified plant ids.
+ * @throws \PDOException when mySQL related errors occur
+ * @throws \TypeError if the parameters don't match the type hints
+ **/
+public static function getCompanionPlantByBothPlantIds(\PDO $pdo, int $plant1Id, int $plant2Id) {
+	if($plant1Id <=0 || $plant1Id <=0) {
+		throw(new\RangeException("companion plant id must be positive"));
+	}
+
+		//create query template
+	$query = "SELECT companionPlant1Id, companionPlant2Id FROM companionPlant WHERE ((companionPlant1Id = :plant1Id, companionPlant2Id = :plant2Id) OR (companionplant1Id = :plant2Id, companionPlant2Id = :plant2Id))";
+		$statement = $pdo->prepare($query);
+
+		//bind parameters
+		$parameters = ["plant1Id"=>$plant1Id, "plant2Id"=>$plant2Id];
+		$statement->execute($parameters);
+
+		// get result from mySQL
+		try {
+			$companionPlant = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch ();
+			if($row !== false) {
+				$companionPlant = new CompanionPlant ($row["companionPlant1Id"], $row["companionPlant2Id"]);
+			}
+		} catch(\Exception $exception) {
+			// if row couldn't be converted, rethrow it
+			throw(new \PDOException($excpetion->getMessage(), 0, $excpetion));
+		}
+		return $companionPlant;
+}
 
 
 
