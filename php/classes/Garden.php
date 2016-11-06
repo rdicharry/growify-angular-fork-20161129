@@ -180,7 +180,7 @@ class Garden  {
 		$statement->execute($parameters);
 	}
 
-	public function getGardenByGardenProfileId(\PDO $pdo, int $gardenProfileId){
+	public function getGardensByGardenProfileId(\PDO $pdo, int $gardenProfileId){
 		// could return many values (an array of garden entries
 		// sanatize the profile id before searching
 		if($gardenProfileId <=0){

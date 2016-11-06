@@ -23,14 +23,14 @@ class CombativePlantTest extends GrowifyTest {
 
 	/**
 	 * Foreign key relationship to Plant.
-	 * @var Plant combativePlant1
+	 * @var Plant combativePlant1Id
 	 */
-	protected $combativePlant1 = null;
+	protected $combativePlant1Id = null;
 	/**
 	 * Foreign key relationship to Plant.
-	 * @var Plant combativePlant2
+	 * @var Plant combativePlant2Id
 	 */
-	protected $combativePlant2 = null;
+	protected $combativePlant2Id = null;
 
 	/**
 	 * Create objects necessary for test (dependencies).
@@ -40,12 +40,12 @@ class CombativePlantTest extends GrowifyTest {
 		parent::setUp();
 
 		// create and insert a Plant1
-		$this->combativePlant1 = new Plant(/*TODO add parameters */);
-		$this->combativePlant1->insert($this->getPDO());
+		$this->combativePlant1Id = new Plant(/*TODO add parameters */);
+		$this->combativePlant1Id->insert($this->getPDO());
 
 		//create and insert a Plant2
-		$this->combativePlant2 = new Plant(/*TODO add parameters*/);
-		$this->combativePlant2->insert($this->getPDO());
+		$this->combativePlant2Id = new Plant(/*TODO add parameters*/);
+		$this->combativePlant2Id->insert($this->getPDO());
 
 	}
 
@@ -107,7 +107,7 @@ class CombativePlantTest extends GrowifyTest {
 	}
 
 	/**
-	 * Insert combative plant object into mySQL as combativePlant1, combativePlant2, check that doing delete on combativePlant2, combativePlant1 removes that object.
+	 * Insert combative plant object into mySQL as combativePlant1Id, combativePlant2Id, check that doing delete on combativePlant2Id, combativePlant1Id removes that object.
 	 */
 	public function testDeleteValidCombativePlantEntryOrderInsensitive(){
 		// create object
@@ -131,7 +131,7 @@ class CombativePlantTest extends GrowifyTest {
 
 		// a query for a particular combative plant should return all
 		// valid plants that it is paired with - so we might need to use
-		// more than one Plant entry to test against. e.g. should be able to retrieve the entries with the plantId as either combativePlant2 or combativePlant2
+		// more than one Plant entry to test against. e.g. should be able to retrieve the entries with the plantId as either combativePlant1Id or combativePlant2Id
 
 	}
 

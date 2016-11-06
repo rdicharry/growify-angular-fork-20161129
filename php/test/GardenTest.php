@@ -188,13 +188,13 @@ class GardenTest extends GrowifyTest {
 	}
 
 	/**
-	 * eliminate - this is the same as testInsertValidGarden()
-	 * do not anticipate referencing gardens by plantID or by date planted
+	 * This is similar to testInsertValidGarden() but uses the getGardensByGardenProfileId() method.
+	 * At this time, we do not anticipate referencing gardens by plantID or by date planted
 	 */
-	/*
-	public function testGetValidGardenByProfileId(){
 
-	}*/
+	public function testGetValidGardensByProfileId(){
+
+	}
 
 	/**
 	 * retrieve a list of all gardens

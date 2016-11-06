@@ -14,28 +14,28 @@ class CombativePlant {
 	 * id of one combative plant - this is a foreign key
 	 * @var int $combativePlant1Id;
 	 */
-	private $combativePlant1;
+	private $combativePlant1Id;
 
 	/**
 	 * id of another combative plant - this is a foreign key
 	 * @var int $combativePlant2Id
 	 */
-	private $combativePlant2;
+	private $combativePlant2Id;
 
 	/**
 	 * CombativePlant constructor.
-	 * @param int $newCombativePlant1
-	 * @param int $newCombativePlant2
+	 * @param int $newCombativePlant1Id
+	 * @param int $newCombativePlant2Id
 
 	 * @throws \TypeError if parameters violate type hints
 	 * @throws \RangeException if data values are out of bounds (e.g. negative values for plant ids
 	 * @throws \Exception if some other exception occurs
 	 *
 	 */
-	public function __construct(int $newCombativePlant1, int $newCombativePlant2){
+	public function __construct(int $newCombativePlant1Id, int $newCombativePlant2Id){
 		try{
-			$this->setCombativePlant1($newCombativePlant1);
-			$this->setCombativePlant2($newCombativePlant2);
+			$this->setCombativePlant1Id($newCombativePlant1Id);
+			$this->setCombativePlant2Id($newCombativePlant2Id);
 		} //rethrow to caller
 		 catch(\RangeException $range){
 			throw(new \RangeException($range->getMessage(), 0, $range));
@@ -50,44 +50,44 @@ class CombativePlant {
 	 * Accessor method for combativePlant1
 	 * @return int $combativePlant1 a plant id
 	 */
-	public function getCombativePlant1(): int {
-		return $this->combativePlant1;
+	public function getCombativePlant1Id(): int {
+		return $this->combativePlant1Id;
 	}
 
 	/**
-	 * Mutator method for combativePlant1.
+	 * Mutator method for combativePlant1Id.
 	 * @param int $newCombativePlant
 	 * @throws \RangeException if $newCombativePlant is not positive.
 	 * @throws \TypeError if $newCombativePlant is not an int.
 	 */
-	public function setCombativePlant1(int $newCombativePlant) {
+	public function setCombativePlant1Id(int $newCombativePlant) {
 		if($newCombativePlant <= 0){
 			throw(new \RangeException("combative plant id must be positive"));
 		}
-		$this->combativePlant1 = $newCombativePlant;
+		$this->combativePlant1Id = $newCombativePlant;
 	}
 
 	/**
-	 * Accessor method for combativePlant2
-	 * @return int $combativeplant2 a plant id.
+	 * Accessor method for combativePlant2Id
+	 * @return int $combativeplant2Id a plant id.
 	 */
-	public function getCombativePlant2(): int {
-		return $this->combativePlant2;
+	public function getCombativePlant2Id(): int {
+		return $this->combativePlant2Id;
 	}
 
 	/**
-	 * Mutator method for combativePlant2
+	 * Mutator method for combativePlant2Id
 	 * @param int $newCombativePlant
 	 * @throws \RangeException if $newCombativePlant is not positive
 	 * @throws \TypeError if $newCombativePlant is not an int.
 	 */
-	public function setCombativePlant2(int $newCombativePlant) {
+	public function setCombativePlant2Id(int $newCombativePlant) {
 
 		if($newCombativePlant <= 0){
 			throw new(\RangeException("combative plant id must be positive"));
 		}
 
-		$this->combativePlant2 = $newCombativePlant;
+		$this->combativePlant2Id = $newCombativePlant;
 	}
 
 	/**
@@ -99,11 +99,11 @@ class CombativePlant {
 	public function insert(\PDO $pdo){
 
 		//create query template
-		$query = "INSERT INTO combativePlant(combativePlant1, combativePlant2) VALUES (:combativePlant1, :combativePlant2 )";
+		$query = "INSERT INTO combativePlant(combativePlant1Id, combativePlant2Id) VALUES (:combativePlant1Id, :combativePlant2Id )";
 		$statement = $pdo->prepare($query);
 
 		//bind the member variables to the place holders in the template
-		$parameters = ["combativePlant1"=>$this->combativePlant1, "combativePlant2"=>$this->combativePlant2];
+		$parameters = ["combativePlant1Id"=>$this->combativePlant1Id, "combativePlant2Id"=>$this->combativePlant2Id];
 		$statement->execute($parameters);
 
 	}
@@ -117,13 +117,13 @@ class CombativePlant {
 	public function delete(\PDO $pdo){
 
 		// create query template
-		// note: need to check both cases: combativeplant1, combativeplant2 AND combativeplant2, combativeplant1 since order does not matter
+		// note: need to check both cases: combativeplant1Id, combativeplant2Id AND combativeplant2Id, combativeplant1Id since order does not matter
 		// TODO ensure that we have done this check in companion plant as well!
-		$query = "DELETE FROM garden WHERE ((combativePlant1= :combativePlant1 AND combativePlant2= :combativePlant2) OR (combativePlant1 = :combativePlant2 AND combativePlant2 = :combativePlant1))";
+		$query = "DELETE FROM garden WHERE ((combativePlant1Id= :combativePlant1Id AND combativePlant2Id= :combativePlant2Id) OR (combativePlant1Id = :combativePlant2Id AND combativePlant2Id = :combativePlant1Id))";
 		$statement = $pdo->prepare($query);
 
 		// bind parameters
-		$parameters = ["combativePlant1"=>$this->combativePlant1, "combativePlant2"=>$this->combativePlant2];
+		$parameters = ["combativePlant1Id"=>$this->combativePlant1Id, "combativePlant2Id"=>$this->combativePlant2Id];
 		$statement->execute($parameters);
 	}
 
@@ -143,7 +143,7 @@ class CombativePlant {
 		}
 
 		// create query template
-		$query = "SELECT combativePlant1, combativePlant2 FROM combativePlant WHERE ((combativePlant1 = :plantId ) OR (combativePlant2=:plantId))";
+		$query = "SELECT combativePlant1Id, combativePlant2Id FROM combativePlant WHERE ((combativePlant1Id = :plantId ) OR (combativePlant2Id=:plantId))";
 		$statement = $pdo->prepare($query);
 
 		// bind parameters
@@ -156,7 +156,7 @@ class CombativePlant {
 
 		while(($row=$statement->fetch()) !== false){
 			try{
-				$combativePlant = new CombativePLant($row["combativePlant1"], $row["combativePlant2"]);
+				$combativePlant = new CombativePlant($row["combativePlant1Id"], $row["combativePlant2Id"]);
 				$combativePlants[$combativePlants->key()]=$combativePlant;
 				$combativePlants->next();
 			}catch(\Exception $exception){
@@ -177,7 +177,7 @@ class CombativePlant {
 	public static function getAllCombativePlants(\PDO $pdo){
 
 		// create query template
-		$query = "SELECT combativePlant1, combativePlant2 FROM combativePlant";
+		$query = "SELECT combativePlant1Id, combativePlant2Id FROM combativePlant";
 		$statement = $pdo->prepare($query);
 		$statement->execute();
 
@@ -186,7 +186,7 @@ class CombativePlant {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch())!==false){
 			try{
-				$combativePlant = new CombativePlant($row["combativePlant1"], $row["combativePlant2"]);
+				$combativePlant = new CombativePlant($row["combativePlant1Id"], $row["combativePlant2Id"]);
 				$combativePlants[$combativePlants->key()] = $combativePlant;
 				$combativePlants->next();
 			} catch(\Exception $exception){
