@@ -1,4 +1,9 @@
 <?php
+
+namespace Edu\Cnm\Growify;
+
+require_once("autoload.php");
+
 /**
  * Plant Information Class
  *
