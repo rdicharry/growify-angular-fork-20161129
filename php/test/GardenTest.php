@@ -72,23 +72,27 @@ class GardenTest extends GrowifyTest {
 	}
 
 	/**
-	 * test inserting a valid garden and verify the data from mySQL matches.
+	 * Test inserting a valid garden and verify the data from mySQL matches. Note that this also provides coverage for the getGardensByGardenProfileId() method.  Note also that at this time, we do not anticipate referencing gardens by plantID or by date planted
 	 */
 	public function testInsertValidGarden(){
-		// count the number of rows and save to compare
+		// store number of rows to compare for later
 		$numRows = $this->getConnection()->getRowCount("garden");
 
-		//create a new Garden and insert into mySQL
-		$garden = new Garden($this->profile->getProfileUserId(), $this->VALID_PLANTING_DATE, $this->plant1->getPlantId());
+		// create a new Garden and insert int mySQL
+		$garden = new Garden($this->profile->getProfileId(), $this->VALID_PLANTING_DATE, $this->plant1->getPlantId());
 		$garden->insert($this->getPDO());
 
-		// grab data from mySQL and check that fields match
-		// TODO how to best attain adequate test coverage - could return multiple rows??
-		$pdoGarden = Garden::getGardenByProfileId($this->getPDO, $this->profile->getProfileUserId());
-		$this->assertEquals( $this->getConnection()->getRowCount("garden"), $numRows+1);
-		$this->assertEquals($pdoGarden->getGardenProfileId(),$this->profile->getProfileId());
-		$this->assertEquals($pdoGarden->getGardenPlantId(), $this->plant1->getPlantId());
+		// grab data from mySQL and enforce fields match expectations
+		$results = Garden::getGardensByGardenProfileId($this->getPDO(), $this->profile->getProfileId());
+		$this->assertEquals($numRows+1, $this->getConnection()->getRowCount("garden"));
+		$this->assertCount(1, $results);
+		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\Growify\\Garden");
+
+		// get the result from the array and validate it
+		$pdoGarden = $results[0];
+		$this->assertEquals($pdoGarden->getGardenProfileId(), $this->profile->getProfileId());
 		$this->assertEquals($pdoGarden->getGardenDatePlanted(), $this->VALID_PLANTING_DATE);
+		$this->assertEquals($pdoGarden->getGardenPlantId(), $this->plant1->getPlantId());
 
 	}
 
@@ -98,8 +102,14 @@ class GardenTest extends GrowifyTest {
 	 * @expectedException PDOException
 	 */
 	public function testInsertInvalidGarden(){
+		$garden1 = new Garden($this->profile->getProfileId(), $this->VALID_PLANTING_DATE, $this->plant1->getPlantId());
+		$garden1->insert($this->getPDO());
 
+		$garden2 = new Garden($this->profile->getProfileId(), $this->VALID_PLANTING_DATE, $this->plant1->getPlantId());
+		$garden2->insert($this->getPDO());
 	}
+
+
 
 	/**
 	 * insert a garden entry, edit it and update in DB.
@@ -187,31 +197,8 @@ class GardenTest extends GrowifyTest {
 		$garden->delete($this->getPDO());
 	}
 
-	/**
-	 * This is similar to testInsertValidGarden() but uses the getGardensByGardenProfileId() method.
-	 * At this time, we do not anticipate referencing gardens by plantID or by date planted
-	 */
-	public function testGetValidGardensByProfileId(){
-		// store number of rows to compare for later
-		$numRows = $this->getConnection()->getRowCount("garden");
 
-		// create a new Garden and insert int mySQL
-		$garden = new Garden($this->profile->getProfileId(), $this->VALID_PLANTING_DATE, $this->plant1->getPlantId());
-		$garden->insert($this->getPDO());
 
-		// grab data from mySQL and enforce fields match expectations
-		$results = Garden::getGardensByGardenProfileId($this->getPDO(), $this->profile->getProfileId());
-		$this->assertEquals($numRows+1, $this->getConnection()->getRowCount("garden"));
-		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\Growify\\Garden");
-
-		// get the result from the array and validate it
-		$pdoGarden = $results[0];
-		$this->assertEquals($pdoGarden->getGardenProfileId(), $this->profile->getProfileId());
-		$this->assertEquals($pdoGarden->getGardenDatePlanted(), $this->VALID_PLANTING_DATE);
-		$this->assertEquals($pdoGarden->getGardenPlantId(), $this->plant1->getPlantId());
-
-	}
 
 	/**
 	 * test retrieving a list of all gardens
