@@ -13,7 +13,7 @@ class Garden  {
 	private $gardenProfileId;
 
 	/**
-	 * the (user entered) date and time the Garden was planted
+	 * the (user entered) date and time the plant (specified by gardenPlantId) was planted
 	 * @var \DateTime $gardenPlantId
 	 */
 	private $gardenDatePlanted;
@@ -211,6 +211,13 @@ class Garden  {
 		return($gardens);
 	}
 
+	/**
+	 * Get all Garden objects.
+	 * @param \PDO $pdo PDO connection object
+	 * @return \SplFixedArray of Garden objects found or null if none found.
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type.
+	 */
 	public static function getAllGardens(\PDO $pdo){
 		//create query template
 		$query = "SELECT gardenProfileId, gardenDatePlanted, gardenPlantId FROM garden ";
@@ -230,6 +237,7 @@ class Garden  {
 				throw(new \PDOException($exception->getMessage(), 0, $exception));
 			}
 		}
+		return $gardens;
 	}
 
 }

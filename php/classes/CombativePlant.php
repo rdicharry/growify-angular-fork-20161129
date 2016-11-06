@@ -127,6 +127,77 @@ class CombativePlant {
 		$statement->execute($parameters);
 	}
 
+/*	no update for this object - we do not have a use case for it. public function update(\PDO $pdo){	}*/
 
+	/**
+	 * Get all of the Combative Plant entries that have the specified plant Id.
+	 * @param \PDO $pdo the PDO connection object.
+	 * @param int $plantId the Id of the plant we are searching for.
+	 * @return \SplFixedArray SplFixedArray of Combative Plants, or null if no matches found.
+	 * @throws \PDOException for mySQL related errors
+	 * @throws \TypeError if variables are not the correct data type.
+	 */
+	public static function getCombativePlantsByPlantId(\PDO $pdo, int $plantId){
+		if($plantId <= 0){
+			throw(new \RangeException("combative plant id must be positive"));
+		}
+
+		// create query template
+		$query = "SELECT combativePlant1, combativePlant2 FROM combativePlant WHERE ((combativePlant1 = :plantId ) OR (combativePlant2=:plantId))";
+		$statement = $pdo->prepare($query);
+
+		// bind parameters
+		$parameters = ["plantId"=>$plantId];
+		$statement->execute($parameters);
+
+		// build an array of combativePlants
+		$combativePlants = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+
+		while(($row=$statement->fetch()) !== false){
+			try{
+				$combativePlant = new CombativePLant($row["combativePlant1"], $row["combativePlant2"]);
+				$combativePlants[$combativePlants->key()]=$combativePlant;
+				$combativePlants->next();
+			}catch(\Exception $exception){
+				//if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($combativePlants);
+
+	}
+
+	/**
+	 * @param \PDO $pdo PDO connection object
+	 * @return \SplFixedArray SplFixedArray of combative plants found or null if none found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object.
+	 */
+	public static function getAllCombativePlants(\PDO $pdo){
+
+		// create query template
+		$query = "SELECT combativePlant1, combativePlant2 FROM combativePlant";
+		$statement = $pdo->prepare($query);
+		$statement->execute();
+
+		// build an array of combativePlants
+		$combativePlants = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch())!==false){
+			try{
+				$combativePlant = new CombativePlant($row["combativePlant1"], $row["combativePlant2"]);
+				$combativePlants[$combativePlants->key()] = $combativePlant;
+				$combativePlants->next();
+			} catch(\Exception $exception){
+				// rethrow if the row couldn't be converted'
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+
+		return($combativePlants);
+
+
+	}
 
 }
