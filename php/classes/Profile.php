@@ -1,5 +1,4 @@
 <?php
-
 namespace Edu\Cnm\Growify;
 
 require_once("autoload.php");
@@ -11,42 +10,42 @@ require_once("autoload.php");
  *
  * @author Greg Bloom <gbloomdev@gmail.com>
  * @version 0.1.0
- ***/
+ **/
 class Profile {
 	/**
 	 * id for this profile; this is the primary key
 	 * @var int $profileId
-	 ***/
+	 **/
 	private $profileId;
 	/**
 	 * user name for this profile
 	 * @var string $profileUsername
-	 ***/
+	 **/
 	private $profileUsername;
 	/**
 	 * email for this profile
 	 * @var string $profileEmail
-	 ***/
+	 **/
 	private $profileEmail;
 	/**
 	 * zip code for this profile
 	 * @var int $profileZipCode
-	 ***/
+	 **/
 	private $profileZipCode;
 	/**
 	 * hash for this profile
 	 * @var string $profileHash
-	 ***/
+	 **/
 	private $profileHash;
 	/**
 	 * salt for this profile
 	 * @var string $profileSalt
-	 ***/
+	 **/
 	private $profileSalt;
 	 /**
 	 * activation for this profile
 	 * @var bool $profileActivation
-	 ***/
+	 **/
 	private $profileActivation;
 
 	public function __construct($newProfileId, $newProfileUsername, $newProfileEmail, $newProfileZipCode, $newProfileHash, $newProfileSalt, $newProfileActivation){
@@ -80,7 +79,7 @@ class Profile {
 	/**
 	 * accessor method for user name
 	 * @return string
-	 ***/
+	 **/
 	public function getProfileUserName() {
 		return $this->profileUsername;
 	}
@@ -207,7 +206,7 @@ class Profile {
 	/**
 	 * mutator method for profile password salt
 	 * @param string $newProfileSalt
-	 ***/
+	 **/
 	public function setProfileSalt($newProfileSalt) {
 		$this->profileSalt = $newProfileSalt;
 	}
@@ -215,7 +214,7 @@ class Profile {
 	/**
 	 * mutator method for profile activation state
 	 * @param boolean $newProfileActivation
-	 ***/
+	 **/
 	public function setProfileActivation($newProfileActivation) {
 		$this->profileActivation = $newProfileActivation;
 	}
@@ -224,7 +223,7 @@ class Profile {
 	 * @param \PDO $pdo the PDO connection object.
 	 * @throws \PDOException if mySQL related errors occur.
 	 * @throws \TypeError if $pdo is not a PDO connection object.
-	 */
+	 **/
 	public function insert(\PDO $pdo) {
 		//check to make sure this profile doesn't already exist
 		if($this->profileId !== null) {
@@ -246,7 +245,7 @@ class Profile {
 	 * @param \PDO $pdo PDO connection object.
 	 * @throws \PDOException if mySQL related errors occur.
 	 * @throws \TypeError if $pdo is not a PDO object.
-	 */
+	 **/
 	public function delete(\PDO $pdo) {
 		// create query template
 		$query = "DELETE FROM profile WHERE profileId = :profileId";
@@ -262,7 +261,7 @@ class Profile {
 	 * @param \PDO $pdo PDO connection object
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError if $pdo is not a PDO connection object.
-	 */
+	 **/
 	public function update(\PDO $pdo) {
 		//create query template
 		$query = "UPDATE profile SET profileId =: profileId, profileUsername =: profileUsername, profileEmail =: profileEmail, profileZipCode =: profileZipCode, profileHash =: profileHash, profileSalt =: profileSalt, profileActivation =: profileActivation";
@@ -280,10 +279,10 @@ class Profile {
 	 * @return Profile|null Profile found or null if not found
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when parameters are not the correct data type.
-	 */
+	 **/
 	public static function getProfileByProfileId(\PDO $pdo, int $profileId) {
 		if($profileId <= 0) {
-			throw(new RangeException("profile id must be positive."));
+			throw(new \RangeException("profile id must be positive."));
 		}
 		// create query template
 		$query = "SELECT profileId, profileUsername, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation FROM profile WHERE profileId = :profileId";
@@ -315,7 +314,7 @@ class Profile {
 	 * @return \SplFixedArray SplFixedArray of Profiles found
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when parameters are not the correct data type.
-	 */
+	 **/
 	public static function getProfileByProfileUsername(\PDO $pdo, string $profileUsername) {
 		$profileUsername = trim($profileUsername);
 		$profileUsername = filter_var($profileUsername, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
@@ -336,7 +335,7 @@ class Profile {
 		while(($row = $statement->fetch()) !== false){
 			try {
 				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
-				$profiles[$profile->key()] = $profile;
+				$profiles[$profiles->key()] = $profile;
 				$profiles->next();
 			} catch(\Exception $exception) {
 				// if the row couldn't be converted, rethrow it
@@ -352,11 +351,11 @@ class Profile {
 	 * @return \SplFixedArray SplFixedArray of Profiles found
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when parameters are not the correct data type.
-	 */
+	 **/
 	public static function getProfileByZipcode(\PDO $pdo, int $profileZipcode) {
 		$profileZipcode = filter_var($profileZipcode, FILTER_VALIDATE_INT);
 		if($profileZipcode <= 0) {
-			throw(new RangeException("profile zipcode must be positive."));
+			throw(new \RangeException("profile zipcode must be positive."));
 		}
 		// create query template
 		$query = "SELECT profileId, profileUsername, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation FROM profile WHERE profileZipcode = :profileZipcode";
@@ -388,7 +387,7 @@ class Profile {
 	 * @return \SplFixedArray of Profile objects found or null if none found.
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when variables are not the correct data type.
-	 */
+	 **/
 	public static function getAllProfiles(\PDO $pdo){
 		//create query template
 		$query = "SELECT profileId, profileName, profileVariety, profileDescription, profileType, profileSpread, profileDaysToHarvest, profileHeight, profileMinTemp, profileMaxTemp, profileSoilMoisture FROM profile";

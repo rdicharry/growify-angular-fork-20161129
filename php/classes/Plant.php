@@ -113,7 +113,7 @@ class Plant {
 	/**
 	 * accessor method for plantId
 	 * @return int
-	 */
+	 **/
 	public function getPlantId() {
 		return $this->plantId;
 	}
@@ -121,7 +121,7 @@ class Plant {
 	/**
 	 * accessor method for plantName
 	 * @return string
-	 */
+	 **/
 	public function getPlantName() {
 		return $this->plantName;
 	}
@@ -129,7 +129,7 @@ class Plant {
 	/**
 	 * accessor method for plantVariety
 	 * @return string
-	 */
+	 **/
 	public function getPlantVariety() {
 		return $this->plantVariety;
 	}
@@ -137,7 +137,7 @@ class Plant {
 	/**
 	 * accessor method for plantDescription
 	 * @return string
-	 */
+	 **/
 	public function getPlantDescription() {
 		return $this->plantDescription;
 	}
@@ -145,7 +145,7 @@ class Plant {
 	/**
 	 * accessor method for plantType
 	 * @return string
-	 */
+	 **/
 	public function getPlantType() {
 		return $this->plantType;
 	}
@@ -153,7 +153,7 @@ class Plant {
 	/**
 	 * accessor method for plantSpread
 	 * @return float
-	 */
+	 **/
 	public function getPlantSpread() {
 		return $this->plantSpread;
 	}
@@ -161,7 +161,7 @@ class Plant {
 	/**
 	 * accessor method for plantDaysToHarvest
 	 * @return int
-	 */
+	 **/
 	public function getPlantDaysToHarvest() {
 		return $this->plantDaysToHarvest;
 	}
@@ -169,7 +169,7 @@ class Plant {
 	/**
 	 * accessor method for plantHeight
 	 * @return float
-	 */
+	 **/
 	public function getPlantHeight() {
 		return $this->plantHeight;
 	}
@@ -177,7 +177,7 @@ class Plant {
 	/**
 	 * accessor method for plantMinTemp
 	 * @return int
-	 */
+	 **/
 	public function getPlantMinTemp() {
 		return $this->plantMinTemp;
 	}
@@ -185,7 +185,7 @@ class Plant {
 	/**
 	 * accessor method for plantMaxTemp
 	 * @return int
-	 */
+	 **/
 	public function getPlantMaxTemp() {
 		return $this->plantMaxTemp;
 	}
@@ -193,7 +193,7 @@ class Plant {
 	/**
 	 * accessor method for plantSoilMoisture
 	 * @return string
-	 */
+	 **/
 	public function getPlantSoilMoisture() {
 		return $this->plantSoilMoisture;
 	}
@@ -203,7 +203,7 @@ class Plant {
 	 * @param int|null $newPlantId new value of plant id
 	 * @throws \RangeException if $newPlantId is negative
 	 * @throws \TypeError if $newPlantId is not an integer
-	 */
+	 **/
 	public function setPlantId(int $newPlantId = null) {
 		// if the plant id is null, this is a new plant without an id from mySQL
 		if($newPlantId === null) {
@@ -222,7 +222,7 @@ class Plant {
 	 * @param string $newPlantName new value of plant name
 	 * @throws \InvalidArgumentException if $newPlantName has invalid contents or is empty
 	 * @throws \RangeException if $newPlantName is too long
-	 */
+	 **/
 	public function setPlantName(string $newPlantName) {
 		$newPlantName = trim($newPlantName);
 		$newPlantName = filter_var($newPlantName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
@@ -240,7 +240,7 @@ class Plant {
 	 * @param string $newPlantVariety new value of plant variety
 	 * @throws \InvalidArgumentException if $newPlantVariety has invalid contents or is empty
 	 * @throws \RangeException if $newPlantVariety is too long
-	 */
+	 **/
 	public function setPlantVariety($newPlantVariety) {
 		$newPlantVariety = trim($newPlantVariety);
 		$newPlantVariety = filter_var($newPlantVariety, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
@@ -258,7 +258,7 @@ class Plant {
 	 * @param string $newPlantDescription new value of plant description
 	 * @throws \InvalidArgumentException if $newPlantDescription has invalid contents or is empty
 	 * @throws \RangeException if $newPlantDescription is too long
-	 */
+	 **/
 	public function setPlantDescription($newPlantDescription) {
 		$newPlantDescription = trim($newPlantDescription);
 		$newPlantDescription = filter_var($newPlantDescription, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
@@ -276,7 +276,7 @@ class Plant {
 	 * @param string $newPlantType new value of plant type
 	 * @throws \InvalidArgumentException if $newPlantType has invalid contents or is empty
 	 * @throws \RangeException if $newPlantType is too long
-	 */
+	 **/
 	public function setPlantType($newPlantType) {
 		$newPlantType = trim($newPlantType);
 		$newPlantType = filter_var($newPlantType, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
@@ -294,7 +294,7 @@ class Plant {
 	 * @param float $newPlantSpread new value of plant spread
 	 * @throws \UnexpectedValueException if $newPlantSpread is not a float
 	 * @throws \RangeException if $newPlantSpread is negative
-	 */
+	 **/
 	public function setPlantSpread($newPlantSpread) {
 		$newPlantSpread = filter_var($newPlantSpread, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 		if($newPlantSpread === false) {
@@ -311,7 +311,7 @@ class Plant {
 	 * @param int $newPlantDaysToHarvest new value of plant days to harvest
 	 * @throws \UnexpectedValueException if $newPlantDaysToHarvest is not an int
 	 * @throws \RangeException if $newPlantDaysToHarvest is negative
-	 */
+	 **/
 	public function setPlantDaysToHarvest($newPlantDaysToHarvest) {
 		$newPlantDaysToHarvest = filter_var($newPlantDaysToHarvest, FILTER_VALIDATE_INT);
 		if($newPlantDaysToHarvest === false) {
@@ -328,7 +328,7 @@ class Plant {
 	 * @param float $newPlantHeight new value of plant mature height
 	 * @throws \UnexpectedValueException if $newPlantHeight is not a float
 	 * @throws \RangeException if $newPlantHeight is negative
-	 */
+	 **/
 	public function setPlantHeight($newPlantHeight) {
 		$newPlantHeight = filter_var($newPlantHeight, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 		if($newPlantHeight === false) {
@@ -344,7 +344,7 @@ class Plant {
 	 * mutator method for plantMinTemp
 	 * @param int $newPlantMinTemp new value of plant min temp
 	 * @throws \UnexpectedValueException if $newPlantMinTemp is not a int
-	 */
+	 **/
 	public function setPlantMinTemp($newPlantMinTemp) {
 		$newPlantMinTemp = filter_var($newPlantMinTemp, FILTER_VALIDATE_INT);
 		if($newPlantMinTemp === false) {
@@ -357,7 +357,7 @@ class Plant {
 	 * mutator method for plantMaxTemp
 	 * @param int $newPlantMaxTemp new value of plant max temp
 	 * @throws \UnexpectedValueException if $newPlantMaxTemp is not a int
-	 */
+	 **/
 	public function setPlantMaxTemp($newPlantMaxTemp) {
 		$newPlantMaxTemp = filter_var($newPlantMaxTemp, FILTER_VALIDATE_INT);
 		if($newPlantMaxTemp === false) {
@@ -371,7 +371,7 @@ class Plant {
 	 * @param string $newPlantSoilMoisture new value of plant soil moisture
 	 * @throws \InvalidArgumentException if $newPlantSoilMoisture has invalid contents or is empty
 	 * @throws \RangeException if $newPlantSoilMoisture is too long
-	 */
+	 **/
 	public function setPlantSoilMoisture($newPlantSoilMoisture) {
 		$newPlantSoilMoisture = trim($newPlantSoilMoisture);
 		$newPlantSoilMoisture = filter_var($newPlantSoilMoisture, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
@@ -389,7 +389,7 @@ class Plant {
 	 * @param \PDO $pdo the PDO connection object.
 	 * @throws \PDOException if mySQL related errors occur.
 	 * @throws \TypeError if $pdo is not a PDO connection object.
-	 */
+	 **/
 	public function insert(\PDO $pdo) {
 		//check to make sure this plant doesn't already exist
 		if($this->plantId !== null) {
@@ -411,7 +411,7 @@ class Plant {
 	 * @param \PDO $pdo PDO connection object.
 	 * @throws \PDOException if mySQL related errors occur.
 	 * @throws \TypeError if $pdo is not a PDO object.
-	 */
+	 **/
 	public function delete(\PDO $pdo) {
 		// create query template
 		$query = "DELETE FROM plant WHERE plantId = :plantId";
@@ -427,7 +427,7 @@ class Plant {
 	 * @param \PDO $pdo PDO connection object
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError if $pdo is not a PDO connection object.
-	 */
+	 **/
 	public function update(\PDO $pdo) {
 		//create query template
 		$query = "UPDATE plant SET plantId = :plantId, plantName = :plantName, plantVariety = :plantVariety, plantDescription = :plantDescription, plantType = :plantType, plantSpread = :plantSpread, plantDaysToHarvest = :plantDaysToHarvest, plantHeight = :plantHeight, plantMinTemp = :plantMinTemp, plantMaxTemp = :plantMaxTemp, plantSoilMoisture = :plantSoilMoisture";
@@ -445,10 +445,10 @@ class Plant {
 	 * @return Plant|null Plant found or null if not found
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when parameters are not the correct data type.
-	 */
+	 **/
 	public static function getPlantByPlantId(\PDO $pdo, int $plantId) {
 		if($plantId <= 0) {
-			throw(new RangeException("Plant id must be positive."));
+			throw(new \RangeException("Plant id must be positive."));
 		}
 		// create query template
 		$query = "SELECT plantId, plantName, plantVariety, plantDescription, plantType, plantSpread, plantDaysToHarvest, plantHeight, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantId= :plantId";
@@ -480,7 +480,7 @@ class Plant {
 	 * @return \SplFixedArray SplFixedArray of Plants found
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when parameters are not the correct data type.
-	 */
+	 **/
 	public static function getPlantByPlantName(\PDO $pdo, string $plantName) {
 		$plantName = trim($plantName);
 		$plantName = filter_var($plantName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
@@ -517,7 +517,7 @@ class Plant {
 	 * @return \SplFixedArray SplFixedArray of Plants found
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when parameters are not the correct data type.
-	 */
+	 **/
 	public static function getPlantByPlantType(\PDO $pdo, string $plantType) {
 		$plantType = trim($plantType);
 		$plantType = filter_var($plantType, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
@@ -554,7 +554,7 @@ class Plant {
 	 * @return \SplFixedArray of Plant objects found or null if none found.
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when variables are not the correct data type.
-	 */
+	 **/
 	public static function getAllPlants(\PDO $pdo){
 		//create query template
 		$query = "SELECT plantId, plantName, plantVariety, plantDescription, plantType, plantSpread, plantDaysToHarvest, plantHeight, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant";
