@@ -18,62 +18,62 @@ class PlantTest extends GrowifyTest {
 	/**
 	 * name of the plant
 	 * @var string $VALID_PLANTNAME
-	 */
+	 **/
 	protected $VALID_PLANTNAME = "Piranha Plant";
 	/**
 	 * 2nd name of the plant, for testing edits and updates
 	 * @var string $VALID_PLANTNAME2
-	 */
+	 **/
 	protected $VALID_PLANTNAME2 = " Pakkun Flower";
 	/**
 	 * variety of the plant
 	 * @var string $VALID_PLANTVARIETY
-	 */
+	 **/
 	protected $VALID_PLANTVARIETY = "standard";
 	/**
 	 * description of the plant
 	 * @var string $VALID_PLANTDESCRIPTION
-	 */
+	 **/
 	protected $VALID_PLANTDESCRIPTION = "Live in green pipes. Red with white spots and has razor sharp teeth";
 	/**
 	 * type of the plant
 	 * @var string $VALID_PLANTTYPE
-	 */
+	 **/
 	protected $VALID_PLANTTYPE = "flower";
 	/**
 	 * space to give the plant
 	 * @var int $VALID_PLANTSPREAD
-	 */
+	 **/
 	protected $VALID_PLANTSPREAD = 5;
 	/**
 	 * amount of days for the plant to mature
 	 * @var int $VALID_PLANTDAYSTOHARVEST
-	 */
+	 **/
 	protected $VALID_PLANTDAYSTOHARVEST = 2;
 	/**
 	 * height of the plant
 	 * @var int $VALID_PLANTHEIGHT
-	 */
+	 **/
 	protected $VALID_PLANTHEIGHT = 4;
 	/**
 	 * minimum temperature for the plant to grow
 	 * @var int $VALID_PLANTMINTEMP
-	 */
+	 **/
 	protected $VALID_PLANTMINTEMP = 50;
 	/**
 	 * maximum temperature for the plant to grow
 	 * @var int $VALID_PLANTMAXTEMP
-	 */
+	 **/
 	protected $VALID_PLANTMAXTEMP = 90;
 	/**
 	 * soil moisture needs for the plant
 	 * @var string $VALID_PLANTSOILMOISTURE
-	 */
+	 **/
 	protected $VALID_PLANTSOILMOISTURE = "D";
 	/**
 	 * The plant being tested
 	 * @var Plant plant
-	 */
+	 **/
 	protected $plant = null;
 
 	public final function setUp() {
@@ -261,6 +261,10 @@ class PlantTest extends GrowifyTest {
 		$this->assertEquals($pdoPlant->getPlantMaxTemp(), $this->VALID_PLANTMAXTEMP);
 		$this->assertEquals($pdoPlant->getPlantSoilMoisture(), $this->VALID_PLANTSOILMOISTURE);
 	}
+	
+	/**
+	 * test grabbing a Plant by a type that does not exist
+	 **/
 	public function testGetInvalidPlantByPlantType() {
 	// grab a plant by searching for type that does not exist
 	$plant = Plant::getPlantByPlantType($this->getPDO(), "This is not a plant");
