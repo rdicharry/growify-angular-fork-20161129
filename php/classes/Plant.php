@@ -86,7 +86,7 @@ class Plant {
 	 * @throws \TypeError if data types violate type
 	 * @throws \Exception for other exceptions
 	 **/
-	public function _construct($newPlantId, $newPlantName, $newPlantVariety, $newPlantDescription, $newPlantType, $newPlantSpread, $newPlantDaysToHarvest, $newPlantHeight, $newPlantMinTemp, $newPlantMaxTemp, $newPlantSoilMoisture) {
+	public function __construct($newPlantId, $newPlantName, $newPlantVariety, $newPlantDescription, $newPlantType, $newPlantSpread, $newPlantDaysToHarvest, $newPlantHeight, $newPlantMinTemp, $newPlantMaxTemp, $newPlantSoilMoisture) {
 		try {
 			$this->setPlantId($newPlantId);
 			$this->setPlantName($newPlantName);
