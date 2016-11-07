@@ -107,19 +107,9 @@ class CompanionPlantTest extends GrowifyTest {
 		$testCompanionPlant2Id->insert($this->getPDO());
 	}
 
-	/**
-	 * test inserting an invalid plant entry (one that has an invalid (non-null) id)
-	 **/
-	/**
-	 * don't use this - it makes more sense to test attempt to add duplicate entry - see testInsertDuplicateValidCompanionPlantEntry() public function testInsertInvalidCompanionPlantEntry()
-	 **/
 
-/**
- *  test updating a companion plant entry
- **/
-public function testUpdateValidCompanionPlantEntry(){
 
-}
+
 /**
  * test updating a companion plant entry that does not exist
  * @expectedException PDOException
@@ -130,8 +120,23 @@ public function testUpdateValidCompanionPlantEntry(){
 
 	/**
 	 * test deleting a valid plant entry
-	 */
+	 **/
 	public function testDeletValidCompanionPlantEntry(){
+		// count the number of rows and save to compare
+		$numRows = $this->getConnection()->getRowCount("companionPlant");
+
+		// create a new CompanionPlant and insert into mySQL
+		$companionPlant = new CompanionPlant($this->CompanionPlant1Id->getPlantId(), $this->companionPlant2Id->getPlantId());
+		$companionPlant->insert($this->getPDO());
+
+		// delete that companionPlant
+		$this->assertEquals($numRows+1, $this->getConnection()->getRowCount("companionPlant"));
+		$companionPlant->delete($this->getPDO());
+
+		// get data from mySQL and enforce the entry was deleted
+		$pdoCompanionPlant = CompanionPlant::getCompanionPlantByBothPlantIds($this->companionPlant1Id->getPlantId(), $this->companionPlant2Id->getPlantId());
+		$this->assertNull($pdoCompanionPlant);
+		$this->assertEquals($numRows, $this->getConnecion()->getRowCount("companionPlant"));
 
 	}
 
