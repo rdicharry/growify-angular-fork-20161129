@@ -145,6 +145,10 @@ class CompanionPlantTest extends GrowifyTest {
 	 * @expectecException PDOException
 	 **/
 	public function testDeleteValidCompanionPlantEntry(){
+		// create a CompanionPlant and try to delete without actually inserting it
+		$companionPlant = new CompanionPlant($this->companionPlant1Id->getPlantId(),$this->companionPlant2Id->getPlantId());
+		$companionPlant->delete($this->getPDO());
+
 
 	}
 	/**
