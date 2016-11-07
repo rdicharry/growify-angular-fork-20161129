@@ -21,6 +21,11 @@ class PlantTest extends GrowifyTest {
 	 */
 	protected $VALID_PLANTNAME = "Piranha Plant";
 	/**
+	 * 2nd name of the plant, for testing edits and updates
+	 * @var string $VALID_PLANTNAME2
+	 */
+	protected $VALID_PLANTNAME2 = " Pakkun Flower";
+	/**
 	 * variety of the plant
 	 * @var string $VALID_PLANTVARIETY
 	 */
@@ -125,7 +130,7 @@ class PlantTest extends GrowifyTest {
 		$plant->insert($this->getPDO());
 
 		// edit the Plant and update it in mySQL
-		$plant->setPlantContent($this->VALID_TWEETCONTENT2);
+		$plant->setPlantName($this->VALID_PLANTNAME2);
 		$plant->update($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
