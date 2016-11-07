@@ -178,7 +178,7 @@ public static function getCompanionPlantByBothPlantIds(\PDO $pdo, int $plant1Id,
 			}
 		} catch(\Exception $exception) {
 			// if row couldn't be converted, rethrow it
-			throw(new \PDOException($excpetion->getMessage(), 0, $excpetion));
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
 		return $companionPlant;
 }
@@ -202,7 +202,7 @@ public static function getCompanionPlantByBothPlantIds(\PDO $pdo, int $plant1Id,
 
 		// bind parameters
 		$parameters = ["plantId"=>$plantId];
-		$statment->execute($parameters);
+		$statement->execute($parameters);
 
 		//build an array of companionPlants
 		$companionPlants = new \SplFixedArray($statement->rowCount());
@@ -213,7 +213,7 @@ public static function getCompanionPlantByBothPlantIds(\PDO $pdo, int $plant1Id,
 				$companionPlant = new CompanionPlant ($row["companionPlant1Id"], $row["companionPlant2Id"]);
 				$companionPlants[$companionPlants->key()]=$companionPlant;
 				$companionPlants->next();
-			}catch(|Exception $exception) {
+			}catch(\Exception $exception) {
 				// if the row couldn't be converted, rethrow it
 				throw(new \PDOException($exception->getMessage(), 0, $exception));
 			}
@@ -221,5 +221,34 @@ public static function getCompanionPlantByBothPlantIds(\PDO $pdo, int $plant1Id,
 		return($companionPlants);
 	}
 
+	/**
+	 * Gets all Companion Plants
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @return \SplFixedArray SplFixedArray of companion plants found or null if none found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throw \TypeError if $pdo is not a PDO conneciton object.
+	 **/
+	public static function getAllCompanionPlants(\PDO $pdo) {
 
+		// create query template
+		$query = "SELECT companionPlant1Id, CompanionPlant2Id FROM companionPlant";
+		$statement = $pdo->prepare($query);
+		$statement ->execute();
+
+		// build an array of CompanionPlants
+		$companionPlants = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !==false) {
+		try{
+			$companionPlant = new companionPlant ($row["companionPlant1Id"], $row["companionPlant2Id"]);
+			$companionPlants[$companionPlants->key()] = $companionPlant;
+			$companionPlants->next();
+		} catch(\Exception $exception){
+			// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($companionPlants);
+	}
 }
