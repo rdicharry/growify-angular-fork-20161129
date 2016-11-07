@@ -159,7 +159,7 @@ class CompanionPlantTest extends GrowifyTest {
 		//a query for a particular companion plant should return all valid plants
 		//more than one Plant entry to test against e.g. should be able to retriever the entries with the plantId as either companionPlant1Id or companionPlant2Id
 		//count number or rows and save for later
-		$numRow = $this->getConnection()->getRowCount("CompanionPlant");
+		$numRows = $this->getConnection()->getRowCount("CompanionPlant");
 
 		// create a new Companion Plant and insert it into mySQL
 		$companionPlant = new CompanionPlant($this->companionPlant1Id->getPlantId(), $this->companionPlant2Id->getPlantId());
