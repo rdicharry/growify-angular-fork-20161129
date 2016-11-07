@@ -148,9 +148,36 @@ class CompanionPlantTest extends GrowifyTest {
 		// create a CompanionPlant and try to delete without actually inserting it
 		$companionPlant = new CompanionPlant($this->companionPlant1Id->getPlantId(),$this->companionPlant2Id->getPlantId());
 		$companionPlant->delete($this->getPDO());
-
-
 	}
+
+	/**
+	 * test ability to retrieve the CompanionPlant record by the second Plant entry (companionPlant2Id)
+	 **/
+	public function testGetValidCombativePlantEntryByPlantId(){
+
+		//we shouldn't know what order the plants will be inside the DB so need to test against either one (two plant id's)
+		//a query for a particular companion plant should return all valid plants
+		//more than one Plant entry to test against e.g. should be able to retriever the entries with the plantId as either companionPlant1Id or companionPlant2Id
+		//count number or rows and save for later
+		$numRow = $this->getConnection()->getRowCount("CompanionPlant");
+
+		// create a new Companion Plant and insert it into mySQL
+		$companionPlant = new CompanionPlant($this->companionPlant1Id->getPlantId(), $this->companionPlant2Id->getPlantId());
+		$companionPlant->insert($this->getPDO());
+
+		// grab the data and enforce fields match expectations
+		$results = CompanionPlant::getAllCompanionPlantsByPlantId($this->getPDO(), $this->companionPlant2Id->getPlantId());
+		$this->assertEquals($numRows+1, $this->getConnection()->getRowCount("companionPlant"));
+		$this->assertCount(1, $results);
+		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\Growify\\CompanionPlant");
+
+		// get result from the array and validate it
+		$pdoCompanionPlant = $results[0];
+		$this->assertEquals($pdoCompanionPlant->getCompanionPlant1Id(), $this->companionPlant1Id->getPlantId());
+		$this->assertEquals($pdoCompanionPlant->getCompanionPlant2Id(), $this->companionPlant2Id->getPlantId());
+	}
+
+
 	/**
 	 * test deleting a companion plant entry that does not exist
 	 * @expectedException PDOException
@@ -184,5 +211,8 @@ class CompanionPlantTest extends GrowifyTest {
 	 **/
 	public function testGetAllValidCompanionPlants(){
 
+	}
+
+	private function assertEquals($param, $getRowCount) {
 	}
 }
