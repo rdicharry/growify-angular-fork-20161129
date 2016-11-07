@@ -44,7 +44,7 @@ class CompanionPlantTest extends GrowifyTest {
 		$this->companionPlant1Id->insert($this->getPDO());
 
 		// create and insert a Plant2Id
-		$this->companionPlant2Id = new Plant(/*TODO add parameters */)
+		$this->companionPlant2Id = new Plant(/*TODO add parameters */);
 		$this->companionPlant2Id->insert($this->getPDO());
 	}
  	/**
@@ -88,7 +88,7 @@ class CompanionPlantTest extends GrowifyTest {
 		$testCompanionPlant1Id = new CompanionPlant ($this->combativePlant1Id->getPlantId(), $this->companionPlant2Id->getPlantId());
 		$testCompanionPlant1Id->insert($this->getPDO());
 		$testCompanionPlant2Id = new CompanionPlant ($this->companionPlant1Id->getPlantId(), $this->companionPlant2Id->getPlantId());
-		$testCompanionPlant2Id->($this->getPDO());
+		$testCompanionPlant2Id->insert($this->getPDO());
 	}
 
 
