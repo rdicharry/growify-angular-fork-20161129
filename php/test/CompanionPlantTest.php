@@ -187,25 +187,15 @@ class CompanionPlantTest extends GrowifyTest {
 	}
 
 	/**
-	 * do we get expected data?
-	 **/
-	public function testGetValidCompanionPlantEntryByPlantId(){
-
-		// we shouldn't know what order the plants will be inside the DB
-		// so need to test against either one (two plant id's)
-
-		// a query for a particular companion plant should return all
-		// valid plants that it is paired with - so we might need to use
-		// more than one Plant entry to test against
-	}
-	/**
 	 * attempt to get a plant for which no entry exists
 	 **/
 	public function testGetInvalidCompanionPlantEntryByPlantId(){
 
-		// we shouldn't know what order th plants will be inside the DB
-		// so need to test against either one (two plant id's)
-	}
+		// get a CompanionPlant entry by searching for a plant that does not exist
+
+		$companionPlant = CompanionPlant::getCompanionPlantByBothPlantIds($this->getPDO(), $this->companionPlant1Id->getPlantId(),$this->companionPlant2Id->getPlantId());
+			$this->assertEquals(null, $companionPlant);
+
 	/**
 	 * test getting a list of ALL companion plants
 	 **/
@@ -213,6 +203,7 @@ class CompanionPlantTest extends GrowifyTest {
 
 	}
 
-	private function assertEquals($param, $getRowCount) {
-	}
+
+}
+
 }
