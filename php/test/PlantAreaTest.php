@@ -24,33 +24,33 @@ class PlantAreaTest extends GrowifyTest {
 	 *Primary key relationship to Plant.
 	 * @var    plantAreaId
 	 **/
-	protected $plantAreaId = null;
+	protected $VALID_PLANTAREAID = "This is a valid plant area";
 
 	/**
 	 *
 	 * @var    plantAreaPlantId
 	 **/
-	protected $plantAreaPlantId = null;
+	protected $VALID_PLANTAREAPLANTID = "This plant area has this plant id in the database";
 
 	/**
 	 *
 	 * @var plantAreaStartDate
 	 */
 
-	protected $plantAreaStartDate = null;
+	protected $VALID_PLANTAREASTARTDATE = null;
 
 	/**
 	 *
 	 * @var plantAreaEndDate
 	 * */
-	protected $plantAreaEndDate = null;
+	protected $VALID_PLANTAREAENDDATE = null;
 
 	/**
 	 *
 	 * @var plantAreaNumber
 	 **/
 
-	protected $plantAreaNumber = null;
+	protected $VALID_PLANTAREANUM = null;
 
 	/**
 	 *Create depend objects before running each test
@@ -81,14 +81,42 @@ public final function setUp() {
 	}
 
 	/**
-	 *  insert a plant area id entry and verify that the mySQL data matches.
+	 * test inserting a valid PlantArea and verify that the actual mySQL data matches
 	 * @expectedException PDOException
 	 **/
-	public function
-	testInsertValidPlantAreaId() {
+
+
+	public function testInsertValidPlantArea() {
+		//count the number of rows and save it for later
+		$numRows = $this->getconnection()->getRowCount("plantArea");
+
+		// create a new PlantArea and insert into mySQL
+		$plantAreaId = new PlantAreaId(null, $this->plant->getPlantId(), $this->VALID_PLANTAREAID);
+		$plantAreaId->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$pdoPlantArea =PlantArea:::getPlantAreaByPlantAreaId($this->getPDO(), $plantArea->getPlantAreaId());
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowcount("plantArea"));
+		$this->assertEquals($pdoPlantArea->getPlantId(), $this->plant->getPlantId());
+		$this->assertEquals($pdoPlantArea->getPlantAreaId(), $this->VALID_PLANTAREAID);
+		$this->assertEquals($pdoPlantArea->getPlantAreaPlantId(),$this->VALID_PLANTAREAPLANTID);
+		$this->assertEquals($pdoPlantArea->getPlantAreaStartDate(),$this->VALID_PLANTAREASTARTDATE);
+		$this->assertEquals($pdoPlantArea->getPlantAreaEndDate(),$this->VALID_PLANTAREAENDDATE);
+		$this->assertEquals($pdoPlantArea->getPlantAreaNum(),$this->VALID_PLANTAREANUM);
 	}
 
+	/**
+	 * test inserting a PlantArea that already exists
+	 *
+	 * @expectedException PDOException
+	 */
+	public function testInsertInvalidPlantArea () {
+		// create a PlantArea with a non null plant area id and watch it fail
+		$plantArea = new PlantArea(GrowifyTest::INVALID_KEY, $this->plant->getPlantId(), $this->VALID_PLANTAREASTARTDATE, $this->VALID_PLANTAREAENDDATE, $this->VALID_PLANTAREANUM);
+		$plantArea->insert($this->getPDO());
 
+
+	}
 
 }
 
