@@ -29,7 +29,7 @@ class Profile {
 	private $profileEmail;
 	/**
 	 * zip code for this profile
-	 * @var int $profileZipCode
+	 * @var string $profileZipCode
 	 **/
 	private $profileZipCode;
 	/**
@@ -94,7 +94,7 @@ class Profile {
 
 	/**
 	 * accessor method for zip code
-	 * @return int
+	 * @return string
 	 **/
 	public function getProfileZipCode() {
 		return $this->profileZipCode;
@@ -180,17 +180,18 @@ class Profile {
 
 	/**
 	 * mutator method for profile zip code
-	 * @param int $newProfileZipCode
-	 * @throws \UnexpectedValueException if $newProfileZipCode is not an int
-	 * @throws \RangeException if $newProfileZipCode is not positive
+	 * @param string $newProfileZipCode
+	 * @throws \InvalidArgumentException if $newProfileZipCode is empty or is not a string
+	 * @throws \RangeException if $newProfileZipCode is too long
 	 **/
 	public function setProfileZipCode($newProfileZipCode) {
-		$newProfileZipCode = filter_var($newProfileZipCode,FILTER_VALIDATE_INT);
-		if($newProfileZipCode === false){
-			throw (new \UnexpectedValueException("zip code is not a valid int"));
+		$newProfileZipCode = trim($newProfileZipCode);
+		$newProfileZipCode = filter_var($newProfileZipCode,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newProfileZipCode)){
+			throw (new \InvalidArgumentException("zip code is empty or has invalid contents"));
 		}
-		if($newProfileZipCode >= 0){
-			throw (new \RangeException("zip code is not positive"));
+		if(strlen($newProfileZipCode) > 160) {
+			throw(new \RangeException("zip code is too large"));
 		}
 		$this->profileZipCode = $newProfileZipCode;
 	}
