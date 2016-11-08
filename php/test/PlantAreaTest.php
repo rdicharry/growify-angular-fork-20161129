@@ -208,6 +208,7 @@ public function testGetAllValidPlantAreas() {
 	// grab the result from the array and validate it
 	$pdoPlantArea = $results[0];
 	$this->assertEquals($pdoPlantArea->getPlantId(), $this->plant->getPlantId());
+	$this->assertEquals($pdoPlantArea->getPlantAreaId(),$this->VALID_PLANTAREAID);
 	$this->assertEquals($pdoPlantArea->getPlantAreaPlantId(),$this->VALID_PLANTAREAPLANTID);
 	$this->assertEquals($pdoPlantArea->getPlantAreaStartDate(),$this->VALID_PLANTAREASTARTDATE);
 	$this->assertEquals($pdoPlantArea->getPlantAreaEndDate(),$this->VALID_PLANTAREAENDDATE);
