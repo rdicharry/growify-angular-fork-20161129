@@ -177,6 +177,16 @@ public function testDeleteValidPlantArea($plantArea) {
 	$this->assertEquals($numRows, $this->getConnection()->getRowCount("plant area"));
 }
 
+/**
+ * test grabbing a PlantArea by number that does not exist
+ **/
+public function testGetInvalidPlantAreaByPlantAreaNum() {
+	//grab a plant area by searching for a plant area number that does not exist
+
+	$plantArea = PlantArea::GetPlantAreaByPlantAreaNum($this->getPDO(), "This plant area number is not in our system");
+	$this->assertCount(0, $plantArea);
+}
+
 
 
 
