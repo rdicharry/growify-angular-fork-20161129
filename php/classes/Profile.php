@@ -213,8 +213,8 @@ class Profile {
 	}
 
 	/**
-	 * mutator method for profile activation state
-	 * @param boolean $newProfileActivation
+	 * mutator method for profile activation code
+	 * @param string $newProfileActivation
 	 **/
 	public function setProfileActivation($newProfileActivation) {
 		$this->profileActivation = $newProfileActivation;
@@ -382,6 +382,42 @@ class Profile {
 		return($profiles);
 	}
 
+	/**
+	 * Get all profiles associated with the specified profile activation code.
+	 * @param \PDO $pdo a PDO connection object
+	 * @param string $profileActivation zipcode of profiles being searched for
+	 * @return Profile profile the profile that was found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when parameters are not the correct data type.
+	 **/
+	public static function getProfileByActivation(\PDO $pdo, string $profileActivation) {
+		$profileActivation = trim($profileActivation);
+		$profileActivation = filter_var($profileActivation, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($profileActivation)) {
+			throw (new \InvalidArgumentException("profile username is invalid"));
+		}
+		// create query template
+		$query = "SELECT profileId, profileUsername, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation FROM profile WHERE profileActivation LIKE :profileActivation";
+		$statement = $pdo->prepare($query);
+
+		// bind the username to the place holder in the template
+		$parameters = ["profileActivation" => $profileActivation];
+		$statement->execute($parameters);
+
+		// grab the profile from mySQL
+		try {
+			$profile = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
+			}
+		} catch(\Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($profile);
+	}
 	/**
 	 * Get all Profile objects.
 	 * @param \PDO $pdo PDO connection object
