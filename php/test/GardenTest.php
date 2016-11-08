@@ -41,15 +41,15 @@ class GardenTest extends GrowifyTest {
 
 	/*
 	 * the date this plant was planted in this garden
-	 * @var DateTime $VALID_PLANTING_DATE
+	 * @var DateTime $validPlantingDate
 	 */
-	protected $VALID_PLANTING_DATE = null/*TODO add valid test data*/;
+	protected $validPlantingDate;
 
 	/**
 	 * For tests that require a second valid planting date
-	 * @var \DateTime $VALID_PLANTING_DATE2
+	 * @var \DateTime validPlantingDate2
 	 */
-	protected $VALID_PLANTING_DATE2 = null/*TODO add valid test data*/;
+	protected $validPlantingDate2;
 
 
 	public final function setUp(){
@@ -57,38 +57,45 @@ class GardenTest extends GrowifyTest {
 		parent::setUp();
 
 		// create and insert a Profile to own the test Garden
-		$this->profile = new Profile(/*TODO add params*/);
+		$this->profile = new Profile(null, "lorax1971", "the.lorax@oncelerco.com", 000000, "pqrst", "lmnop", 1);
 		$this->profile->insert($this->getPDO());
 
 		// create and insert a Plant to go into the garden
-		$this->plant1 = new Plant(/*TODO add params */);
+		$this->plant1 = new Plant(null, "truffula tree", "green", "Primary food source for Brown Barbaloots", "tree", 5, 100, 5, 32, 99, "d" );
 		$this->plant1->insert($this->getPDO());
 
 		// create and insert a second Plant to go into the garden
 		// for tests that need two plants
-		$this->plant2 = new Plant(/*TODO add params */);
+		$this->plant2 = new Plant(null, "Audrey", "custom", "companion", "vine", "carnivorous", 1000, 100, 10, 32, 99, "h");
 		$this->plant2->insert($this->getPDO());
+
+		$validPlantingDate = new DateTime("2016-03-04");
+		$validPlantingDate2 = new DateTime("2016-02-16");
 
 	}
 
 	/**
-	 * test inserting a valid garden and verify the data from mySQL matches.
+	 * Test inserting a valid garden and verify the data from mySQL matches. Note that this also provides coverage for the getGardensByGardenProfileId() method.  Note also that at this time, we do not anticipate referencing gardens by plantID or by date planted
 	 */
 	public function testInsertValidGarden(){
-		// count the number of rows and save to compare
+		// store number of rows to compare for later
 		$numRows = $this->getConnection()->getRowCount("garden");
 
-		//create a new Garden and insert into mySQL
-		$garden = new Garden($this->profile->getProfileUserId(), $this->VALID_PLANTING_DATE, $this->plant1->getPlantId());
+		// create a new Garden and insert int mySQL
+		$garden = new Garden($this->profile->getProfileId(), $this->validPlantingDate, $this->plant1->getPlantId());
 		$garden->insert($this->getPDO());
 
-		// grab data from mySQL and check that fields match
-		// TODO how to best attain adequate test coverage - could return multiple rows??
-		$pdoGarden = Garden::getGardenByProfileId($this->getPDO, $this->profile->getProfileUserId());
-		$this->assertEquals( $this->getConnection()->getRowCount("garden"), $numRows+1);
-		$this->assertEquals($pdoGarden->getGardenProfileId(),$this->profile->getProfileId());
+		// grab data from mySQL and enforce fields match expectations
+		$results = Garden::getGardensByGardenProfileId($this->getPDO(), $this->profile->getProfileId());
+		$this->assertEquals($numRows+1, $this->getConnection()->getRowCount("garden"));
+		$this->assertCount(1, $results);
+		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\Growify\\Garden");
+
+		// get the result from the array and validate it
+		$pdoGarden = $results[0];
+		$this->assertEquals($pdoGarden->getGardenProfileId(), $this->profile->getProfileId());
+		$this->assertEquals($pdoGarden->getGardenDatePlanted(), $this->validPlantingDate);
 		$this->assertEquals($pdoGarden->getGardenPlantId(), $this->plant1->getPlantId());
-		$this->assertEquals($pdoGarden->getGardenDatePlanted(), $this->VALID_PLANTING_DATE);
 
 	}
 
@@ -98,8 +105,14 @@ class GardenTest extends GrowifyTest {
 	 * @expectedException PDOException
 	 */
 	public function testInsertInvalidGarden(){
+		$garden1 = new Garden($this->profile->getProfileId(), $this->validPlantingDate, $this->plant1->getPlantId());
+		$garden1->insert($this->getPDO());
 
+		$garden2 = new Garden($this->profile->getProfileId(), $this->validPlantingDate, $this->plant1->getPlantId());
+		$garden2->insert($this->getPDO());
 	}
+
+
 
 	/**
 	 * insert a garden entry, edit it and update in DB.
@@ -109,7 +122,7 @@ class GardenTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("garden");
 
 		// create a new Garden and insert it into mySQL
-		$garden = new Garden($this->profile->getProfileUserId(), $this->VALID_PLANTING_DATE, $this->plant1->getPlantId());
+		$garden = new Garden($this->profile->getProfileUserId(), $this->validPlantingDate, $this->plant1->getPlantId());
 		$garden->insert($this->getPDO());
 
 		// edit garden & update in mySQL
@@ -121,7 +134,7 @@ class GardenTest extends GrowifyTest {
 		$this->assertEquals( $this->getConnection()->getRowCount("garden"), $numRows+1);
 		$this->assertEquals($pdoGarden->getGardenProfileId(),$this->profile->getProfileId());
 		$this->assertEquals($pdoGarden->getGardenPlantId(), $this->plant2->getPlantId());
-		$this->assertEquals($pdoGarden->getGardenDatePlanted(), $this->VALID_PLANTING_DATE);
+		$this->assertEquals($pdoGarden->getGardenDatePlanted(), $this->validPlantingDate);
 	}
 
 	/**
@@ -132,11 +145,11 @@ class GardenTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("garden");
 
 		// create a new Garden and insert it into mySQL
-		$garden = new Garden($this->profile->getProfileUserId(), $this->VALID_PLANTING_DATE, $this->plant1->getPlantId());
+		$garden = new Garden($this->profile->getProfileUserId(), $this->validPlantingDate, $this->plant1->getPlantId());
 		$garden->insert($this->getPDO());
 
 		// edit garden & update in mySQL
-		$garden->setGardenPlantId($this->VALID_PLANTING_DATE2);
+		$garden->setGardenPlantId($this->validPlantingDate2);
 		$garden->update($this->getPDO());
 
 		// grab the data from mySQL and enforce fields match expected
@@ -144,7 +157,7 @@ class GardenTest extends GrowifyTest {
 		$this->assertEquals( $this->getConnection()->getRowCount("garden"), $numRows+1);
 		$this->assertEquals($pdoGarden->getGardenProfileId(),$this->profile->getProfileId());
 		$this->assertEquals($pdoGarden->getGardenPlantId(), $this->plant1->getPlantId());
-		$this->assertEquals($pdoGarden->getGardenDatePlanted(), $this->VALID_PLANTING_DATE2);
+		$this->assertEquals($pdoGarden->getGardenDatePlanted(), $this->validPlantingDate2);
 
 	}
 
@@ -164,7 +177,7 @@ class GardenTest extends GrowifyTest {
 		$numRows = $this->getConnection->getRowCount("garden");
 
 		// create a new Garden and insert it into the DB
-		$garden = new Garden($this->profile->getProfileUserId(), $this->VALID_PLANTING_DATE, $this->plant1->getPlantId());
+		$garden = new Garden($this->profile->getProfileUserId(), $this->validPlantingDate, $this->plant1->getPlantId());
 		$garden->insert($this->getPDO());
 
 		// delete Garden from mySQL
@@ -183,35 +196,12 @@ class GardenTest extends GrowifyTest {
 	 */
 	public function testDeleteInvalidGarden() {
 		// create a Garden and try to delete it without actually inserting it
-		$garden = new Garden($this->profile->getProfileUserId(), $this->VALID_PLANTING_DATE, $this->plant1->getPlantId());
+		$garden = new Garden($this->profile->getProfileUserId(), $this->validPlantingDate, $this->plant1->getPlantId());
 		$garden->delete($this->getPDO());
 	}
 
-	/**
-	 * This is similar to testInsertValidGarden() but uses the getGardensByGardenProfileId() method.
-	 * At this time, we do not anticipate referencing gardens by plantID or by date planted
-	 */
-	public function testGetValidGardensByProfileId(){
-		// store number of rows to compare for later
-		$numRows = $this->getConnection()->getRowCount("garden");
 
-		// create a new Garden and insert int mySQL
-		$garden = new Garden($this->profile->getProfileId(), $this->VALID_PLANTING_DATE, $this->plant1->getPlantId());
-		$garden->insert($this->getPDO());
 
-		// grab data from mySQL and enforce fields match expectations
-		$results = Garden::getGardensByGardenProfileId($this->getPDO(), $this->profile->getProfileId());
-		$this->assertEquals($numRows+1, $this->getConnection()->getRowCount("garden"));
-		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\Growify\\Garden");
-
-		// get the result from the array and validate it
-		$pdoGarden = $results[0];
-		$this->assertEquals($pdoGarden->getGardenProfileId(), $this->profile->getProfileId());
-		$this->assertEquals($pdoGarden->getGardenDatePlanted(), $this->VALID_PLANTING_DATE);
-		$this->assertEquals($pdoGarden->getGardenPlantId(), $this->plant1->getPlantId());
-
-	}
 
 	/**
 	 * test retrieving a list of all gardens
@@ -222,7 +212,7 @@ class GardenTest extends GrowifyTest {
 		$numRows = $this->getconnection()->getRowCount("garden");
 
 		//create a new Garden and insert int mySQL
-		$garden = new Garden($this->profile->getProfileId(), $this->VALID_PLANTING_DATE, $this->plant1->getPlantId());
+		$garden = new Garden($this->profile->getProfileId(), $this->validPlantingDate, $this->plant1->getPlantId());
 		$garden->insert($this->getPDO());
 
 		// grab data from mySQL and enforce fields match our expectations.
@@ -234,7 +224,7 @@ class GardenTest extends GrowifyTest {
 		// get result from the array and validate it
 		$pdoGarden = $results[0];
 		$this->assertEquals($pdoGarden->getGardenProfileId(), $this->profile,getProfileId());
-		$this->assertEquals($pdoGarden->getGardenDatePlanted(), $this->VALID_PLANTING_DATE);
+		$this->assertEquals($pdoGarden->getGardenDatePlanted(), $this->validPlantingDate);
 		$this->assertEquals($pdoGarden->getGardenPlantId(), $this->plant1->getPlantId());
 	}
 }

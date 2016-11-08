@@ -188,7 +188,7 @@ class Garden  {
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when parameters are not the correct data type.
 	 */
-	public function getGardensByGardenProfileId(\PDO $pdo, int $gardenProfileId){
+	public static function getGardensByGardenProfileId(\PDO $pdo, int $gardenProfileId){
 		// could return many values (an array of garden entries
 		// sanatize the profile id before searching
 		if($gardenProfileId <=0){

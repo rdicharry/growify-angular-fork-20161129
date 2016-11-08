@@ -12,7 +12,7 @@ require_once("autoload.php");
  * @author Greg Bloom <gbloomdev@gmail.com>
  * @version 0.1.0
  **/
-class Plant{
+class Plant {
 	/**
 	 * id for this plant; this is the primary key
 	 * @var int $plantId
@@ -74,7 +74,7 @@ class Plant{
 	 * @param string $newPlantName
 	 * @param string $newPlantVariety
 	 * @param string $newPlantDescription
-	 * @param string$newPlantType
+	 * @param string $newPlantType
 	 * @param float $newPlantSpread
 	 * @param int $newPlantDaysToHarvest
 	 * @param float $newPlantHeight
@@ -86,8 +86,8 @@ class Plant{
 	 * @throws \TypeError if data types violate type
 	 * @throws \Exception for other exceptions
 	 **/
-	public function _construct($newPlantId, $newPlantName, $newPlantVariety, $newPlantDescription, $newPlantType, $newPlantSpread, $newPlantDaysToHarvest, $newPlantHeight,$newPlantMinTemp,$newPlantMaxTemp, $newPlantSoilMoisture){
-		try{
+	public function __construct($newPlantId, $newPlantName, $newPlantVariety, $newPlantDescription, $newPlantType, $newPlantSpread, $newPlantDaysToHarvest, $newPlantHeight, $newPlantMinTemp, $newPlantMaxTemp, $newPlantSoilMoisture) {
+		try {
 			$this->setPlantId($newPlantId);
 			$this->setPlantName($newPlantName);
 			$this->setPlantVariety($newPlantVariety);
@@ -109,10 +109,11 @@ class Plant{
 			throw(new \Exception($exception->getMessage(), 0, $exception));
 		}
 	}
+
 	/**
 	 * accessor method for plantId
 	 * @return int
-	 */
+	 **/
 	public function getPlantId() {
 		return $this->plantId;
 	}
@@ -120,7 +121,7 @@ class Plant{
 	/**
 	 * accessor method for plantName
 	 * @return string
-	 */
+	 **/
 	public function getPlantName() {
 		return $this->plantName;
 	}
@@ -128,7 +129,7 @@ class Plant{
 	/**
 	 * accessor method for plantVariety
 	 * @return string
-	 */
+	 **/
 	public function getPlantVariety() {
 		return $this->plantVariety;
 	}
@@ -136,7 +137,7 @@ class Plant{
 	/**
 	 * accessor method for plantDescription
 	 * @return string
-	 */
+	 **/
 	public function getPlantDescription() {
 		return $this->plantDescription;
 	}
@@ -144,7 +145,7 @@ class Plant{
 	/**
 	 * accessor method for plantType
 	 * @return string
-	 */
+	 **/
 	public function getPlantType() {
 		return $this->plantType;
 	}
@@ -152,7 +153,7 @@ class Plant{
 	/**
 	 * accessor method for plantSpread
 	 * @return float
-	 */
+	 **/
 	public function getPlantSpread() {
 		return $this->plantSpread;
 	}
@@ -160,7 +161,7 @@ class Plant{
 	/**
 	 * accessor method for plantDaysToHarvest
 	 * @return int
-	 */
+	 **/
 	public function getPlantDaysToHarvest() {
 		return $this->plantDaysToHarvest;
 	}
@@ -168,7 +169,7 @@ class Plant{
 	/**
 	 * accessor method for plantHeight
 	 * @return float
-	 */
+	 **/
 	public function getPlantHeight() {
 		return $this->plantHeight;
 	}
@@ -176,7 +177,7 @@ class Plant{
 	/**
 	 * accessor method for plantMinTemp
 	 * @return int
-	 */
+	 **/
 	public function getPlantMinTemp() {
 		return $this->plantMinTemp;
 	}
@@ -184,7 +185,7 @@ class Plant{
 	/**
 	 * accessor method for plantMaxTemp
 	 * @return int
-	 */
+	 **/
 	public function getPlantMaxTemp() {
 		return $this->plantMaxTemp;
 	}
@@ -192,7 +193,7 @@ class Plant{
 	/**
 	 * accessor method for plantSoilMoisture
 	 * @return string
-	 */
+	 **/
 	public function getPlantSoilMoisture() {
 		return $this->plantSoilMoisture;
 	}
@@ -202,7 +203,7 @@ class Plant{
 	 * @param int|null $newPlantId new value of plant id
 	 * @throws \RangeException if $newPlantId is negative
 	 * @throws \TypeError if $newPlantId is not an integer
-	 */
+	 **/
 	public function setPlantId(int $newPlantId = null) {
 		// if the plant id is null, this is a new plant without an id from mySQL
 		if($newPlantId === null) {
@@ -221,11 +222,11 @@ class Plant{
 	 * @param string $newPlantName new value of plant name
 	 * @throws \InvalidArgumentException if $newPlantName has invalid contents or is empty
 	 * @throws \RangeException if $newPlantName is too long
-	 */
+	 **/
 	public function setPlantName(string $newPlantName) {
 		$newPlantName = trim($newPlantName);
-		$newPlantName = filter_var($newPlantName,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newPlantName)){
+		$newPlantName = filter_var($newPlantName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newPlantName)) {
 			throw (new \InvalidArgumentException("name is empty or has invalid contents"));
 		}
 		if(strlen($newPlantName) > 26) {
@@ -236,14 +237,14 @@ class Plant{
 
 	/**
 	 * mutator method for plantVariety
-	 * @param string $newPlantVariety  new value of plant variety
+	 * @param string $newPlantVariety new value of plant variety
 	 * @throws \InvalidArgumentException if $newPlantVariety has invalid contents or is empty
 	 * @throws \RangeException if $newPlantVariety is too long
-	 */
+	 **/
 	public function setPlantVariety($newPlantVariety) {
 		$newPlantVariety = trim($newPlantVariety);
-		$newPlantVariety = filter_var($newPlantVariety,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newPlantVariety)){
+		$newPlantVariety = filter_var($newPlantVariety, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newPlantVariety)) {
 			throw (new \InvalidArgumentException("variety is empty or has invalid contents"));
 		}
 		if(strlen($newPlantVariety) > 26) {
@@ -257,11 +258,11 @@ class Plant{
 	 * @param string $newPlantDescription new value of plant description
 	 * @throws \InvalidArgumentException if $newPlantDescription has invalid contents or is empty
 	 * @throws \RangeException if $newPlantDescription is too long
-	 */
+	 **/
 	public function setPlantDescription($newPlantDescription) {
 		$newPlantDescription = trim($newPlantDescription);
-		$newPlantDescription = filter_var($newPlantDescription,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newPlantDescription)){
+		$newPlantDescription = filter_var($newPlantDescription, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newPlantDescription)) {
 			throw (new \InvalidArgumentException("description is empty or has invalid contents"));
 		}
 		if(strlen($newPlantDescription) > 512) {
@@ -275,11 +276,11 @@ class Plant{
 	 * @param string $newPlantType new value of plant type
 	 * @throws \InvalidArgumentException if $newPlantType has invalid contents or is empty
 	 * @throws \RangeException if $newPlantType is too long
-	 */
+	 **/
 	public function setPlantType($newPlantType) {
 		$newPlantType = trim($newPlantType);
-		$newPlantType = filter_var($newPlantType,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newPlantType)){
+		$newPlantType = filter_var($newPlantType, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newPlantType)) {
 			throw (new \InvalidArgumentException("type is empty or has invalid contents"));
 		}
 		if(strlen($newPlantType) > 9) {
@@ -293,13 +294,13 @@ class Plant{
 	 * @param float $newPlantSpread new value of plant spread
 	 * @throws \UnexpectedValueException if $newPlantSpread is not a float
 	 * @throws \RangeException if $newPlantSpread is negative
-	 */
+	 **/
 	public function setPlantSpread($newPlantSpread) {
-		$newPlantSpread = filter_var($newPlantSpread,FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
-		if($newPlantSpread === false){
+		$newPlantSpread = filter_var($newPlantSpread, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+		if($newPlantSpread === false) {
 			throw (new \UnexpectedValueException("spread is not a valid float"));
 		}
-		if($newPlantSpread >= 0){
+		if($newPlantSpread >= 0) {
 			throw (new \RangeException("spread is not positive"));
 		}
 		$this->plantSpread = $newPlantSpread;
@@ -310,13 +311,13 @@ class Plant{
 	 * @param int $newPlantDaysToHarvest new value of plant days to harvest
 	 * @throws \UnexpectedValueException if $newPlantDaysToHarvest is not an int
 	 * @throws \RangeException if $newPlantDaysToHarvest is negative
-	 */
+	 **/
 	public function setPlantDaysToHarvest($newPlantDaysToHarvest) {
-		$newPlantDaysToHarvest = filter_var($newPlantDaysToHarvest,FILTER_VALIDATE_INT);
-		if($newPlantDaysToHarvest === false){
+		$newPlantDaysToHarvest = filter_var($newPlantDaysToHarvest, FILTER_VALIDATE_INT);
+		if($newPlantDaysToHarvest === false) {
 			throw (new \UnexpectedValueException("days to harvest is not a valid int"));
 		}
-		if($newPlantDaysToHarvest >= 0){
+		if($newPlantDaysToHarvest >= 0) {
 			throw (new \RangeException("days to harvest is not positive"));
 		}
 		$this->plantDaysToHarvest = $newPlantDaysToHarvest;
@@ -327,13 +328,13 @@ class Plant{
 	 * @param float $newPlantHeight new value of plant mature height
 	 * @throws \UnexpectedValueException if $newPlantHeight is not a float
 	 * @throws \RangeException if $newPlantHeight is negative
-	 */
+	 **/
 	public function setPlantHeight($newPlantHeight) {
-		$newPlantHeight = filter_var($newPlantHeight,FILTER_SANITIZE_NUMBER_FLOAT,FILTER_FLAG_ALLOW_FRACTION);
-		if($newPlantHeight === false){
+		$newPlantHeight = filter_var($newPlantHeight, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+		if($newPlantHeight === false) {
 			throw (new \UnexpectedValueException("height is not a valid float"));
 		}
-		if($newPlantHeight >= 0){
+		if($newPlantHeight >= 0) {
 			throw (new \RangeException("height is not positive"));
 		}
 		$this->plantHeight = $newPlantHeight;
@@ -343,10 +344,10 @@ class Plant{
 	 * mutator method for plantMinTemp
 	 * @param int $newPlantMinTemp new value of plant min temp
 	 * @throws \UnexpectedValueException if $newPlantMinTemp is not a int
-	 */
+	 **/
 	public function setPlantMinTemp($newPlantMinTemp) {
-		$newPlantMinTemp = filter_var($newPlantMinTemp,FILTER_VALIDATE_INT);
-		if($newPlantMinTemp === false){
+		$newPlantMinTemp = filter_var($newPlantMinTemp, FILTER_VALIDATE_INT);
+		if($newPlantMinTemp === false) {
 			throw (new \UnexpectedValueException("min temp is not a valid int"));
 		}
 		$this->plantMinTemp = $newPlantMinTemp;
@@ -356,10 +357,10 @@ class Plant{
 	 * mutator method for plantMaxTemp
 	 * @param int $newPlantMaxTemp new value of plant max temp
 	 * @throws \UnexpectedValueException if $newPlantMaxTemp is not a int
-	 */
+	 **/
 	public function setPlantMaxTemp($newPlantMaxTemp) {
-		$newPlantMaxTemp = filter_var($newPlantMaxTemp,FILTER_VALIDATE_INT);
-		if($newPlantMaxTemp === false){
+		$newPlantMaxTemp = filter_var($newPlantMaxTemp, FILTER_VALIDATE_INT);
+		if($newPlantMaxTemp === false) {
 			throw (new \UnexpectedValueException("max temp is not a valid int"));
 		}
 		$this->plantMaxTemp = $newPlantMaxTemp;
@@ -370,11 +371,11 @@ class Plant{
 	 * @param string $newPlantSoilMoisture new value of plant soil moisture
 	 * @throws \InvalidArgumentException if $newPlantSoilMoisture has invalid contents or is empty
 	 * @throws \RangeException if $newPlantSoilMoisture is too long
-	 */
+	 **/
 	public function setPlantSoilMoisture($newPlantSoilMoisture) {
 		$newPlantSoilMoisture = trim($newPlantSoilMoisture);
-		$newPlantSoilMoisture = filter_var($newPlantSoilMoisture,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newPlantSoilMoisture)){
+		$newPlantSoilMoisture = filter_var($newPlantSoilMoisture, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newPlantSoilMoisture)) {
 			throw (new \InvalidArgumentException("soil moisture is empty or has invalid contents"));
 		}
 		if(strlen($newPlantSoilMoisture) > 6) {
@@ -382,4 +383,198 @@ class Plant{
 		}
 		$this->plantSoilMoisture = $newPlantSoilMoisture;
 	}
+
+	/**
+	 * Insert a new Plant entry.
+	 * @param \PDO $pdo the PDO connection object.
+	 * @throws \PDOException if mySQL related errors occur.
+	 * @throws \TypeError if $pdo is not a PDO connection object.
+	 **/
+	public function insert(\PDO $pdo) {
+		//check to make sure this plant doesn't already exist
+		if($this->plantId !== null) {
+			throw(new \PDOException("not a new plant"));
+		}
+
+		//create query template
+		$query = "INSERT INTO plant(plantId, plantName, plantVariety, plantDescription, plantType, plantSpread, plantDaysToHarvest, plantHeight, plantMinTemp, plantMaxTemp, plantSoilMoisture) VALUES (:plantId, :plantName, :plantVariety, :plantDescription, :plantType, :plantSpread, :plantDaysToHarvest, :plantHeight,:plantMinTemp,:plantMaxTemp, :plantSoilMoisture)";
+		$statement = $pdo->prepare($query);
+
+		// bind member variables to placeholders in the template
+		$parameters = ["plantId" => $this->plantId, "plantName" => $this->plantName, "plantVariety" => $this->plantVariety, "plantDescription" => $this->plantDescription, "plantType" => $this->plantType, "plantSpread" => $this->plantSpread, "plantDaysToHarvest" => $this->plantDaysToHarvest, "plantHeight" => $this->plantHeight, "plantMinTemp" => $this->plantMinTemp, "plantMaxTemp" => $this->plantMaxTemp, "plantSoilMoisture" => $this->plantSoilMoisture];
+		$statement->execute($parameters);
+
+	}
+
+	/**
+	 * Delete a Plant entry.
+	 * @param \PDO $pdo PDO connection object.
+	 * @throws \PDOException if mySQL related errors occur.
+	 * @throws \TypeError if $pdo is not a PDO object.
+	 **/
+	public function delete(\PDO $pdo) {
+		// create query template
+		$query = "DELETE FROM plant WHERE plantId = :plantId";
+		$statement = $pdo->prepare($query);
+
+		// bind member variables to placeholder in template
+		$parameters = ["plantId" => $this->plantId];
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * Updates the Plant entry in mySQL.
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object.
+	 **/
+	public function update(\PDO $pdo) {
+		//create query template
+		$query = "UPDATE plant SET plantId = :plantId, plantName = :plantName, plantVariety = :plantVariety, plantDescription = :plantDescription, plantType = :plantType, plantSpread = :plantSpread, plantDaysToHarvest = :plantDaysToHarvest, plantHeight = :plantHeight, plantMinTemp = :plantMinTemp, plantMaxTemp = :plantMaxTemp, plantSoilMoisture = :plantSoilMoisture";
+		$statement = $pdo->prepare($query);
+
+		// bind member variables to placeholders
+		$parameters = ["plantId" => $this->plantId, "plantName" => $this->plantName, "plantVariety" => $this->plantVariety, "plantDescription" => $this->plantDescription, "plantType" => $this->plantType, "plantSpread" => $this->plantSpread, "plantDaysToHarvest" => $this->plantDaysToHarvest, "plantHeight" => $this->plantHeight, "plantMinTemp" => $this->plantMinTemp, "plantMaxTemp" => $this->plantMaxTemp, "plantSoilMoisture" => $this->plantSoilMoisture];
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * Get plant associated with the specified plant Id.
+	 * @param \PDO $pdo a PDO connection object
+	 * @param int $plantId a valid plant Id
+	 * @return Plant|null Plant found or null if not found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when parameters are not the correct data type.
+	 **/
+	public static function getPlantByPlantId(\PDO $pdo, int $plantId) {
+		if($plantId <= 0) {
+			throw(new \RangeException("Plant id must be positive."));
+		}
+		// create query template
+		$query = "SELECT plantId, plantName, plantVariety, plantDescription, plantType, plantSpread, plantDaysToHarvest, plantHeight, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantId= :plantId";
+		$statement = $pdo->prepare($query);
+
+		// bind the plant id to the place holder in the template
+		$parameters = ["plantId" => $plantId];
+		$statement->execute($parameters);
+
+		// grab the plant from mySQL
+		try {
+			$plant = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$plant = new Plant($row["plantId"], $row["plantName"], $row["plantVariety"], $row["plantDescription"], $row["plantType"], $row["plantSpread"], $row["plantDaysToHarvest"], $row["plantHeight"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
+			}
+		} catch(\Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($plant);
+	}
+
+	/**
+	 * Get all plants associated with the specified plant name.
+	 * @param \PDO $pdo a PDO connection object
+	 * @param string $plantName name of plant being searched for
+	 * @return \SplFixedArray SplFixedArray of Plants found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when parameters are not the correct data type.
+	 **/
+	public static function getPlantByPlantName(\PDO $pdo, string $plantName) {
+		$plantName = trim($plantName);
+		$plantName = filter_var($plantName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($plantName)) {
+			throw (new \InvalidArgumentException("plant name is invalid"));
+		}
+		// create query template
+		$query = "SELECT plantId, plantName, plantVariety, plantDescription, plantType, plantSpread, plantDaysToHarvest, plantHeight, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantName LIKE :plantName";
+		$statement = $pdo->prepare($query);
+
+		// bind the plant name to the place holder in the template
+		$parameters = ["plantName" => $plantName];
+		$statement->execute($parameters);
+
+		// build an array of plants
+		$plants = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false){
+			try {
+					$plant = new Plant($row["plantId"], $row["plantName"], $row["plantVariety"], $row["plantDescription"], $row["plantType"], $row["plantSpread"], $row["plantDaysToHarvest"], $row["plantHeight"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
+				$plants[$plants->key()] = $plant;
+				$plants->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($plants);
+	}
+	/**
+	 * Get all plants associated with the specified plant type.
+	 * @param \PDO $pdo a PDO connection object
+	 * @param string $plantType type of plant being searched for
+	 * @return \SplFixedArray SplFixedArray of Plants found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when parameters are not the correct data type.
+	 **/
+	public static function getPlantByPlantType(\PDO $pdo, string $plantType) {
+		$plantType = trim($plantType);
+		$plantType = filter_var($plantType, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($plantType)) {
+			throw (new \InvalidArgumentException("plant type is invalid"));
+		}
+		// create query template
+		$query = "SELECT plantId, plantName, plantVariety, plantDescription, plantType, plantSpread, plantDaysToHarvest, plantHeight, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantType LIKE :plantType";
+		$statement = $pdo->prepare($query);
+
+		// bind the plant type to the place holder in the template
+		$parameters = ["plantType" => $plantType];
+		$statement->execute($parameters);
+
+		// build an array of plants
+		$plants = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false){
+			try {
+				$plant = new Plant($row["plantId"], $row["plantName"], $row["plantVariety"], $row["plantDescription"], $row["plantType"], $row["plantSpread"], $row["plantDaysToHarvest"], $row["plantHeight"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
+				$plants[$plants->key()] = $plant;
+				$plants->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($plants);
+	}
+
+	/**
+	 * Get all Plant objects.
+	 * @param \PDO $pdo PDO connection object
+	 * @return \SplFixedArray of Plant objects found or null if none found.
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type.
+	 **/
+	public static function getAllPlants(\PDO $pdo){
+		//create query template
+		$query = "SELECT plantId, plantName, plantVariety, plantDescription, plantType, plantSpread, plantDaysToHarvest, plantHeight, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant";
+		$statement = $pdo->prepare($query);
+		$statement->execute();
+
+		// build an array of plant entries
+		$plants = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row=$statement->fetch())!== false){
+			try {
+				$plant = new Plant($row["plantId"], $row["plantName"], $row["plantVariety"], $row["plantDescription"], $row["plantType"], $row["plantSpread"], $row["plantDaysToHarvest"], $row["plantHeight"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
+				$plants[$plants->key()] = $plant;
+				$plants->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($plants);
+	}
+
 }

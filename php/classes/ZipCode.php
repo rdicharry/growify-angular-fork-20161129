@@ -12,12 +12,12 @@ require(autoload.php);
 class ZipCode{
 	/**
 	 * @var String the Zip Code corresponding to a USDA Grow Zone (zipCodeArea)
-	 */
+	 **/
 	private $zipCodeCode;
 
 	/**
 	 * @var string the zipCodeArea USDA GrowZone that corresponds to a United States Postal ZipCode
-	 */
+	 **/
 	private $zipCodeArea;
 	/**
 	 * ZipCode constructor.
@@ -28,7 +28,7 @@ class ZipCode{
 	 * @throws OutOfBoundsException if a string greater or less than 5 characters was passed through $zipCodeCode or greater than less than 2 was passed through $zipCodeArea
 	 * @throws InvalidArgumentException if a string passed through zipCodeCode or zipCodeArea has failed to validate (not legitimate grow area or zip code)
 	 * @throws Exception if an otherwise unspecified error was thrown.
-	 */
+	 **/
 	public function __construct($zipCodeCode, $zipCodeArea) {
 		try {
 			$this->setZipCodeCode($zipCodeCode);
@@ -51,7 +51,7 @@ class ZipCode{
 	 * @throws TypeError if the parameter $zipCodeCode is not a string
 	 * @throws OutOfBoundsException if the parameter $zipCodeCode is not 5 characters long (the length of a New Mexico Zipcode)
 	 * @throws InvalidArgumentException if the parameter $zipCodeCode does not begin with 87 or 88 (The only beginning characters of a New Mexico ZipCode)
-	 */
+	 **/
 	public function setZipCodeCode($zipCodeCode) {
 		//Validates $zipCodeCode to make sure it is a string that is 5 characters long beginning with either 87 or 88
 		if(!is_string($zipCodeCode)){
@@ -74,8 +74,7 @@ class ZipCode{
 	 * @throws OutOfBoundsException if the parameter $zipCodeArea is not 2 characters long
 	 * @throws InvalidArgumentException if the parameter $zipCodeArea does not start with the characters 4,5,6,7, or 8 (start of valid growing zone)
 	 * @throws InvalidArgumentException if the parameter $zipCodeArea does not end with the characters a or b.
-	 *
-	 */
+	 **/
 	public function setZipCodeArea($zipCodeArea) {
 		//Validates the Zip code area, making sure that it is an intenger and between 1-3 in value (The three NM growing zones)
 		if(!is_string($zipCodeArea)){
@@ -101,9 +100,10 @@ class ZipCode{
 	}
 
 	 /**
-	  * Returns the value of this ZipCode instance's zipCodeCode
-	  * @returns string zipCodeCode of this ZipCode instance, represents a New Mexico Zip Code
-	 */
+	 * Returns the value of this ZipCode instance's zipCodeCode
+	 *
+	 * @returns string zipCodeCode of this ZipCode instance, represents a New Mexico Zip Code
+	 **/
 	public function getZipCodeCode() {
 		return $this->zipCodeCode;
 	}
@@ -113,7 +113,7 @@ class ZipCode{
 	 *
 	 * @param PDO $pdo the php data object used to delete a row from the the zipCode table
 	 * @throws PDOException if an error regarding the php data object occured
-	 */
+	 **/
 	public function insert(\PDO $pdo){
 		try {
 			$query = "INSERT INTO zipCode(zipCodeCode, zipCodeArea) VALUES(:zipCodeCode, :zipCodeArea)";
@@ -131,7 +131,7 @@ class ZipCode{
 	 *
 	 * @param PDO $pdo the php data object used to delete a row from the the zipCode table
 	 * @throws PDOException if an error regarding the php data object occured
-	 */
+	 **/
 	public function delete(\PDO $pdo) {
 		//checks if zipCodeCode exists.
 		if($this->zipCodeCode === null) {
@@ -152,7 +152,7 @@ class ZipCode{
 	 *
 	 * @param PDO $pdo the php data object used to update the zipCode table
 	 * @throws PDOException if an error regarding the php data object occured
-	 */
+	 **/
 	public function update(\PDO $pdo) {
 		//Checks if the zipCodeCode exists
 		if($this->zipCodeCode === null) {
