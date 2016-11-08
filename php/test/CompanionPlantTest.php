@@ -25,12 +25,12 @@ class CompanionPlantTest extends GrowifyTest {
 	 * Foreign key relationship to Plant
 	 * @var Plant companionPlant1
 	 **/
-	protected $companionPlant1Id = null;
+	protected $companionPlant1 = null;
 	/**
 	 * Foreign key relationship to Plant
 	 * @var Plant companionPlant2
 	 **/
-	protected $companionPlant2Id = null;
+	protected $companionPlant2 = null;
 
 	/**
 	 * Create objects necessary for test (dependencies)
@@ -40,12 +40,12 @@ class CompanionPlantTest extends GrowifyTest {
 		parent::setUp();
 
 		// create and insert a Plant1Id
-		$this->companionPlant1Id = new Plant(/*TODO add parameters */);
-		$this->companionPlant1Id->insert($this->getPDO());
+		$this->companionPlant1 = new Plant(/*TODO add parameters */);
+		$this->companionPlant1->insert($this->getPDO());
 
 		// create and insert a Plant2Id
-		$this->companionPlant2Id = new Plant(/*TODO add parameters */);
-		$this->companionPlant2Id->insert($this->getPDO());
+		$this->companionPlant2 = new Plant(/*TODO add parameters */);
+		$this->companionPlant2->insert($this->getPDO());
 	}
  	/**
 	 * insert a companion plant entry and verify that the mySQL entry data matches.
@@ -59,7 +59,7 @@ class CompanionPlantTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount ("companionPlant");
 
 		// create a new companion plant entry and insert it into mySQL
-		$companionPlant = new companionPlant($this->companionPlant1Id->getPlantId(), $this->companionPlant2Id->getPlantId());
+		$companionPlant = new companionPlant($this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId());
 		$companionPlant->insert($this->getPDO());
 
 		//grab date from mySQL and enforce fields match
@@ -72,8 +72,8 @@ class CompanionPlantTest extends GrowifyTest {
 
 		//get result from the array and validate it
 		$pdoCompanionPlant = $results[0]; //only one entry in this test
-		$this->assertTrue(($pdoCompanionPlant->getCompanionPlant1Id () === $this->companionPlant1Id->getPlantId() )||
-			($pdoCompanionPlant->getCompanionPlant2Id() === $this->companionPlant2Id->getPlantId()));
+		$this->assertTrue(($pdoCompanionPlant->getCompanionPlant1Id () === $this->companionPlant1->getPlantId() )||
+			($pdoCompanionPlant->getCompanionPlant2Id() === $this->companionPlant2->getPlantId()));
 
 	}
 
@@ -85,9 +85,9 @@ class CompanionPlantTest extends GrowifyTest {
 	 **/
 	public function testInsertDuplicateValidCompanionPlantEntry() {
 
-		$testCompanionPlant1Id = new CompanionPlant ($this->companionPlant1Id->getPlantId(), $this->companionPlant2Id->getPlantId());
+		$testCompanionPlant1Id = new CompanionPlant ($this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId());
 		$testCompanionPlant1Id->insert($this->getPDO());
-		$testCompanionPlant2Id = new CompanionPlant ($this->companionPlant1Id->getPlantId(), $this->companionPlant2Id->getPlantId());
+		$testCompanionPlant2Id = new CompanionPlant ($this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId());
 		$testCompanionPlant2Id->insert($this->getPDO());
 	}
 
@@ -101,9 +101,9 @@ class CompanionPlantTest extends GrowifyTest {
 	 * @expectedException \PDOException
 	 **/
 	public function testInsertDuplicateValidCombativePlantEntrySwapIds() {
-		$testCompanionPlant1Id = new CompanionPlant ($this->companionPlant1Id->getPlantId(), $this->companionPlant2Id->getPlantId());
+		$testCompanionPlant1Id = new CompanionPlant ($this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId());
 		$testCompanionPlant1Id->insert($this->getPDO());
-		$testCompanionPlant2Id = new CompanionPlant($this->companionPlant2Id->getPlantId(), $this->companionPlant1Id->getPlantId());
+		$testCompanionPlant2Id = new CompanionPlant($this->companionPlant2->getPlantId(), $this->companionPlant1->getPlantId());
 		$testCompanionPlant2Id->insert($this->getPDO());
 	}
 
@@ -126,7 +126,7 @@ class CompanionPlantTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("companionPlant");
 
 		// create a new CompanionPlant and insert into mySQL
-		$companionPlant = new CompanionPlant($this->companionPlant1Id->getPlantId(), $this->companionPlant2Id->getPlantId());
+		$companionPlant = new CompanionPlant($this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId());
 		$companionPlant->insert($this->getPDO());
 
 		// delete that companionPlant
@@ -134,7 +134,7 @@ class CompanionPlantTest extends GrowifyTest {
 		$companionPlant->delete($this->getPDO());
 
 		// get data from mySQL and enforce the entry was deleted
-		$pdoCompanionPlant = CompanionPlant::getCompanionPlantByBothPlantIds($this->companionPlant1Id->getPlantId(), $this->companionPlant2Id->getPlantId());
+		$pdoCompanionPlant = CompanionPlant::getCompanionPlantByBothPlantIds($this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId());
 		$this->assertNull($pdoCompanionPlant);
 		$this->assertEquals($numRows, $this->getConnecion()->getRowCount("companionPlant"));
 
@@ -146,7 +146,7 @@ class CompanionPlantTest extends GrowifyTest {
 	 **/
 	public function testDeleteValidCompanionPlantEntry(){
 		// create a CompanionPlant and try to delete without actually inserting it
-		$companionPlant = new CompanionPlant($this->companionPlant1Id->getPlantId(),$this->companionPlant2Id->getPlantId());
+		$companionPlant = new CompanionPlant($this->companionPlant1->getPlantId(),$this->companionPlant2->getPlantId());
 		$companionPlant->delete($this->getPDO());
 	}
 
@@ -162,19 +162,19 @@ class CompanionPlantTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("CompanionPlant");
 
 		// create a new Companion Plant and insert it into mySQL
-		$companionPlant = new CompanionPlant($this->companionPlant1Id->getPlantId(), $this->companionPlant2Id->getPlantId());
+		$companionPlant = new CompanionPlant($this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId());
 		$companionPlant->insert($this->getPDO());
 
 		// grab the data and enforce fields match expectations
-		$results = CompanionPlant::getAllCompanionPlantsByPlantId($this->getPDO(), $this->companionPlant2Id->getPlantId());
+		$results = CompanionPlant::getAllCompanionPlantsByPlantId($this->getPDO(), $this->companionPlant2->getPlantId());
 		$this->assertEquals($numRows+1, $this->getConnection()->getRowCount("companionPlant"));
 		$this->assertCount(1, $results);
 		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\Growify\\CompanionPlant");
 
 		// get result from the array and validate it
 		$pdoCompanionPlant = $results[0];
-		$this->assertEquals($pdoCompanionPlant->getCompanionPlant1Id(), $this->companionPlant1Id->getPlantId());
-		$this->assertEquals($pdoCompanionPlant->getCompanionPlant2Id(), $this->companionPlant2Id->getPlantId());
+		$this->assertEquals($pdoCompanionPlant->getCompanionPlant1Id(), $this->companionPlant1->getPlantId());
+		$this->assertEquals($pdoCompanionPlant->getCompanionPlant2Id(), $this->companionPlant2->getPlantId());
 	}
 
 
@@ -193,7 +193,7 @@ class CompanionPlantTest extends GrowifyTest {
 
 		// get a CompanionPlant entry by searching for a plant that does not exist
 
-		$companionPlant = CompanionPlant::getCompanionPlantByBothPlantIds($this->getPDO(), $this->companionPlant1Id->getPlantId(), $this->companionPlant2Id->getPlantId());
+		$companionPlant = CompanionPlant::getCompanionPlantByBothPlantIds($this->getPDO(), $this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId());
 		$this->assertEquals(null, $companionPlant);
 	}
 	/**
@@ -204,7 +204,7 @@ class CompanionPlantTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("CompanionPlant");
 
 		// create a new Companion Plant and insert it into mySQL
-		$companionPlant = new CompanionPlant($this->companionPlant1Id->getPlantId(), $this->companionPlant2Id->getPlantId());
+		$companionPlant = new CompanionPlant($this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId());
 		$companionPlant->insert($this->getPDO());
 
 		// grab the data and enforce fields match expectations
@@ -215,7 +215,7 @@ class CompanionPlantTest extends GrowifyTest {
 
 		//get result from the array and validate it
 		$pdoCompanionPlant =$results[0];
-		$this->assertEquals($pdoCompanionPlant->getCompanionPlant1Id(),$this->companionPlant1Id->getPlantId());
-		$this->assertEquals($pdoCompanionPlant->getCompanionPlant2Id(),$this->companionPlant2Id->getPlantId());
+		$this->assertEquals($pdoCompanionPlant->getCompanionPlant1Id(),$this->companionPlant1->getPlantId());
+		$this->assertEquals($pdoCompanionPlant->getCompanionPlant2Id(),$this->companionPlant2->getPlantId());
 	}
 }

@@ -43,8 +43,8 @@ CREATE TABLE companionPlant(
 );
 
 CREATE TABLE combativePlant(
-	combativeplant1Id SMALLINT UNSIGNED NOT NULL,
-	combativeplant2Id SMALLINT UNSIGNED NOT NULL,
+	combativePlant1Id SMALLINT UNSIGNED NOT NULL,
+	combativePlant2Id SMALLINT UNSIGNED NOT NULL,
 	-- index foreign keys
 	INDEX(combativePlant1Id),
 	INDEX(combativePlant2Id),
