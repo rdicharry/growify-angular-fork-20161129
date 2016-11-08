@@ -1,7 +1,8 @@
 <?php
 namespace Edu\Cnm\Growify\Test;
 
-use Edu\Cnm\Growify\{Plant, PlantArea};
+use Edu\Cnm\Growify\{Plant};
+use PDOException;
 use PlantArea;
 
 // grab the project test parameters
@@ -96,7 +97,7 @@ public final function setUp() {
 		$plantAreaId->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
-		$pdoPlantArea = PlantArea:::getPlantAreaByPlantAreaId($this->getPDO(), $plantArea->getPlantAreaId());
+		$pdoPlantArea = PlantArea::getPlantAreaByPlantAreaId($this->getPDO(), $plantArea->getPlantAreaId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("plantArea"));
 		$this->assertEquals($pdoPlantArea->getPlantId(), $this->plant->getPlantId());
 		$this->assertEquals($pdoPlantArea->getPlantAreaId(), $this->VALID_PLANTAREAID);
@@ -134,8 +135,8 @@ public function testUpdateValidPlantArea ($plantArea) {
 	$plantArea->update($this->getPDO());
 
 	// grab the data from mySQL and enforce the fields match our expectations
-	$pdoPlantArea =PlantArea:::getPlantAreaByPlantAreaId($this->getPDO(), $plantArea->getPlantAreaId());
-	$this->assertEquals($numRows + 1, $this->getConnection()->getRowcount("plantArea"));
+	$pdoPlantArea =PlantArea::getPlantAreaByPlantAreaId($this->getPDO(), $plantArea->getPlantAreaId());
+	$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("plantArea"));
 	$this->assertEquals($pdoPlantArea->getPlantId(), $this->plant->getPlantId());
 	$this->assertEquals($pdoPlantArea->getPlantAreaId(), $this->VALID_PLANTAREAID);
 	$this->assertEquals($pdoPlantArea->getPlantAreaPlantId(),$this->VALID_PLANTAREAPLANTID);
@@ -143,6 +144,41 @@ public function testUpdateValidPlantArea ($plantArea) {
 	$this->assertEquals($pdoPlantArea->getPlantAreaEndDate(),$this->VALID_PLANTAREAENDDATE);
 	$this->assertEquals($pdoPlantArea->getPlantAreaNum(),$this->VALID_PLANTAREANUM);
 }
+
+/**
+ * test updating a PlantArea that that does not exist
+ * @expectedException PDOException
+ **/
+public function testUpdateInvalidPlantArea($plantArea) {
+	// create a PlantArea and try to delete it without actually inserting it
+	$plantArea = new PlantArea(null, $this->plant->getPlantId(), $this->VALID_PLANTAREAID, $this->VALID_PLANTAREASTARTDATE, $this->VALID_PLANTAREAENDDATE, $this->VALID_PLANTAREANUM);
+	$plantArea->update($this->getPDO());
+}
+
+/**
+ * test creating a PlantArea and then deleting it
+ **/
+public function testDeleteValidPlantArea($plantArea) {
+	// count the number of rows and save it for later
+	$numRows = $this->getconnection()->getRowCount("plantArea");
+
+
+	// create a new PlantArea and insert into mySQL
+	$plantAreaId = new PlantAreaId(null, $this->plant->getPlantId(), $this->VALID_PLANTAREAID, $this->VALID_PLANTAREASTARTDATE, $this->VALID_PLANTAREAENDDATE, $this->VALID_PLANTAREANUM);
+	$plantAreaId->insert($this->getPDO());
+
+	// delete the PlantArea from mySQL
+	$this->assertEquals($numRows +1, $this->getConnection()->getRowCount("plant area"));
+	$plantArea->delete($this->getPDO());
+
+	// grab the date from mySQL and enforce the PlantArea does not exist
+	$pdoPlantArea = PlantArea::getPlantAreabyPlantAreaPlantId($this->getPDO(), $plantArea->getPlantId());
+	$this->assertNull($pdoPlantArea);
+	$this->assertEquals($numRows, $this->getConnection()->getRowCount("plant area"));
+}
+
+
+
 
 
 }
