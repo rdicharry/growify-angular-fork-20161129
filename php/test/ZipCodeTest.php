@@ -1,10 +1,10 @@
 <?php
 
-namespace Edu\Cnm\Growify;
-use Cnm\Edu\Growify\ZipCode;
+namespace Cnm\Edu\Growify;
 use Cnm\Edu\Growify\Test\GrowifyTest;
-
+use Cnm\Edu\Growify\ZipCode;
 require_once('GrowifyTest.php');
+require_once (dirname(__DIR__).'/classes/ZipCode.php');
 // grab the class under scrutiny
 require_once(dirname(__DIR__) . "/classes/autoload.php");
 /**
@@ -39,12 +39,10 @@ protected $VALID_ZIPCODEAREA2  = "7a";
  * @var string $INVALID_ZIPCODECODE
  */
 protected $INVALID_ZIPCODECODE = "04200";
-protected $zipCode = null;
 
 public final function setUp() {
 // run the default setUp() method first
 parent::getSetUpOperation();
-
 }
 
 /**

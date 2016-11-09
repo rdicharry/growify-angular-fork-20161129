@@ -6,7 +6,7 @@
  * Time: 3:58 PM
  */
 namespace Cnm\Edu\Growify;
-require_once('autoload.php');
+require_once(dirname(__DIR__) . '/classes/autoload.php');
 
 
 class ZipCode{
@@ -115,7 +115,7 @@ class ZipCode{
 	 **/
 	public function insert(\PDO $pdo){
 		try {
-			$query = "INSERT INTO zipCode(zipCodeCode, zipCodeArea) VALUES(:zipCodeCode, :zipCodeArea)";
+			$query = "INSERT INTO zipCode(zipCodeCode, zipCodeZone) VALUES(:zipCodeCode, :zipCodeArea)";
 			$statement = $pdo->prepare($query);
 
 			$parameters = ["zipCodeCode" => $this->zipCodeCode, "zipCodeArea" => $this->zipCodeArea];
@@ -158,7 +158,7 @@ class ZipCode{
 			throw(new \PDOException("This zipcode cannot be updated because it doesnt exist."));
 		}
 		try {
-			$query = "UPDATE zipCode SET zipCodeCode = :zipCodeCode, zipCodeArea = :zipCodeArea";
+			$query = "UPDATE zipCode SET zipCodeCode = :zipCodeCode, zipCodeZone = :zipCodeArea";
 			$statement = $pdo->prepare($query);
 			$parameters = ["zipCodeCode" => $this->zipCodeCode, "zipCodeArea" => $this->zipCodeArea];
 			$statement->execute($parameters);
@@ -181,7 +181,7 @@ class ZipCode{
 			throw(new \TypeError("Zip Code is not a String"));
 		}
 
-		$query = "SELECT zipCodeCode,zipCodeArea FROM zipCode WHERE zipCodeCode = :zipCodeCode";
+		$query = "SELECT zipCodeCode,zipCodeZone FROM zipCode WHERE zipCodeCode = :zipCodeCode";
 		$statement = $pdo->prepare($query);
 		$parameters = ["zipCodeCode" => $zipCodeCode];
 		$statement->execute($parameters);
@@ -209,7 +209,7 @@ class ZipCode{
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
 	public static function getAllZipCodes(\PDO $pdo) {
-		$query = "SELECT zipCodeCode, zipCodeArea FROM zipCode";
+		$query = "SELECT zipCodeCode, zipCodeZone FROM zipCode";
 		$statement = $pdo->prepare($query);
 		$statement->execute();
 		$zipCodes = new \SplFixedArray($statement->rowCount());
