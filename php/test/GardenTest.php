@@ -1,7 +1,7 @@
 <?php
 namespace Edu\Cnm\Growify\Test;
 
-use Edu\Cnm\Growify\{Profile, Plant, Garden};
+use Edu\Cnm\Growify\{Profile, Plant, Garden, ZipCode};
 
 // grab the project test parameters
 require_once("GrowifyTest.php");
@@ -57,8 +57,11 @@ class GardenTest extends GrowifyTest {
 		// run the default setUp() method first
 		parent::setUp();
 
+		$this->zipCode = new ZipCode("87120", "5b");
+		$this->zipCode->insert($this->getPDO());
+
 		// create and insert a Profile to own the test Garden
-		$this->profile = new Profile(null, "lorax1971", "the.lorax@oncelerco.com", "00000", "pqrst", "lmnop", 1);
+		$this->profile = new Profile(null, "lorax1971", "the.lorax@oncelerco.com", $this->zipCode, "pqrst", "lmnop", 1);
 		$this->profile->insert($this->getPDO());
 
 		// create and insert a Plant to go into the garden

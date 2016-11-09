@@ -53,7 +53,7 @@ class Profile implements \JsonSerializable {
 	 * @param $newProfileId
 	 * @param $newProfileUsername
 	 * @param $newProfileEmail
-	 * @param $newProfileZipCode a ZipCode object linking a zip code and a planting area.
+	 * @param $newProfileZipCode ZipCode object linking a zip code and a planting area.
 	 * @param $newProfileHash
 	 * @param $newProfileSalt
 	 * @param $newProfileActivation

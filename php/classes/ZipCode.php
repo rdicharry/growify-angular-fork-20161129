@@ -5,8 +5,8 @@
  * Date: 11/2/2016
  * Time: 3:58 PM
  */
-namespace Cnm\Edu\Growify;
-require_once(dirname(__DIR__) . '/classes/autoload.php');
+namespace Edu\Cnm\Growify;
+require_once('autoload.php');
 
 
 class ZipCode{
@@ -58,7 +58,7 @@ class ZipCode{
 		}elseif(strlen($zipCodeCode) != 5){
 			throw (new \OutOfBoundsException('The $zipCodeCode Entered is not 5 characters long and is therefore an invalid New Mexico Zip Code'));
 		}
-		elseif((substr($zipCodeCode,0,2) !== "87") &&  (substr($zipCodeCode, 0,2) !== "88")){
+		elseif(substr($zipCodeCode,0,2) !== '87' &&  substr($zipCodeCode, 0,2) !=='88'){
 			throw (new \InvalidArgumentException('The $zipCodeCode entered is not a valid New Mexico Zip Code'));
 		}
 
@@ -82,7 +82,7 @@ class ZipCode{
 			throw (new \OutOfBoundsException("This is not a valid New Mexico growing Zone"));
 		} elseif(substr($zipCodeArea,0,1)!= '4' && substr($zipCodeArea,0,1)!= '5' && substr($zipCodeArea,0,1)!= '6' && substr($zipCodeArea,0,1)!= '7' && substr($zipCodeArea,0,1)!= '8'){
 			throw (new \InvalidArgumentException("This zip code area is not a valid New Mexco growing zone"));
-		} elseif(substr($zipCodeArea,1) != 'a' && substr($zipCodeArea,1) != 'b'){
+		} elseif(substr($zipCodeArea,1,1) != 'a' && substr($zipCodeArea,1,1) != 'b'){
 			throw (new \InvalidArgumentException("This zip code area is not a valid New Mexco growing zone"));
 		}
 		//Set this object's value of zipCodeArea to the specified ZipCodeArea in the Parameter
@@ -115,7 +115,7 @@ class ZipCode{
 	 **/
 	public function insert(\PDO $pdo){
 		try {
-			$query = "INSERT INTO zipCode(zipCodeCode, zipCodeZone) VALUES(:zipCodeCode, :zipCodeArea)";
+			$query = "INSERT INTO zipCode(zipCodeCode, zipCodeArea) VALUES(:zipCodeCode, :zipCodeArea)";
 			$statement = $pdo->prepare($query);
 
 			$parameters = ["zipCodeCode" => $this->zipCodeCode, "zipCodeArea" => $this->zipCodeArea];
@@ -158,7 +158,7 @@ class ZipCode{
 			throw(new \PDOException("This zipcode cannot be updated because it doesnt exist."));
 		}
 		try {
-			$query = "UPDATE zipCode SET zipCodeCode = :zipCodeCode, zipCodeZone = :zipCodeArea";
+			$query = "UPDATE zipCode SET zipCodeCode = :zipCodeCode, zipCodeArea = :zipCodeArea";
 			$statement = $pdo->prepare($query);
 			$parameters = ["zipCodeCode" => $this->zipCodeCode, "zipCodeArea" => $this->zipCodeArea];
 			$statement->execute($parameters);
@@ -181,7 +181,7 @@ class ZipCode{
 			throw(new \TypeError("Zip Code is not a String"));
 		}
 
-		$query = "SELECT zipCodeCode,zipCodeZone FROM zipCode WHERE zipCodeCode = :zipCodeCode";
+		$query = "SELECT zipCodeCode,zipCodeArea FROM zipCode WHERE zipCodeCode = :zipCodeCode";
 		$statement = $pdo->prepare($query);
 		$parameters = ["zipCodeCode" => $zipCodeCode];
 		$statement->execute($parameters);
@@ -209,7 +209,7 @@ class ZipCode{
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
 	public static function getAllZipCodes(\PDO $pdo) {
-		$query = "SELECT zipCodeCode, zipCodeZone FROM zipCode";
+		$query = "SELECT zipCodeCode, zipCodeArea FROM zipCode";
 		$statement = $pdo->prepare($query);
 		$statement->execute();
 		$zipCodes = new \SplFixedArray($statement->rowCount());
