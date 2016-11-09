@@ -1,13 +1,12 @@
 <?php
 
-namespace Edu\Cnm\growify\php\Test;
+namespace Edu\Cnm\Growify\Test;
 
-use Edu\Cnm\growify\Test\GrowifyTest;
-use Edu\Cnm\growify\php\ZipCode;
+use  Edu\Cnm\Growify\Test;
+use Edu\Cnm\Growify\ZipCode;
 
-// grab the project test parameters
 require_once('GrowifyTest.php');
-
+require_once ('ZipCode.php');
 // grab the class under scrutiny
 require_once(dirname(__DIR__) . "/classes/autoload.php");
 
