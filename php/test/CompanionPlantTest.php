@@ -40,11 +40,11 @@ class CompanionPlantTest extends GrowifyTest {
 		parent::setUp();
 
 		// create and insert a Plant1Id
-		$this->companionPlant1 = new Plant(/*TODO add parameters */);
+		$this->companionPlant1 = new Plant(null, "wildcarrot", "orangelike", "what bunnies eat", "longish", 7, 200, 55, 38, 89, "c");
 		$this->companionPlant1->insert($this->getPDO());
 
 		// create and insert a Plant2Id
-		$this->companionPlant2 = new Plant(/*TODO add parameters */);
+		$this->companionPlant2 = new Plant(null, "minitomato", "smallest", "round and shiny", "fruity", 8, 10, 44, 45, 71, "t");
 		$this->companionPlant2->insert($this->getPDO());
 	}
  	/**
@@ -56,7 +56,7 @@ class CompanionPlantTest extends GrowifyTest {
 	 **/
 	public function testInsertValidCompanionPlantEntry() {
 		// store number of rows for later
-		$numRows = $this->getConnection()->getRowCount ("companionPlant");
+		$numRows = $this->getConnection()->getRowCount("companionPlant");
 
 		// create a new companion plant entry and insert it into mySQL
 		$companionPlant = new companionPlant($this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId());
@@ -107,17 +107,6 @@ class CompanionPlantTest extends GrowifyTest {
 		$testCompanionPlant2Id->insert($this->getPDO());
 	}
 
-
-
-
-/**
- * test updating a companion plant entry that does not exist
- * @expectedException PDOException
- **/
-	public function testUpdateInvalidCompanionPlantEntry() {
-
-	}
-
 	/**
 	 * test deleting a valid plant entry
 	 **/
@@ -136,7 +125,7 @@ class CompanionPlantTest extends GrowifyTest {
 		// get data from mySQL and enforce the entry was deleted
 		$pdoCompanionPlant = CompanionPlant::getCompanionPlantByBothPlantIds($this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId());
 		$this->assertNull($pdoCompanionPlant);
-		$this->assertEquals($numRows, $this->getConnecion()->getRowCount("companionPlant"));
+		$this->assertEquals($numRows, $this->getConnection()->getRowCount("companionPlant"));
 
 	}
 
@@ -151,7 +140,7 @@ class CompanionPlantTest extends GrowifyTest {
 	}
 
 	/**
-	 * test ability to retrieve the CompanionPlant record by the second Plant entry (companionPlant2Id)
+	 * test ability to retrieve the CompanionPlant record by the second Plant entry (companionPlant2)
 	 **/
 	public function testGetValidCombativePlantEntryByPlantId(){
 
@@ -175,15 +164,6 @@ class CompanionPlantTest extends GrowifyTest {
 		$pdoCompanionPlant = $results[0];
 		$this->assertEquals($pdoCompanionPlant->getCompanionPlant1Id(), $this->companionPlant1->getPlantId());
 		$this->assertEquals($pdoCompanionPlant->getCompanionPlant2Id(), $this->companionPlant2->getPlantId());
-	}
-
-
-	/**
-	 * test deleting a companion plant entry that does not exist
-	 * @expectedException PDOException
-	 **/
-	public function testInvalidCompanionPlantEntry() {
-
 	}
 
 	/**
