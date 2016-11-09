@@ -1,7 +1,9 @@
 <?php
 namespace Edu\Cnm\Growify\Test;
 
-use Edu\Cnm\Growify\{Plant, CompanionPlant};
+
+use Edu\Cnm\Growify\CompanionPlant;
+use Edu\Cnm\Growify\Plant;
 
 //grab the project test parameters
 require_once("GrowifyTest.php");
@@ -114,14 +116,14 @@ class CompanionPlantTest extends GrowifyTest {
 
 		// create a new CompanionPlant and insert into mySQL
 		$companionPlant = new CompanionPlant($this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId());
-		$companionPlant->insert($this->getPDO());
+		$companionPlant->insert($this->getPDO(5));
 
 		// delete that companionPlant
 		$this->assertEquals($numRows+1, $this->getConnection()->getRowCount("companionPlant"));
-		$companionPlant->delete($this->getPDO());
+		$companionPlant->delete($this->getPDO(5));
 
 		// get data from mySQL and enforce the entry was deleted
-		$pdoCompanionPlant = CompanionPlant::getCompanionPlantByBothPlantIds($this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId());
+		$pdoCompanionPlant = CompanionPlant::getCompanionPlantByBothPlantIds($this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId(5));
 		$this->assertNull($pdoCompanionPlant);
 		$this->assertEquals($numRows, $this->getConnection()->getRowCount("companionPlant"));
 
@@ -196,4 +198,6 @@ class CompanionPlantTest extends GrowifyTest {
 		$this->assertEquals($pdoCompanionPlant->getCompanionPlant1Id(),$this->companionPlant1->getPlantId());
 		$this->assertEquals($pdoCompanionPlant->getCompanionPlant2Id(),$this->companionPlant2->getPlantId());
 	}
+
+
 }
