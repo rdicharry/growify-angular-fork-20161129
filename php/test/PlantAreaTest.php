@@ -1,16 +1,14 @@
 <?php
 namespace Edu\Cnm\Growify\Test;
 
-use Edu\Cnm\Growify\{Plant};
-use PDOException;
-use PlantArea;
+use Edu\Cnm\Growify\{Plant, PlantArea};
+
 
 // grab the project test parameters
 require_once("GrowifyTest.php");
 
 // grab the class under scrutiny
-require_once(dirname(__DIR__)."/classes/autoload.php");
-
+require_once("PlantAreaTest.php");
 /**
  * Full PHPUnit test for the PlantArea class
  *
@@ -24,61 +22,61 @@ require_once(dirname(__DIR__)."/classes/autoload.php");
 class PlantAreaTest extends GrowifyTest {
 	/**
 	 *Primary key relationship to Plant.
-	 * @var    plantAreaId
+	 * @var int $VALID_PLANTAREAID
 	 **/
 	protected $VALID_PLANTAREAID = "This is a valid plant area";
 
 	/**
-	 *
-	 * @var    plantAreaPlantId
+	 * int of a valid plant area plant id
+	 * @var int $VALID_PLANTAREAPLANTID
 	 **/
 	protected $VALID_PLANTAREAPLANTID = "This plant area has this plant id in the database";
 
 	/**
-	 *
-	 * @var plantAreaStartDate
-	 */
+	 * string of a valid plant area start date
+	 * @var string $VALID_PLANTAREASTARTDATE
+	 **/
 
-	protected $VALID_PLANTAREASTARTDATE = null;
-
-	/**
-	 *
-	 * @var plantAreaEndDate
-	 * */
-	protected $VALID_PLANTAREAENDDATE = null;
+	protected $VALID_PLANTAREASTARTDATE = "01-15";
 
 	/**
-	 *
-	 * @var plantAreaNumber
+	 * string of a valid plant area end date
+	 * @var string $VALID_PLANTAREAENDDATE
+	 **/
+	protected $VALID_PLANTAREAENDDATE = "03-01";
+
+	/**
+	 * string of a valid plant area number
+	 * @var string $VALID_PLANTAREANUM
 	 **/
 
 	protected $VALID_PLANTAREANUM = null;
 
 	/**
 	 *Create depend objects before running each test
-	 */
-public final function setUp() {
-	// run the default setUp() method first
+	 **/
+	public final function setUp() {
+		// run the default setUp() method first
 		parent::setUp();
 
 		//create and insert a plant area id
-		$this->plantAreaId = new Plant();
-		$this->plantAreaId->insert($this->getPDO());
+		$this->plantArea = new Plant(null, "5a");
+		$this->plantArea->insert($this->getPDO());
 
 		//create and insert plant area plant id
-		$this->plantAreaPlantId = new Plant();
+		$this->plantAreaPlantId = new Plant(null);
 		$this->plantAreaPlantId->insert ($this->getPDO());
 
 		//create and insert plant area start date
-		$this->plantAreaStartDate = new Plant();
+		$this->plantAreaStartDate = new Plant(30);
 		$this->plantAreaStartDate->insert($this->getPDO());
 
 		//create and insert plant area end date
-		$this->plantAreaEndDate = new Plant();
+		$this->plantAreaEndDate = new Plant(57);
 		$this->plantAreaStartDate->insert($this->getPDO());
 
 		//create and insert plant area area num
-		$this->plantAreaNum = new Plant();
+		$this->plantAreaNum = new Plant(2);
 		$this->plantAreaNum->insert($this->getPDO());
 	}
 
@@ -90,7 +88,7 @@ public final function setUp() {
 
 	public function testInsertValidPlantArea($plantAreaId) {
 		//count the number of rows and save it for later
-		$numRows = $this->getconnection()->getRowCount("plantArea");
+		$numRows = $this->getConnection()->getRowCount("plantArea");
 
 		// create a new PlantArea and insert into mySQL
 		$plantArea = new PlantAreaId(null, $this->plant->getPlantId(), $this->VALID_PLANTAREAID, $this->VALID_PLANTAREAPLANTID, $this->VALID_PLANTAREASTARTDATE, $this->VALID_PLANTAREAENDDATE, $this->VALID_PLANTAREANUM);
@@ -127,8 +125,8 @@ public function testUpdateValidPlantArea ($plantArea) {
 	$numRows = $this->getconnection()->getRowCount("plantArea");
 
 	// create a new PlantArea and insert into mySQL
-	$plantAreaId = new PlantAreaId(null, $this->plant->getPlantId(), $this->VALID_PLANTAREAID, $this->VALID_PLANTAREASTARTDATE, $this->VALID_PLANTAREAENDDATE, $this->VALID_PLANTAREANUM);
-	$plantAreaId->insert($this->getPDO());
+	$plantAreaId = new PlantArea(null, $this->plant->getPlantId(), $this->VALID_PLANTAREAID, $this->VALID_PLANTAREASTARTDATE, $this->VALID_PLANTAREAENDDATE, $this->VALID_PLANTAREANUM);
+	$plantArea->insert($this->getPDO());
 
 	// edit the PlantArea and update it in mySQL
 	$plantArea->setPlantAreaId($this->VALID_PLANTAREAID);
@@ -164,8 +162,8 @@ public function testDeleteValidPlantArea($plantArea) {
 
 
 	// create a new PlantArea and insert into mySQL
-	$plantAreaId = new PlantAreaId(null, $this->plant->getPlantId(), $this->VALID_PLANTAREAID, $this->VALID_PLANTAREASTARTDATE, $this->VALID_PLANTAREAENDDATE, $this->VALID_PLANTAREANUM);
-	$plantAreaId->insert($this->getPDO());
+	$plantArea = new PlantAreaId(null, $this->plant->getPlantId(), $this->VALID_PLANTAREAID, $this->VALID_PLANTAREASTARTDATE, $this->VALID_PLANTAREAENDDATE, $this->VALID_PLANTAREANUM);
+	$plantArea->insert($this->getPDO());
 
 	// delete the PlantArea from mySQL
 	$this->assertEquals($numRows +1, $this->getConnection()->getRowCount("plant area"));
@@ -196,8 +194,8 @@ public function testGetAllValidPlantAreas() {
 	$numRows = $this->getconnection()->getRowCount("plantArea");
 
 	// create a new PlantArea and insert into mySQL
-	$plantAreaId = new PlantAreaId(null, $this->plant->getPlantId(), $this->VALID_PLANTAREAID, $this->VALID_PLANTAREASTARTDATE, $this->VALID_PLANTAREAENDDATE, $this->VALID_PLANTAREANUM);
-	$plantAreaId->insert($this->getPDO());
+	$plantArea = new PlantAreaId(null, $this->plant->getPlantId(), $this->VALID_PLANTAREAID, $this->VALID_PLANTAREASTARTDATE, $this->VALID_PLANTAREAENDDATE, $this->VALID_PLANTAREANUM);
+	$plantArea->insert($this->getPDO());
 
 	// grab the data from mySQL and enforce the fields match our expectations
 	$results =PlantArea::getAllPlantAreas($this->getPDO());

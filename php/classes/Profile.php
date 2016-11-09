@@ -43,8 +43,8 @@ class Profile {
 	 **/
 	private $profileSalt;
 	 /**
-	 * activation for this profile
-	 * @var bool $profileActivation
+	 * activation code for this profile
+	 * @var string $profileActivation
 	 **/
 	private $profileActivation;
 
@@ -117,7 +117,7 @@ class Profile {
 	}
 	/**
 	 * accessor method for profile activation state
-	 * @return bool
+	 * @return string
 	 **/
 	public function getProfileActivation(){
 		return $this->profileActivation;
@@ -197,10 +197,18 @@ class Profile {
 	}
 
 	/**
-	 * mutator method for profile password hash
-	 * @param string $newProfileHash
-	 **/
+ * mutator method for profile password hash
+ * @param string $newProfileHash
+ **/
 	public function setProfileHash($newProfileHash) {
+		$newProfileHash = trim($newProfileHash);
+		$newProfileHash = filter_var($newProfileHash,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newProfileHash)){
+			throw (new \InvalidArgumentException("hash is empty or has invalid contents"));
+		}
+		if(strlen($newProfileHash) > 128) {
+			throw(new \RangeException("hash is too large"));
+		}
 		$this->profileHash = $newProfileHash;
 	}
 
@@ -209,6 +217,14 @@ class Profile {
 	 * @param string $newProfileSalt
 	 **/
 	public function setProfileSalt($newProfileSalt) {
+		$newProfileSalt = trim($newProfileSalt);
+		$newProfileSalt = filter_var($newProfileSalt,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newProfileSalt)){
+			throw (new \InvalidArgumentException("salt is empty or has invalid contents"));
+		}
+		if(strlen($newProfileSalt) > 64) {
+			throw(new \RangeException("salt is too large"));
+		}
 		$this->profileSalt = $newProfileSalt;
 	}
 
@@ -217,6 +233,14 @@ class Profile {
 	 * @param string $newProfileActivation
 	 **/
 	public function setProfileActivation($newProfileActivation) {
+		$newProfileActivation = trim($newProfileActivation);
+		$newProfileActivation = filter_var($newProfileActivation,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newProfileActivation)){
+			throw (new \InvalidArgumentException("activation is empty or has invalid contents"));
+		}
+		if(strlen($newProfileActivation) > 16) {
+			throw(new \RangeException("activation is too large"));
+		}
 		$this->profileActivation = $newProfileActivation;
 	}
 	/**
