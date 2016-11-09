@@ -77,7 +77,7 @@ class CombativePlantTest extends GrowifyTest {
 		// first check array parameters
 		$this->assertEquals($numRows+1, $this->getConnection()->getRowCount("combativePlant"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\Growify\\CombativePlant");
+		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\Growify\\CombativePlant", $results);
 
 		// get result from the array and validate it.
 		$pdoCombativePlant = $results[0]; // only one entry in this test
@@ -243,7 +243,7 @@ class CombativePlantTest extends GrowifyTest {
 		$results = CombativePlant::getAllCombativePlants($this->getPDO());
 		$this->assertEquals($numRows+1, $this->getConnection()->getRowCount("combativePlant"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\Growify\\CombativePlant");
+		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\Growify\\CombativePlant", $results);
 
 		// get result from the array and validate it.
 		$pdoCombativePlant = $results[0];

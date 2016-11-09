@@ -119,7 +119,7 @@ class CombativePlant implements \JsonSerializable{
 		// create query template
 		// note: need to check both cases: combativeplant1Id, combativeplant2Id AND combativeplant2Id, combativeplant1Id since order does not matter
 		// TODO ensure that we have done this check in companion plant as well!
-		$query = "DELETE FROM garden WHERE ((combativePlant1Id= :combativePlant1Id AND combativePlant2Id= :combativePlant2Id) OR (combativePlant1Id = :combativePlant2Id AND combativePlant2Id = :combativePlant1Id))";
+		$query = "DELETE FROM combativePlant WHERE (combativePlant1Id = :combativePlant1Id , combativePlant2Id = :combativePlant2Id) OR (combativePlant1Id = :combativePlant2Id , combativePlant2Id = :combativePlant1Id)";
 		$statement = $pdo->prepare($query);
 
 		// bind parameters
@@ -147,7 +147,7 @@ class CombativePlant implements \JsonSerializable{
 		}
 
 		// create query template
-		$query = "SELECT combativePlant1Id, combativePlant2Id FROM combativePlant WHERE ((combativePlant1Id= :plant1Id, combativePlant2Id = :plant2Id) OR (combativePlant1Id = :plant2Id, combativePlant2Id = :plant2Id))";
+		$query = "SELECT combativePlant1Id, combativePlant2Id FROM combativePlant WHERE ((combativePlant1Id = :plant1Id, combativePlant2Id = :plant2Id) OR (combativePlant1Id = :plant2Id, combativePlant2Id = :plant1Id))";
 		$statement = $pdo->prepare($query);
 
 		// bind parameters
