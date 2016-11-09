@@ -21,7 +21,7 @@ class ZipCodeTest extends GrowifyTest {
 * String of a valid Zipcode
 * @var string $VALID_ZipCodeCode
 **/
-protected $VALID_ZIPCODECODE = "87002";
+protected $VALID_ZIPCODECODE = '87002';
 /**
 * String of a valid ZipCodeArea
 * @var string $VALID_ZIPCODEAREA
@@ -64,7 +64,7 @@ $this->assertEquals($pdozipCode->getZipCodeArea(), $this->VALID_ZIPCODEAREA);
 /**
 * test inserting a ZipCode that already exists
 *
-* @expectedException PDOException
+* @expectedException \InvalidArgumentException
 **/
 public function testInsertInvalidZipCode() {
 // create a ZipCode with a non null zipCodeCode and watch it fail
@@ -97,11 +97,11 @@ $this->assertEquals($pdoZipCode->getZipCodeArea(), $this->VALID_ZIPCODEAREA2);
 /**
 * test updating a ZipCode that does not exist
 *
-* @expectedException PDOException
+* @expectedException \PDOException
 **/
 public function testUpdateInvalidZipCode() {
 // create a ZipCode, try to update it without actually updating it and watch it fail
-$zipCode = new ZipCode($this->INVALID_ZIPCODECODE, $this->VALID_ZIPCODEAREA);
+$zipCode = new ZipCode($this->VALID_ZIPCODECODE, $this->VALID_ZIPCODEAREA);
 $zipCode->update($this->getPDO());
 }
 
