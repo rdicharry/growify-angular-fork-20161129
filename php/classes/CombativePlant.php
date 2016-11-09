@@ -1,5 +1,5 @@
 <?php
-namespace Cnm\Edu\Growify;
+namespace Edu\Cnm\Growify;
 
 require_once("autoload.php");
 
@@ -119,7 +119,14 @@ class CombativePlant implements \JsonSerializable{
 		// create query template
 		// note: need to check both cases: combativeplant1Id, combativeplant2Id AND combativeplant2Id, combativeplant1Id since order does not matter
 		// TODO ensure that we have done this check in companion plant as well!
-		$query = "DELETE FROM combativePlant WHERE (combativePlant1Id = :combativePlant1Id , combativePlant2Id = :combativePlant2Id) OR (combativePlant1Id = :combativePlant2Id , combativePlant2Id = :combativePlant1Id)";
+		$query = "DELETE FROM combativePlant WHERE combativePlant1Id = :combativePlant1Id , combativePlant2Id = :combativePlant2Id";
+		$statement = $pdo->prepare($query);
+
+		// bind parameters
+		$parameters = ["combativePlant1Id"=>$this->combativePlant1Id, "combativePlant2Id"=>$this->combativePlant2Id];
+		$statement->execute($parameters);
+
+		$query = "DELETE FROM combativePlant WHERE combativePlant1Id = :combativePlant2Id , combativePlant2Id = :combativePlant1Id";
 		$statement = $pdo->prepare($query);
 
 		// bind parameters

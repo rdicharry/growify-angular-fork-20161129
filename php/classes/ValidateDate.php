@@ -1,5 +1,5 @@
 <?php
-namespace Cnm\Edu\Growify;
+namespace Edu\Cnm\Growify;
 
 /**
  * Trait to Validate a mySQL Date

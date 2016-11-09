@@ -1,7 +1,7 @@
 <?php
-namespace Cnm\Edu\Growify\Test;
+namespace Edu\Cnm\Growify\Test;
 
-use Cnm\Edu\Growify\Plant;
+use Edu\Cnm\Growify\Plant;
 
 require_once("GrowifyTest.php");
 
