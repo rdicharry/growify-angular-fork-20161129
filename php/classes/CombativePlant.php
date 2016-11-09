@@ -84,7 +84,7 @@ class CombativePlant implements \JsonSerializable{
 	public function setCombativePlant2Id(int $newCombativePlant) {
 
 		if($newCombativePlant <= 0){
-			throw new(\RangeException("combative plant id must be positive"));
+			throw (new \RangeException("combative plant id must be positive"));
 		}
 
 		$this->combativePlant2Id = $newCombativePlant;
