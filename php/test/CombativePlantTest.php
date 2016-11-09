@@ -1,13 +1,16 @@
 <?php
 namespace Edu\Cnm\Growify\Test;
 
-use Edu\Cnm\Growify\{Plant, CombativePlant};
+use Edu\Cnm\Growify\Plant;
+use Edu\Cnm\Growify\CombativePlant;
 
 // grab the project test parameters
 require_once("GrowifyTest.php");
 
 // grab the class under scrutiny
-require_once("CombativePlantTest.php");
+
+require_once(dirname(__DIR__)."/classes/autoload.php");
+//require_once("CombativePlant.php");
 
 /**
  * Full PHPUnit test for the CombativePlant class.
@@ -46,7 +49,7 @@ class CombativePlantTest extends GrowifyTest {
 		$this->combativePlant1->insert($this->getPDO());
 
 		//create and insert a Plant2
-		$this->combativePlant2 = new Plant(null, "Audrey", "custom", "companion", "vine", "carnivorous", 1000, 100, 10, 32, 99, "h");
+		$this->combativePlant2 = new Plant(null, "Audrey", "custom", "companion", "vine",  1000, 100, 10, 32, 99, "h");
 		$this->combativePlant2->insert($this->getPDO());
 
 	}
@@ -195,7 +198,7 @@ class CombativePlantTest extends GrowifyTest {
 		// valid plants that it is paired with - so we might need to use
 		// more than one Plant entry to test against. e.g. should be able to retrieve the entries with the plantId as either combativePlant1Id or combativePlant2Id
 		// count number of rows and save for later
-		$numRows = $this->getConnection()->getRowCount("CombativePlant");
+		$numRows = $this->getConnection()->getRowCount("combativePlant");
 
 		// create a new Combative plant and insert it into mySQL
 		$combativePlant = new CombativePlant($this->combativePlant1->getPlantId(),$this->combativePlant2->getPlantId());
@@ -230,7 +233,7 @@ class CombativePlantTest extends GrowifyTest {
 	 */
 	public function testGetAllValidCombativePlants(){
 		// count number of rows and save for later
-		$numRows = $this->getConnection()->getRowCount("CombativePlant");
+		$numRows = $this->getConnection()->getRowCount("combativePlant");
 
 		// create a new Combative plant and insert it into mySQL
 		$combativePlant = new CombativePlant($this->combativePlant1->getPlantId(),$this->combativePlant2->getPlantId());
