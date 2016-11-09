@@ -1,5 +1,5 @@
 <?php
-namespace Edu\Cnm\Growify\Test;
+namespace Edu\Cnm\igrowify\Test;
 
 // grab the encrypted properties file
 require_once("/etc/apache2/capstone-mysql/encrypted-config.php");

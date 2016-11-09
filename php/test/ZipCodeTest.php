@@ -6,7 +6,7 @@ use Edu\Cnm\growify\Test\GrowifyTest;
 use Edu\Cnm\growify\php\ZipCode;
 
 // grab the project test parameters
-require_once("GrowifyTest.php");
+require_once('GrowifyTest.php');
 
 // grab the class under scrutiny
 require_once(dirname(__DIR__) . "/classes/autoload.php");
@@ -46,7 +46,7 @@ protected $INVALID_ZIPCODECODE = "04200";
 
 public final function setUp() {
 // run the default setUp() method first
-parent::setUp();
+parent::getSetUpOperation();
 
 }
 

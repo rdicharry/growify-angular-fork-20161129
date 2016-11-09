@@ -2,12 +2,14 @@
 
 -- drop table if exists statements
 DROP TABLE IF EXISTS plant;
-DROP TABLE IF EXISTS profile;
-DROP TABLE IF EXISTS zipCode;
 DROP TABLE IF EXISTS companionPlant;
 DROP TABLE IF EXISTS combativePlant;
 DROP TABLE IF EXISTS garden;
 DROP TABLE IF EXISTS plantArea;
+DROP TABLE IF EXISTS zipCode;
+DROP TABLE IF EXISTS profile;
+
+
 
 CREATE TABLE plant(
 
@@ -23,7 +25,17 @@ CREATE TABLE plant(
 	plantMaxTemp TINYINT UNSIGNED NOT NULL,
 	plantMinTemp TINYINT SIGNED NOT NULL,
 
-	PRIMARY KEY (plantId)
+	PRIMARY KEY (plantId) -- ,
+	-- FOREIGN KEY (plantId) REFERENCES garden(gardenPlantId),
+	-- FOREIGN KEY (plantId) REFERENCES plantArea(plantAreaPlantId)
+);
+
+CREATE TABLE zipCode(
+	zipCodeCode VARCHAR(5)NOT NULL, -- made a varchar for easier validation but can change to unsigned int
+	zipCodeZone VARCHAR(2) NOT NULL,
+	-- foreign key and indexing
+	INDEX(zipCodeZone),
+	PRIMARY KEY(zipCodeCode)
 );
 
 CREATE TABLE profile(
@@ -45,8 +57,8 @@ CREATE TABLE companionPlant(
 	-- index and create foreign keys
 	INDEX(companionPlant1Id),
 	INDEX(companionPlant2Id),
-	FOREIGN KEY(companionPlant1Id) REFERENCES plant(plantId),
-	FOREIGN KEY(companionPlant2Id) REFERENCES plant(plantId)
+	FOREIGN KEY (companionPlant1Id) REFERENCES plant(plantId),
+	FOREIGN KEY (companionPlant2Id) REFERENCES plant(plantId)
 );
 
 CREATE TABLE combativePlant(
@@ -55,8 +67,8 @@ CREATE TABLE combativePlant(
 	-- index foreign keys
 	INDEX(combativePlant1Id),
 	INDEX(combativePlant2Id),
-	FOREIGN KEY(combativePlant1Id) REFERENCES plant(plantId),
-	FOREIGN KEY(combativePlant2Id) REFERENCES plant(plantId)
+	FOREIGN KEY (combativePlant1Id) REFERENCES plant(plantId),
+	FOREIGN KEY (combativePlant2Id) REFERENCES plant(plantId)
 );
 
 CREATE TABLE garden (
@@ -64,14 +76,14 @@ CREATE TABLE garden (
 	gardenPlantId SMALLINT UNSIGNED,
 	gardenDatePlanted DATE,
 	-- index and create foreign keys
-	INDEX(gardenProfileId),
-	INDEX(gardenPlantId),
 	FOREIGN KEY(gardenProfileId) REFERENCES profile(profileId),
-	FOREIGN KEY(gardenPlantId) REFERENCES plant(plantId)
+	FOREIGN KEY(gardenPlantId) REFERENCES plant(plantId),
+	INDEX(gardenProfileId),
+	INDEX(gardenPlantId)
 );
 
 CREATE TABLE plantArea(
-	plantAreaId SMALLINT UNSIGNED PRIMARY KEY AUTO_INCREMENT, -- Primary Key
+	plantAreaId SMALLINT UNSIGNED AUTO_INCREMENT, -- Primary Key
 	plantAreaPlantId SMALLINT UNSIGNED NOT NULL, -- Foreign Key
 
 	plantAreaStartDay TINYINT NOT NULL,
@@ -84,12 +96,3 @@ CREATE TABLE plantArea(
 	FOREIGN KEY(plantAreaPlantId) REFERENCES plant(plantId),
 	PRIMARY KEY (plantAreaId)
 );
-
-CREATE TABLE zipCode(
-	zipCodeCode VARCHAR(5)NOT NULL, -- made a varchar for easier validation but can change to unsigned int
-	zipCodeZone VARCHAR(2) NOT NULL,
-	-- foreign key and indexing
-	INDEX(zipCodeZone),
-	FOREIGN KEY(zipCodeZone) REFERENCES plantArea(plantAreaNumber),
-	PRIMARY KEY(zipCodeCode)
-)

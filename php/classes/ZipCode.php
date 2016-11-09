@@ -5,7 +5,7 @@
  * Date: 11/2/2016
  * Time: 3:58 PM
  */
-namespace cnm\edu\growify;
+namespace cnm\edu\growify\php\ZipCode;
 require_once('autoload.php');
 
 
