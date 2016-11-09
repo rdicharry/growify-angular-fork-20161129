@@ -43,8 +43,8 @@ class Profile {
 	 **/
 	private $profileSalt;
 	 /**
-	 * activation for this profile
-	 * @var bool $profileActivation
+	 * activation code for this profile
+	 * @var string $profileActivation
 	 **/
 	private $profileActivation;
 
@@ -117,7 +117,7 @@ class Profile {
 	}
 	/**
 	 * accessor method for profile activation state
-	 * @return bool
+	 * @return string
 	 **/
 	public function getProfileActivation(){
 		return $this->profileActivation;
