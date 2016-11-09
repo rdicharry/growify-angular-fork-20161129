@@ -10,7 +10,8 @@
  *
  *
  */
-class PlantArea {
+class PlantArea implements \JsonSerializable {
+
 	/**
 	 * id for this PlantArea; this is the primary key
 	 * @var int $plantAreaId
@@ -393,4 +394,13 @@ class PlantArea {
 		}
 		return ($plantAreas);
 	}
+	/**
+	 * format state variables for JSON serialization
+	 * @return array an array with serialized state variables
+	 **/
+	public function jsonSerialize() {
+		$fields = get_object_vars($this);
+		return($fields);
+	}
+
 }

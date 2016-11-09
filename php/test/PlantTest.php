@@ -114,7 +114,7 @@ class PlantTest extends GrowifyTest {
 	 **/
 	public function testInsertInvalidPlant() {
 		// create a Plant with a non null plant id and watch it fail
-		$plant = new Plant(null, $this->VALID_PLANTNAME, $this->VALID_PLANTVARIETY, $this->VALID_PLANTDESCRIPTION, $this->VALID_PLANTTYPE, $this->VALID_PLANTSPREAD, $this->VALID_PLANTDAYSTOHARVEST, $this->VALID_PLANTHEIGHT, $this->VALID_PLANTMINTEMP, $this->VALID_PLANTMAXTEMP, $this->VALID_PLANTSOILMOISTURE);
+		$plant = new Plant(GrowifyTest::INVALID_KEY, $this->VALID_PLANTNAME, $this->VALID_PLANTVARIETY, $this->VALID_PLANTDESCRIPTION, $this->VALID_PLANTTYPE, $this->VALID_PLANTSPREAD, $this->VALID_PLANTDAYSTOHARVEST, $this->VALID_PLANTHEIGHT, $this->VALID_PLANTMINTEMP, $this->VALID_PLANTMAXTEMP, $this->VALID_PLANTSOILMOISTURE);
 		$plant->insert($this->getPDO());
 	}
 
@@ -154,7 +154,7 @@ class PlantTest extends GrowifyTest {
 	 * @expectedException PDOException
 	 **/
 	public function testUpdateInvalidPlant() {
-		// create a Plant, try to update it without actually updating it and watch it fail
+		// create a Plant, try to update it without actually inserting it and watch it fail
 		$plant = new Plant(null, $this->VALID_PLANTNAME, $this->VALID_PLANTVARIETY, $this->VALID_PLANTDESCRIPTION, $this->VALID_PLANTTYPE, $this->VALID_PLANTSPREAD, $this->VALID_PLANTDAYSTOHARVEST, $this->VALID_PLANTHEIGHT, $this->VALID_PLANTMINTEMP, $this->VALID_PLANTMAXTEMP, $this->VALID_PLANTSOILMOISTURE);
 		$plant->update($this->getPDO());
 	}

@@ -5,8 +5,9 @@
  * Date: 11/2/2016
  * Time: 3:58 PM
  */
-namespace Edu\Cnm\Growify;
+namespace Cnm\Edu\Growify;
 require_once('autoload.php');
+
 
 class ZipCode{
 	/**
