@@ -404,6 +404,9 @@ class Plant {
 		$parameters = ["plantId" => $this->plantId, "plantName" => $this->plantName, "plantVariety" => $this->plantVariety, "plantDescription" => $this->plantDescription, "plantType" => $this->plantType, "plantSpread" => $this->plantSpread, "plantDaysToHarvest" => $this->plantDaysToHarvest, "plantHeight" => $this->plantHeight, "plantMinTemp" => $this->plantMinTemp, "plantMaxTemp" => $this->plantMaxTemp, "plantSoilMoisture" => $this->plantSoilMoisture];
 		$statement->execute($parameters);
 
+		// get auto-assigned plant id from mysql
+		$this->plantId = intval($pdo->lastInsertId());
+
 	}
 
 	/**
