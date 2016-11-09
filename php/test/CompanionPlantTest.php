@@ -3,7 +3,6 @@ namespace Edu\Cnm\Growify\Test;
 
 use Edu\Cnm\Growify\{Plant, CompanionPlant};
 
-
 //grab the project test parameters
 require_once("GrowifyTest.php");
 
