@@ -1,4 +1,7 @@
 <?php
+namespace Edu\Cnm\Growify;
+
+require_once("autoload.php");
 
 /**
  * Creating class for CompanionPlant
@@ -6,11 +9,11 @@
  * This is the class for the CompanionPlant for the Growify capstone.
  *
  * @author Ana Vela <avela7@cnm.edu>
- * @version 1.0.0
+ * @version 1.0
  **/
 
 
-class CompanionPlant {
+class CompanionPlant implements \JsonSerializable {
 /**
  *
  *  id for first CompanionPlant
@@ -251,4 +254,15 @@ public static function getCompanionPlantByBothPlantIds(\PDO $pdo, int $plant1Id,
 		}
 		return($companionPlants);
 	}
+
+	/**
+	 * format state variables for JSON serialization
+	 * @return array an array with serialized state variables
+	 **/
+	public function jsonSerialize() {
+		$fields = get_object_vars($this);
+		return($fields);
+	}
+
+
 }
