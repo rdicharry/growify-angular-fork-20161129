@@ -1,11 +1,5 @@
 <?php
-namespace Cnm\Edu\Growify;
-
-use InvalidArgumentException;
-use OutOfBoundsException;
-use PDO;
-use PDOException;
-use TypeError;
+namespace Edu\Cnm\Growify;
 
 require_once("autoload.php");
 
