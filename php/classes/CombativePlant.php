@@ -8,7 +8,7 @@ require_once("autoload.php");
  * @author Rebecca Dicharry <rdicharry@cnm.edu>
  *
  */
-class CombativePlant {
+class CombativePlant implements \JsonSerializable{
 
 	/**
 	 * id of one combative plant - this is a foreign key
@@ -238,6 +238,15 @@ class CombativePlant {
 		return($combativePlants);
 
 
+	}
+
+	/**
+	 * format state variables for JSON serialization
+	 * @return array an array with serialized state variables
+	 */
+	public function jsonSerialize(){
+		$fields = get_object_vars($this);
+		return($fields);
 	}
 
 }
