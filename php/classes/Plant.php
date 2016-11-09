@@ -300,7 +300,7 @@ class Plant {
 		if($newPlantSpread === false) {
 			throw (new \UnexpectedValueException("spread is not a valid float"));
 		}
-		if($newPlantSpread >= 0) {
+		if($newPlantSpread < 0) {
 			throw (new \RangeException("spread is not positive"));
 		}
 		$this->plantSpread = $newPlantSpread;
@@ -317,7 +317,7 @@ class Plant {
 		if($newPlantDaysToHarvest === false) {
 			throw (new \UnexpectedValueException("days to harvest is not a valid int"));
 		}
-		if($newPlantDaysToHarvest >= 0) {
+		if($newPlantDaysToHarvest <= 0) {
 			throw (new \RangeException("days to harvest is not positive"));
 		}
 		$this->plantDaysToHarvest = $newPlantDaysToHarvest;
@@ -334,7 +334,7 @@ class Plant {
 		if($newPlantHeight === false) {
 			throw (new \UnexpectedValueException("height is not a valid float"));
 		}
-		if($newPlantHeight >= 0) {
+		if($newPlantHeight <= 0) {
 			throw (new \RangeException("height is not positive"));
 		}
 		$this->plantHeight = $newPlantHeight;
