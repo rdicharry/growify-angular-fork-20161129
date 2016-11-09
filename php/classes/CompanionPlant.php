@@ -1,4 +1,7 @@
 <?php
+namespace Edu\Cnm\Growify;
+
+require_once("autoload.php");
 
 /**
  * Creating class for CompanionPlant
@@ -6,21 +9,21 @@
  * This is the class for the CompanionPlant for the Growify capstone.
  *
  * @author Ana Vela <avela7@cnm.edu>
- * @version 1.0.0
+ * @version 1.0
  **/
 
 
-class CompanionPlant {
+class CompanionPlant implements \JsonSerializable {
 /**
  *
- *  id for first CompanionPlant
+ *  id for first CompanionPlant - foreign key
  * @var int $companionPlant1Id
  **/
 	private $companionPlant1Id;
 
 	/**
 	 *
-	 * id for second CompanionPlant
+	 * id for second CompanionPlant - foreign key
 	 * @var int $companionPlant2Id
 	 *
 	 **/
@@ -30,15 +33,16 @@ class CompanionPlant {
 	/**
 	 * constructor for this CompanionPlant
 	 *
-	 * @param $newCompanionPlant1Id
-	 * @param $newCompanionPlant2Id
-	 * @throws Exception if some other exception occurs
-	 * @throws TypeError if data types violate type hints
+	 * @param int $newCompanionPlant1Id
+	 * @param int $newCompanionPlant2Id
+	 * @throws \RangeException if data values are out of bounds (e.g. negative values for plant ids
+	 * @throws \Exception if some other exception occurs
+	 * @throws \TypeError if data types violate type hints
 	 * @internal param int|null $companionPlant1Id first CompanionPlant
 	 * @internal param int|null $companionPlant2Id second CompanionPlant
 	 *
 	 **/
-	public function _construct($newCompanionPlant1Id, $newCompanionPlant2Id) {
+	public function _construct(int $newCompanionPlant1Id, int $newCompanionPlant2Id) {
 		try {
 			$this->setCompanionPlant1Id($newCompanionPlant1Id);
 			$this->setCompanionPlant2Id($newCompanionPlant2Id);
@@ -68,7 +72,7 @@ class CompanionPlant {
 	/**
 	 * mutator method for this companion plant 1 id
 	 *
-	 * @param int|null $newCompanionPlant1 new value of companion plant 1 id
+	 * @param int|null $newCompanionPlant1Id new value of companion plant 1 id
 	 * @throws \RangeException if $newCompanionPlant1Id is not positive
 	 * @throws \TypeError if $newCompanionPlant1Id is not an integer
 	 **/
@@ -251,4 +255,15 @@ public static function getCompanionPlantByBothPlantIds(\PDO $pdo, int $plant1Id,
 		}
 		return($companionPlants);
 	}
+
+	/**
+	 * format state variables for JSON serialization
+	 * @return array an array with serialized state variables
+	 **/
+	public function jsonSerialize() {
+		$fields = get_object_vars($this);
+		return($fields);
+	}
+
+
 }
