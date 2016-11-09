@@ -2,8 +2,9 @@
 
 namespace Cnm\Edu\Growify;
 use Cnm\Edu\Growify\Test\GrowifyTest;
-use Cnm\Edu\Growify\ZipCode;
-require_once('GrowifyTest.php');
+use  Cnm\Edu\Growify\ZipCode;
+
+require_once(dirname(__DIR__).'/test/GrowifyTest.php');
 require_once (dirname(__DIR__).'/classes/ZipCode.php');
 // grab the class under scrutiny
 require_once(dirname(__DIR__) . "/classes/autoload.php");

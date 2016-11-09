@@ -5,7 +5,7 @@
  * Date: 11/2/2016
  * Time: 3:58 PM
  */
-namespace Edu\Cnm\Growify;
+namespace Cnm\Edu\Growify;
 require_once('autoload.php');
 
 
@@ -115,10 +115,10 @@ class ZipCode{
 	 **/
 	public function insert(\PDO $pdo){
 		try {
-			$query = "INSERT INTO zipCode(zipCodeCode, zipCodeArea) VALUES(:zipCodeCode, :zipCodeArea)";
+			$query = "INSERT INTO zipCode(zipCodeCode, zipCodeZone) VALUES(:zipCodeCode, :zipCodeZone)";
 			$statement = $pdo->prepare($query);
 
-			$parameters = ["zipCodeCode" => $this->zipCodeCode, "zipCodeArea" => $this->zipCodeArea];
+			$parameters = ["zipCodeCode" => $this->zipCodeCode, "zipCodeZone" => $this->zipCodeArea];
 			$statement->execute($parameters);
 		}catch(\PDOException $pdoException){
 			throw(new \PDOException($pdoException->getMessage(),0,$pdoException));
@@ -158,7 +158,7 @@ class ZipCode{
 			throw(new \PDOException("This zipcode cannot be updated because it doesnt exist."));
 		}
 		try {
-			$query = "UPDATE zipCode SET zipCodeCode = :zipCodeCode, zipCodeArea = :zipCodeArea";
+			$query = "UPDATE zipCode SET zipCodeCode = :zipCodeCode, zipCodeZone = :zipCodeArea";
 			$statement = $pdo->prepare($query);
 			$parameters = ["zipCodeCode" => $this->zipCodeCode, "zipCodeArea" => $this->zipCodeArea];
 			$statement->execute($parameters);
@@ -181,7 +181,7 @@ class ZipCode{
 			throw(new \TypeError("Zip Code is not a String"));
 		}
 
-		$query = "SELECT zipCodeCode,zipCodeArea FROM zipCode WHERE zipCodeCode = :zipCodeCode";
+		$query = "SELECT zipCodeCode,zipCodeZone FROM zipCode WHERE zipCodeCode = :zipCodeCode";
 		$statement = $pdo->prepare($query);
 		$parameters = ["zipCodeCode" => $zipCodeCode];
 		$statement->execute($parameters);
@@ -209,7 +209,7 @@ class ZipCode{
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
 	public static function getAllZipCodes(\PDO $pdo) {
-		$query = "SELECT zipCodeCode, zipCodeArea FROM zipCode";
+		$query = "SELECT zipCodeCode, zipCodeZone FROM zipCode";
 		$statement = $pdo->prepare($query);
 		$statement->execute();
 		$zipCodes = new \SplFixedArray($statement->rowCount());
