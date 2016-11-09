@@ -13,7 +13,7 @@ class Garden implements \JsonSerializable {
 	private $gardenProfileId;
 
 	/**
-	 * the (user entered) date and time the plant (specified by gardenPlantId) was planted
+	 * the (user entered) date the plant (specified by gardenPlantId) was planted
 	 * @var \DateTime $gardenPlantId
 	 */
 	private $gardenDatePlanted;
@@ -248,6 +248,14 @@ class Garden implements \JsonSerializable {
 		return $gardens;
 	}
 
-
+	/**
+	 * formats the state variables for JSON serialization
+	 * @return array an array containing the serialized state variables.
+	 */
+	public function jsonSerialize(){
+		$fields = get_object_vars($this);
+		$fields["gardenDatePlanted"]=$this->gardenDatePlanted->getTimestamp()*1000;
+		return($fields);
+	}
 
 }
