@@ -1,34 +1,17 @@
 
 
 -- drop table if exists statements
-DROP TABLE IF EXISTS plant;
 DROP TABLE IF EXISTS companionPlant;
 DROP TABLE IF EXISTS combativePlant;
 DROP TABLE IF EXISTS garden;
 DROP TABLE IF EXISTS plantArea;
-DROP TABLE IF EXISTS zipCode;
 DROP TABLE IF EXISTS profile;
+DROP TABLE IF EXISTS zipCode;
+DROP TABLE IF EXISTS plant;
 
 
 
-CREATE TABLE plant(
 
-	plantId SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT, -- PRIMARY KEY
-	plantSoilMoisture VARCHAR(3) NOT NULL,
-	plantDescription VARCHAR(512),
-	plantSpread FLOAT UNSIGNED NOT NULL,
-	plantHeight FLOAT UNSIGNED NOT NULL,
-	plantType VARCHAR(9) NOT NULL ,
-	plantDaysToHarvest SMALLINT UNSIGNED NOT NULL,
-	plantVariety VARCHAR(64) NOT NULL,
-	plantName VARCHAR(26) UNIQUE NOT NULL,
-	plantMaxTemp TINYINT UNSIGNED NOT NULL,
-	plantMinTemp TINYINT SIGNED NOT NULL,
-
-	PRIMARY KEY (plantId) -- ,
-	-- FOREIGN KEY (plantId) REFERENCES garden(gardenPlantId),
-	-- FOREIGN KEY (plantId) REFERENCES plantArea(plantAreaPlantId)
-);
 
 CREATE TABLE zipCode(
 	zipCodeCode VARCHAR(5)NOT NULL, -- made a varchar for easier validation but can change to unsigned int
@@ -49,6 +32,25 @@ CREATE TABLE profile(
 	-- PRIMARY KEY AND FOREIGN KEY
 	PRIMARY KEY (profileId),
 	FOREIGN KEY (profileZipCode) REFERENCES zipCode(zipCodeCode)
+);
+
+CREATE TABLE plant(
+
+	plantId SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT, -- PRIMARY KEY
+	plantSoilMoisture VARCHAR(3) NOT NULL,
+	plantDescription VARCHAR(512),
+	plantSpread FLOAT UNSIGNED NOT NULL,
+	plantHeight FLOAT UNSIGNED NOT NULL,
+	plantType VARCHAR(9) NOT NULL ,
+	plantDaysToHarvest SMALLINT UNSIGNED NOT NULL,
+	plantVariety VARCHAR(64) NOT NULL,
+	plantName VARCHAR(26) UNIQUE NOT NULL,
+	plantMaxTemp TINYINT UNSIGNED NOT NULL,
+	plantMinTemp TINYINT SIGNED NOT NULL,
+
+	PRIMARY KEY (plantId) -- ,
+	-- FOREIGN KEY (plantId) REFERENCES garden(gardenPlantId),
+	-- FOREIGN KEY (plantId) REFERENCES plantArea(plantAreaPlantId)
 );
 
 CREATE TABLE companionPlant(
@@ -96,3 +98,5 @@ CREATE TABLE plantArea(
 	FOREIGN KEY(plantAreaPlantId) REFERENCES plant(plantId),
 	PRIMARY KEY (plantAreaId)
 );
+
+
