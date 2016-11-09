@@ -3,7 +3,7 @@ namespace Edu\Cnm\Growify;
 
 require_once("autoload.php");
 
-class Garden  {
+class Garden implements \JsonSerializable {
 	use ValidateDate;
 
 	/**
@@ -247,5 +247,7 @@ class Garden  {
 		}
 		return $gardens;
 	}
+
+
 
 }

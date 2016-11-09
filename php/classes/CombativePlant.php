@@ -240,6 +240,10 @@ class CombativePlant implements \JsonSerializable{
 
 	}
 
+	/**
+	 * format state variables for JSON serialization
+	 * @return array an array with serialized state variables
+	 */
 	public function jsonSerialize(){
 		$fields = get_object_vars($this);
 		return($fields);
