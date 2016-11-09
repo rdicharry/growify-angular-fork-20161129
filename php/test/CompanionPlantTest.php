@@ -7,8 +7,7 @@ use Edu\Cnm\Growify\{Plant, CompanionPlant};
 require_once("GrowifyTest.php");
 
 //grab the class under scrutiny
-require_once("CompanionPlantTest.php");
-
+require_once(dirname(__DIR__) . "/classes/autoload.php");
 /**
  * Full PHPUnit test for the CompanionPlant class
  *
