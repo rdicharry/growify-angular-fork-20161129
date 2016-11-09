@@ -58,7 +58,7 @@ class ZipCode{
 		}elseif(strlen($zipCodeCode) != 5){
 			throw (new \OutOfBoundsException('The $zipCodeCode Entered is not 5 characters long and is therefore an invalid New Mexico Zip Code'));
 		}
-		elseif(substr($zipCodeCode,0,1) != '87' &&  substr($zipCodeCode, 0,1) !='88'){
+		elseif(substr($zipCodeCode,0,2) !== '87' &&  substr($zipCodeCode, 0,2) !=='88'){
 			throw (new \InvalidArgumentException('The $zipCodeCode entered is not a valid New Mexico Zip Code'));
 		}
 
@@ -80,9 +80,9 @@ class ZipCode{
 			throw (new \TypeError("This zip code area is not a string"));
 		} elseif(strlen($zipCodeArea)!= 2){
 			throw (new \OutOfBoundsException("This is not a valid New Mexico growing Zone"));
-		} elseif(substr($zipCodeArea,0,0)!= '4' && substr($zipCodeArea,0,0)!= '5' && substr($zipCodeArea,0,0)!= '6' && substr($zipCodeArea,0,0)!= '7' && substr($zipCodeArea,0,0)!= '8'){
+		} elseif(substr($zipCodeArea,0,1)!= '4' && substr($zipCodeArea,0,1)!= '5' && substr($zipCodeArea,0,1)!= '6' && substr($zipCodeArea,0,1)!= '7' && substr($zipCodeArea,0,1)!= '8'){
 			throw (new \InvalidArgumentException("This zip code area is not a valid New Mexco growing zone"));
-		} elseif(substr($zipCodeArea,1) != 'a' && substr($zipCodeArea,1) != 'b'){
+		} elseif(substr($zipCodeArea,1,1) != 'a' && substr($zipCodeArea,1,1) != 'b'){
 			throw (new \InvalidArgumentException("This zip code area is not a valid New Mexco growing zone"));
 		}
 		//Set this object's value of zipCodeArea to the specified ZipCodeArea in the Parameter
