@@ -51,6 +51,7 @@ class GardenTest extends GrowifyTest {
 	 */
 	protected $validPlantingDate2;
 
+	protected $zipCode;
 
 	public final function setUp(){
 		// run the default setUp() method first

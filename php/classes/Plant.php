@@ -1,6 +1,6 @@
 <?php
 
-namespace Cnm\Edu\Growify;
+namespace Edu\Cnm\Growify;
 
 require_once("autoload.php");
 
@@ -12,7 +12,7 @@ require_once("autoload.php");
  * @author Greg Bloom <gbloomdev@gmail.com>
  * @version 0.1.0
  **/
-class Plant {
+class Plant implements \JsonSerializable{
 	/**
 	 * id for this plant; this is the primary key
 	 * @var int $plantId
@@ -579,5 +579,12 @@ class Plant {
 		}
 		return ($plants);
 	}
-
+	/**
+	 * format state variables for JSON serialization
+	 * @return array an array with serialized state variables
+	 **/
+	public function jsonSerialize() {
+		$fields = get_object_vars($this);
+		return($fields);
+	}
 }

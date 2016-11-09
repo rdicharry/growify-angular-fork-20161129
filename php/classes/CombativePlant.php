@@ -119,7 +119,14 @@ class CombativePlant implements \JsonSerializable{
 		// create query template
 		// note: need to check both cases: combativeplant1Id, combativeplant2Id AND combativeplant2Id, combativeplant1Id since order does not matter
 		// TODO ensure that we have done this check in companion plant as well!
-		$query = "DELETE FROM garden WHERE ((combativePlant1Id= :combativePlant1Id AND combativePlant2Id= :combativePlant2Id) OR (combativePlant1Id = :combativePlant2Id AND combativePlant2Id = :combativePlant1Id))";
+		$query = "DELETE FROM combativePlant WHERE (combativePlant1Id  = :combativePlant1Id) AND (combativePlant2Id = :combativePlant2Id)";
+		$statement = $pdo->prepare($query);
+
+		// bind parameters
+		$parameters = ["combativePlant1Id"=>$this->combativePlant1Id, "combativePlant2Id"=>$this->combativePlant2Id];
+		$statement->execute($parameters);
+
+		$query = "DELETE FROM combativePlant WHERE (combativePlant1Id  = :combativePlant2Id) AND ( combativePlant2Id = :combativePlant1Id)";
 		$statement = $pdo->prepare($query);
 
 		// bind parameters
@@ -141,13 +148,14 @@ class CombativePlant implements \JsonSerializable{
 	 * @throws \PDOException when mySQL related errors occur.
 	 * @throws \TypeError if the parameters don't match the type hints.
 	 */
+	/*
 	public static function getCombativePlantByBothPlantIds(\PDO $pdo, int $plant1Id, int $plant2Id){
 		if($plant1Id <=0 || $plant1Id <=0){
 			throw(new \RangeException("combative plant id must be positive"));
 		}
 
 		// create query template
-		$query = "SELECT combativePlant1Id, combativePlant2Id FROM combativePlant WHERE ((combativePlant1Id= :plant1Id, combativePlant2Id = :plant2Id) OR (combativePlant1Id = :plant2Id, combativePlant2Id = :plant2Id))";
+		$query = "SELECT combativePlant1Id, combativePlant2Id FROM combativePlant WHERE ((combativePlant1Id = :plant1Id, combativePlant2Id = :plant2Id) OR (combativePlant1Id = :plant2Id, combativePlant2Id = :plant1Id))";
 		$statement = $pdo->prepare($query);
 
 		// bind parameters
@@ -167,7 +175,7 @@ class CombativePlant implements \JsonSerializable{
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
 		}
 		return $combativePlant;
-	}
+	}*/
 
 	/**
 	 * Get all of the Combative Plant entries that have the specified plant Id.

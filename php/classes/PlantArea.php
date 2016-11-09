@@ -1,5 +1,11 @@
 <?php
-namespace Edu\Cnm\Growify;
+namespace Cnm\Edu\Growify;
+
+use InvalidArgumentException;
+use OutOfBoundsException;
+use PDO;
+use PDOException;
+use TypeError;
 
 require_once("autoload.php");
 
@@ -85,7 +91,7 @@ class PlantArea implements \JsonSerializable {
 			$this->setPlantAreaAreaNum($newPlantAreaAreaNum);
 		} catch(\InvalidArgumentException $invalidArgument) {
 			// rethrow the execption to the caller
-			throw(new \InvalidArgumentException($invalidArgument->getMessage(), $invalidArgument));
+			throw(new \InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
 		} catch(\RangeException $range) {
 			//rethrow the exception to the caller
 			throw(new \RangeException($range->getMessage(), 0, $range));

@@ -1,7 +1,7 @@
 <?php
-namespace Cnm\Edu\Growify\Test;
+namespace Edu\Cnm\Growify\Test;
 
-use Cnm\Edu\Growify\{Profile, ZipCode};
+use Edu\Cnm\Growify\{Profile, ZipCode};
 
 require_once("GrowifyTest.php");
 
@@ -68,7 +68,7 @@ class ProfileTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("profile");
 
 		// create a new Profile and insert to into mySQL
-		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
+		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode->getZipCodeCode(), $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
 		$profile->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -89,7 +89,7 @@ class ProfileTest extends GrowifyTest {
 	 **/
 	public function testInsertInvalidProfile() {
 		// create a Profile with a non null profile id and watch it fail
-		$profile = new Profile(GrowifyTest::INVALID_KEY, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
+		$profile = new Profile(GrowifyTest::INVALID_KEY, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode->getZipCodeCode(), $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
 		$profile->insert($this->getPDO());
 	}
 
@@ -101,7 +101,7 @@ class ProfileTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("profile");
 
 		// create a new Profile and insert to into mySQL
-		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
+		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode->getZipCodeCode(), $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
 		$profile->insert($this->getPDO());
 
 		// edit the Profile and update it in mySQL
@@ -126,7 +126,7 @@ class ProfileTest extends GrowifyTest {
 	 **/
 	public function testUpdateInvalidProfile() {
 		// create a Profile, try to update it without actually inserting it and watch it fail
-		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
+		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode->getZipCodeCode(), $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
 		$profile->update($this->getPDO());
 	}
 
@@ -138,7 +138,7 @@ class ProfileTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("profile");
 
 		// create a new Profile and insert to into mySQL
-		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
+		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode->getZipCodeCode(), $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
 		$profile->insert($this->getPDO());
 
 		// delete the Profile from mySQL
@@ -158,7 +158,7 @@ class ProfileTest extends GrowifyTest {
 	 **/
 	public function testDeleteInvalidProfile() {
 		// create a Profile and try to delete it without actually inserting it
-		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
+		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode->getZipCodeCode(), $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
 		$profile->delete($this->getPDO());
 	}
 
@@ -170,7 +170,7 @@ class ProfileTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("profile");
 
 		// create a new Profile and insert to into mySQL
-		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
+		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode->getZipCodeCode(), $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
 		$profile->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -207,7 +207,7 @@ class ProfileTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("profile");
 
 		// create a new Profile and insert to into mySQL
-		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
+		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode->getZipCodeCode(), $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
 		$profile->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
