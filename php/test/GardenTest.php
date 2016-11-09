@@ -1,7 +1,7 @@
 <?php
-namespace Edu\Cnm\Growify\Test;
+namespace Cnm\Edu\Growify\Test;
 
-use Edu\Cnm\Growify\{Profile, Plant, Garden};
+use Cnm\Edu\Growify\{Profile, Plant, Garden};
 
 // grab the project test parameters
 require_once("GrowifyTest.php");

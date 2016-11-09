@@ -1,14 +1,13 @@
 <?php
-namespace Edu\Cnm\Growify\Test;
+namespace Cnm\Edu\Growify\Test;
 
-use Edu\Cnm\Growify\{Plant, CompanionPlant};
+use Cnm\Edu\Growify\{Plant, CompanionPlant};
 
 //grab the project test parameters
 require_once("GrowifyTest.php");
 
 //grab the class under scrutiny
-require_once("CompanionPlantTest.php");
-
+require_once(dirname(__DIR__) . "/classes/autoload.php");
 /**
  * Full PHPUnit test for the CompanionPlant class
  *
