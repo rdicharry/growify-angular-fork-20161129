@@ -1,8 +1,8 @@
 <?php
 
-namespace Edu\Cnm\Growify;
+namespace Cnm\Edu\Growify\Test;
+
 use Cnm\Edu\Growify\ZipCode;
-use Cnm\Edu\Growify\Test\GrowifyTest;
 
 require_once('GrowifyTest.php');
 // grab the class under scrutiny
