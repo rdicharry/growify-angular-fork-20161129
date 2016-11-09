@@ -1,4 +1,7 @@
 <?php
+namespace Edu\Cnm\Growify;
+
+require_once("autoload.php");
 
 /**
  * Creating class for PlantArea
