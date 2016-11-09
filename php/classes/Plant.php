@@ -1,6 +1,6 @@
 <?php
 
-namespace Edu\Cnm\Growify;
+namespace Cnm\Edu\Growify;
 
 require_once("autoload.php");
 
