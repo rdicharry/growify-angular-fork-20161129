@@ -29,7 +29,7 @@ class Profile implements \JsonSerializable {
 	private $profileEmail;
 	/**
 	 * zip code for this profile
-	 * @var string $profileZipCode
+	 * @var ZipCode $profileZipCode
 	 **/
 	private $profileZipCode;
 	/**
@@ -48,6 +48,18 @@ class Profile implements \JsonSerializable {
 	 **/
 	private $profileActivation;
 
+	/**
+	 * Profile constructor.
+	 * @param $newProfileId
+	 * @param $newProfileUsername
+	 * @param $newProfileEmail
+	 * @param $newProfileZipCode a ZipCode object linking a zip code and a planting area.
+	 * @param $newProfileHash
+	 * @param $newProfileSalt
+	 * @param $newProfileActivation
+	 * @throws \Exception
+	 * @throws \TypeError
+	 */
 	public function __construct($newProfileId, $newProfileUsername, $newProfileEmail, $newProfileZipCode, $newProfileHash, $newProfileSalt, $newProfileActivation){
 		try{
 			$this->setProfileId($newProfileId);
@@ -185,14 +197,7 @@ class Profile implements \JsonSerializable {
 	 * @throws \RangeException if $newProfileZipCode is too long
 	 **/
 	public function setProfileZipCode($newProfileZipCode) {
-		$newProfileZipCode = trim($newProfileZipCode);
-		$newProfileZipCode = filter_var($newProfileZipCode,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newProfileZipCode)){
-			throw (new \InvalidArgumentException("zip code is empty or has invalid contents"));
-		}
-		if(strlen($newProfileZipCode) > 160) {
-			throw(new \RangeException("zip code is too large"));
-		}
+
 		$this->profileZipCode = $newProfileZipCode;
 	}
 
