@@ -47,7 +47,6 @@ class ZipCode{
 	/**
 	 * Sets the value of this ZipCode object's zipCodeCode to zipCodeCode
 	 * @param $zipCodeCode string the value of zipCodeArea
-	 *
 	 * @throws \TypeError if the parameter $zipCodeCode is not a string
 	 * @throws \OutOfBoundsException if the parameter $zipCodeCode is not 5 characters long (the length of a New Mexico Zipcode)
 	 * @throws \InvalidArgumentException if the parameter $zipCodeCode does not begin with 87 or 88 (The only beginning characters of a New Mexico ZipCode)

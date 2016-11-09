@@ -1,15 +1,12 @@
 <?php
 
-namespace Edu\Cnm\Growify\Test;
-
-use  Edu\Cnm\Growify\Test;
-use Edu\Cnm\Growify\ZipCode;
+namespace Edu\Cnm\Growify;
+use Cnm\Edu\Growify\ZipCode;
+use Cnm\Edu\Growify\Test\GrowifyTest;
 
 require_once('GrowifyTest.php');
-require_once ('ZipCode.php');
 // grab the class under scrutiny
 require_once(dirname(__DIR__) . "/classes/autoload.php");
-
 /**
 * Full PHPUnit test for the ZipCode class
 *
@@ -42,6 +39,7 @@ protected $VALID_ZIPCODEAREA2  = "7a";
  * @var string $INVALID_ZIPCODECODE
  */
 protected $INVALID_ZIPCODECODE = "04200";
+protected $zipCode = null;
 
 public final function setUp() {
 // run the default setUp() method first
@@ -61,8 +59,8 @@ $zipCode->insert($this->getPDO());
 
 $pdozipCode = ZipCode::getZipCodeByZipCodeCode($this->getPDO(), $zipCode->getZipCodeCode());
 $this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("zipCode"));
-$this->assertEquals($pdozipCode->zipCodeCode(), $this->VALID_ZIPCODECODE);
-$this->assertEquals($pdozipCode->getzipCodeArea(), $this->VALID_ZIPCODEAREA);
+$this->assertEquals($pdozipCode->getZipCodeCode(), $this->VALID_ZIPCODECODE);
+$this->assertEquals($pdozipCode->getZipCodeArea(), $this->VALID_ZIPCODEAREA);
 }
 
 /**
@@ -88,7 +86,7 @@ $zipCode = new ZipCode($this->VALID_ZIPCODECODE,$this->VALID_ZIPCODEAREA);
 $zipCode->insert($this->getPDO());
 
 // edit the ZipCode and update it in mySQL
-$zipCode->setCodeArea($this->VALID_ZIPCODEAREA2);
+$zipCode->setZipCodeArea($this->VALID_ZIPCODEAREA2);
 $zipCode->update($this->getPDO());
 
 // grab the data from mySQL and enforce the fields match our expectations
@@ -125,7 +123,7 @@ $this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("zipCode")
 $zipCode->delete($this->getPDO());
 
 // grab the data from mySQL and enforce the zipCode does not exist
-$pdoZipCode = ZipCode::getZipCodeByZipCodeCode($this->getPDO(), $zipCode->getZipCodeCode);
+$pdoZipCode = ZipCode::getZipCodeByZipCodeCode($this->getPDO(), $zipCode->getZipCodeCode());
 $this->assertNull($pdoZipCode);
 $this->assertEquals($numRows, $this->getConnection()->getRowCount("zipCode"));
 }
@@ -142,7 +140,7 @@ $zipCode->delete($this->getPDO());
 }
 
 /**
-* test grabbing all ZipCodes
+* test grabbing all ZipCodesphp
 **/
 public function testGetAllValidZipCodes() {
 // count the number of rows and save it for later
