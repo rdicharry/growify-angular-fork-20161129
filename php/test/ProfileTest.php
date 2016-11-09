@@ -27,19 +27,21 @@ class ProfileTest extends GrowifyTest {
 	protected $VALID_EMAIL = "testperson@gmail.com";
 	/**
 	 * hash for this profile
+	 * just gibberish letters
 	 * @var string $VALID_HASH
 	 **/
-	protected $VALID_HASH = "";
+	protected $VALID_HASH = "d7fsdyfsdf79sfds7f7sd87f87dsf7sdf87s87df78ds87f87s87df87dss78f7d8s878f8d7sf7sduihjhjdkskhfkjhsdjkfjkshjfhjdsjkfhkjshdfkjhdsjkfhs";
 	/**
 	 * salt for this profile
+	 * just gibberish letters
 	 * @var string $VALID_SALT
 	 **/
-	protected $VALID_SALT;
+	protected $VALID_SALT = "hshfkksauck994544jumfjf8of8jiuxu7uc7ic8biv9vvob8bocjjf778rusudli" ;
 	/**
 	 * activation for this profile
 	 * @var string $VALID_ACTIVATION
 	 **/
-	protected $VALID_ACTIVATION;
+	protected $VALID_ACTIVATION = "jk87289d8fs8d9g9";
 	/**
 	 * The profile being tested
 	 * @var Profile profile
