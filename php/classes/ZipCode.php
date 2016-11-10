@@ -11,7 +11,7 @@ require_once('autoload.php');
 
 class ZipCode{
 	/**
-	 * @var String the Zip Code corresponding to a USDA Grow Zone (zipCodeArea)
+	 * @var string the Zip Code corresponding to a USDA Grow Zone (zipCodeArea)
 	 **/
 	private $zipCodeCode;
 
@@ -62,7 +62,7 @@ class ZipCode{
 			throw (new \InvalidArgumentException('The $zipCodeCode entered is not a valid New Mexico Zip Code'));
 		}
 
-		$this->$zipCodeCode = $zipCodeCode;
+		$this->zipCodeCode = $zipCodeCode;
 	}
 
 	/**
@@ -86,7 +86,7 @@ class ZipCode{
 			throw (new \InvalidArgumentException("This zip code area is not a valid New Mexco growing zone"));
 		}
 		//Set this object's value of zipCodeArea to the specified ZipCodeArea in the Parameter
-		$this->$zipCodeArea = $zipCodeArea;
+		$this->zipCodeArea = $zipCodeArea;
 	}
 
 	/**
