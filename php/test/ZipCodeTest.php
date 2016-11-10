@@ -102,7 +102,6 @@ $this->assertEquals($pdoZipCode->getZipCodeArea(), $this->VALID_ZIPCODEAREA2);
 public function testUpdateInvalidZipCode() {
 // create a ZipCode, try to update it without actually updating it and watch it fail
 $zipCode = new ZipCode($this->VALID_ZIPCODECODE, $this->VALID_ZIPCODEAREA);
-$zipCode->insert($this->getPDO());
 $zipCode->update($this->getPDO());
 }
 
