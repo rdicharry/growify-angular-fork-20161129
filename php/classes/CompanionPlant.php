@@ -3,6 +3,7 @@ namespace Edu\Cnm\Growify;
 
 require_once("autoload.php");
 
+
 /**
  * Creating class for CompanionPlant
  *
@@ -11,7 +12,6 @@ require_once("autoload.php");
  * @author Ana Vela <avela7@cnm.edu>
  * @version 1.0
  **/
-
 
 class CompanionPlant implements \JsonSerializable {
 /**
@@ -42,7 +42,7 @@ class CompanionPlant implements \JsonSerializable {
 	 * @internal param int|null $companionPlant2Id second CompanionPlant
 	 *
 	 **/
-	public function _construct(int $newCompanionPlant1Id, int $newCompanionPlant2Id) {
+	public function __construct(int $newCompanionPlant1Id, int $newCompanionPlant2Id) {
 		try {
 			$this->setCompanionPlant1Id($newCompanionPlant1Id);
 			$this->setCompanionPlant2Id($newCompanionPlant2Id);
