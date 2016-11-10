@@ -53,7 +53,7 @@ public function testInsertValidZipCode() {
 // count the number of rows and save it for later
 $numRows = $this->getConnection()->getRowCount("zipCode");
 
-$zipCode = new ZipCode($this->VALID_ZIPCODECODE,$this->VALID_ZIPCODEAREA);
+$zipCode = new ZipCode($this->VALID_ZIPCODECODE , $this->VALID_ZIPCODEAREA);
 $zipCode->insert($this->getPDO());
 
 $pdozipCode = ZipCode::getZipCodeByZipCodeCode($this->getPDO(), $zipCode->getZipCodeCode());
@@ -89,9 +89,9 @@ $zipCode->setZipCodeArea($this->VALID_ZIPCODEAREA2);
 $zipCode->update($this->getPDO());
 
 // grab the data from mySQL and enforce the fields match our expectations
-$pdoZipCode = ZipCode::getZipCodebyZipCodeCode($this->getPDO(), $zipCode->getZipCodeArea());
+$pdoZipCode = $zipCode::getZipCodeByZipCodeCode($this->getPDO(), $zipCode->getZipCodeCode());
 $this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("zipCode"));
-$this->assertEquals($pdoZipCode->getZipCodeCode(), $this->$zipCode->getZipCodeCode());
+$this->assertEquals($pdoZipCode->getZipCodeCode(), $zipCode->getZipCodeCode());
 $this->assertEquals($pdoZipCode->getZipCodeArea(), $this->VALID_ZIPCODEAREA2);
 }
 
@@ -103,6 +103,7 @@ $this->assertEquals($pdoZipCode->getZipCodeArea(), $this->VALID_ZIPCODEAREA2);
 public function testUpdateInvalidZipCode() {
 // create a ZipCode, try to update it without actually updating it and watch it fail
 $zipCode = new ZipCode($this->VALID_ZIPCODECODE, $this->VALID_ZIPCODEAREA);
+$zipCode->insert($this->getPDO());
 $zipCode->update($this->getPDO());
 }
 

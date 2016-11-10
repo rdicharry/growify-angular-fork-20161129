@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * Created by PhpStorm
  * User: Growify
  * Date: 11/2/2016
  * Time: 3:58 PM
@@ -11,7 +11,7 @@ require_once('autoload.php');
 
 class ZipCode{
 	/**
-	 * @var string the Zip Code corresponding to a USDA Grow Zone (zipCodeArea)
+	 * @var String the Zip Code corresponding to a USDA Grow Zone (zipCodeArea)
 	 **/
 	private $zipCodeCode;
 
@@ -58,7 +58,7 @@ class ZipCode{
 		}elseif(strlen($zipCodeCode) != 5){
 			throw (new \OutOfBoundsException('The $zipCodeCode Entered is not 5 characters long and is therefore an invalid New Mexico Zip Code'));
 		}
-		elseif(substr($zipCodeCode,0,2) !== '87' &&  substr($zipCodeCode, 0,2) !=='88'){
+		elseif((substr($zipCodeCode, 0,2) !== '87') &&  (substr($zipCodeCode, 0,2) !=='88')){
 			throw (new \InvalidArgumentException('The $zipCodeCode entered is not a valid New Mexico Zip Code'));
 		}
 
@@ -118,7 +118,7 @@ class ZipCode{
 			$query = "INSERT INTO zipCode(zipCodeCode, zipCodeZone) VALUES(:zipCodeCode, :zipCodeZone)";
 			$statement = $pdo->prepare($query);
 
-			$parameters = ["zipCodeCode" => $this->zipCodeCode, "zipCodeZone" => $this->zipCodeArea];
+			$parameters = ['zipCodeCode' => $this->zipCodeCode, 'zipCodeZone' => $this->zipCodeArea];
 			$statement->execute($parameters);
 		}catch(\PDOException $pdoException){
 			throw(new \PDOException($pdoException->getMessage(),0,$pdoException));
@@ -157,10 +157,10 @@ class ZipCode{
 		if($this->zipCodeCode === null) {
 			throw(new \PDOException("This zipcode cannot be updated because it doesnt exist."));
 		}
-		try {
-			$query = "UPDATE zipCode SET zipCodeCode = :zipCodeCode, zipCodeZone = :zipCodeArea";
+		try{
+			$query = "UPDATE zipCode SET zipCodeCode = :zipCodeCodeNew, zipCodeZone = :zipCodeArea WHERE zipCodeCode = :zipCodeCode";
 			$statement = $pdo->prepare($query);
-			$parameters = ["zipCodeCode" => $this->zipCodeCode, "zipCodeArea" => $this->zipCodeArea];
+			$parameters = ['zipCodeCode' => $this->zipCodeCode, 'zipCodeArea' => $this->zipCodeArea, 'zipCodeCode'=> $this->zipCodeCode];
 			$statement->execute($parameters);
 		}catch(\PDOException $pdoException){
 			throw(new \PDOException($pdoException->getMessage(),0,$pdoException));
@@ -191,7 +191,7 @@ class ZipCode{
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
-				$zipCode = new ZipCode($row["zipCodeCode"], $row["zipCodeArea"]);
+				$zipCode = new ZipCode($row["zipCodeCode"], $row["zipCodeZone"]);
 			}
 		} catch(\Exception $exception) {
 			// if the row couldn't be converted, rethrow it
@@ -216,7 +216,7 @@ class ZipCode{
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$zipCode = new ZipCode($row["zipCodeCode"], $row["zipCodeArea"]);
+				$zipCode = new ZipCode($row["zipCodeCode"], $row["zipCodeZone"]);
 				$zipCodes[$zipCodes->key()] = $zipCode;
 				$zipCodes->next();
 			} catch(\Exception $exception) {
