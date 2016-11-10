@@ -156,7 +156,7 @@ $this->assertContainsOnlyInstancesOf("Edu\\Cnm\\Growify\\php\\ZipCode", $results
 // grab the result from the array and validate it
 $pdoZipCode = $results[0];
 $this->assertEquals($pdoZipCode->getZipCodeCode(), $zipCode->getZipCodeCode());
-$this->assertEquals($pdoZipCode->getZipCodeArea(), $zipCode->getZipCodeArea);
+$this->assertEquals($pdoZipCode->getZipCodeArea(), $zipCode->getZipCodeArea());
 }
 
 }
