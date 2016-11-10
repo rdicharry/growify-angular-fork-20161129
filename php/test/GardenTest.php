@@ -2,6 +2,7 @@
 namespace Edu\Cnm\Growify\Test;
 
 use Edu\Cnm\Growify\{Profile, Plant, Garden, ZipCode};
+use DateTime;
 
 // grab the project test parameters
 require_once("GrowifyTest.php");
@@ -60,8 +61,14 @@ class GardenTest extends GrowifyTest {
 		$this->zipCode = new ZipCode("87120", "5b");
 		$this->zipCode->insert($this->getPDO());
 
+		//generate *test* hash & salt for profile
+
+		$password = "acd123";
+		$salt = bin2hex(random_bytes(32));
+		$hash = hash_pbkdf2("sha512", $password, $salt, 262144);
+
 		// create and insert a Profile to own the test Garden
-		$this->profile = new Profile(null, "lorax1971", "the.lorax@oncelerco.com", $this->zipCode, "pqrst", "lmnop", 1);
+		$this->profile = new Profile(null, "lorax1971", "the.lorax@oncelerco.com", $this->zipCode, $salt, $hash, 1);
 		$this->profile->insert($this->getPDO());
 
 		// create and insert a Plant to go into the garden
@@ -170,6 +177,9 @@ class GardenTest extends GrowifyTest {
 	 * @expectedException PDOException
 	 */
 	public function testUpdateInvalidGarden(){
+
+		$garden = new Garden($this>profile->getProfileUserId(), $this->validPlantingDate, $this->plant1->getPlantId());
+		$garden->update($this->getPDO());
 
 	}
 
