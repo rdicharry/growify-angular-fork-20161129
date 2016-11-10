@@ -1,6 +1,9 @@
 <?php
 namespace Edu\Cnm\Growify;
 
+use Exception;
+use TypeError;
+
 require_once("autoload.php");
 
 /**
@@ -112,7 +115,7 @@ class PlantArea implements \JsonSerializable {
 	 * mutator method for plant area id
 	 *
 	 * @param int|null $newPlantAreaId new value of plant area id
-	 * @throws OutOfBoundsException if $newPlantAreaId is not positive or greater than the largest unsigned SMALLINT value
+	 * @throws \OutOfBoundsException if $newPlantAreaId is not positive or greater than the largest unsigned SMALLINT value
 	 * @throws TypeError if $newPlantAreaid is not an integer
 	 **/
 	public function setPlantAreaId($newPlantAreaId) {
@@ -174,9 +177,9 @@ class PlantArea implements \JsonSerializable {
 		if(!is_string($newPlantAreaStartDate)){
 			throw(new \TypeError("Plant Area Start Date is not a string"));
 		}elseif(strlen($newPlantAreaStartDate) > 5){  //change: If plant Area Start Date is longer than 5 characters it will throw an Out of Bounds Error
-			throw (new OutOfBoundsException("This plantareastartdate is greater than 5 characters long"));
+			throw (new \OutOfBoundsException("This plantareastartdate is greater than 5 characters long"));
 		} elseif((int)(substr($newPlantAreaStartDate,0,1)) > 31 || (int)(substr($newPlantAreaStartDate,3)) > 12 || (int)(substr($newPlantAreaStartDate,0,1) < 1 || (int)(substr($newPlantAreaStartDate,3) < 1))){ //change: this elseif statement checks the first two and last two numbers of the plantareastartdate and sees if they are valid (makes sure that the day isn't less than 1 or greater than 31, and makes sure the last two characters aren't greater than 12 or less than 1, I can do this because I am briefly turning these strings into numbers using an integer cast by saying (int)([string numbers]). You can do this as long as the string contains only numbers.
-			throw (new InvalidArgumentException('Plant Area Start Date is not a valid Date: "Day/Month"'));
+			throw (new \InvalidArgumentException('Plant Area Start Date is not a valid Date: "Day/Month"'));
 		}
 	}
 
@@ -196,17 +199,17 @@ class PlantArea implements \JsonSerializable {
 	 *
 	 * @param string $newPlantAreaEndDate plant area end date as a DateTime object or string
 	 * @throws TypeError if $newPlantAreaEndDate contains more than 5 characters
-	 * @throws InvalidArgumentException if $newPlantAreaEndDate is a date that does not exist
-	 * @throws OutOfBoundsException if $newPlantAreaEndDate is greater than 5 characters long
+	 * @throws \InvalidArgumentException if $newPlantAreaEndDate is a date that does not exist
+	 * @throws \OutOfBoundsException if $newPlantAreaEndDate is greater than 5 characters long
 	 **/
 	public function setPlantAreaEndDate($newPlantAreaEndDate) {
 		//check if $newPlantAreaEndDate is a string, if not throw TypeError
 		if(!is_string($newPlantAreaEndDate)){
 			throw(new \TypeError("Plant Area End Date is not a string"));
 		}elseif(strlen($newPlantAreaEndDate) > 5){  //change: If plant Area End Date is longer than 5 characters it will throw an Out of Bounds Error
-			throw (new OutOfBoundsException("Plant Area End Date is greater than 5 characters long"));
+			throw (new \OutOfBoundsException("Plant Area End Date is greater than 5 characters long"));
 		} elseif((int)(substr($newPlantAreaEndDate,0,1)) > 31 || (int)(substr($newPlantAreaEndDate,3)) > 12 || (int)(substr($newPlantAreaEndDate,0,1) < 1 || (int)(substr($newPlantAreaEndDate,3) < 1))){ //change: this elseif statement checks the first two and last two numbers of the $newPlantAreaEndDate and sees if they are valid (makes sure that the day isn't less than 1 or greater than 31, and makes sure the last two characters aren't greater than 12 or less than 1, I can do this because I am briefly turning these strings into numbers using an integer cast by saying (int)([string numbers]). You can do this as long as the string contains only numbers.
-			throw (new InvalidArgumentException('Plant Area End Date is not a valid Date: "Day/Month"'));
+			throw (new \InvalidArgumentException('Plant Area End Date is not a valid Date: "Day/Month"'));
 		}
 
 		$this->plantAreaEndDate = $newPlantAreaEndDate;
@@ -226,9 +229,9 @@ class PlantArea implements \JsonSerializable {
 	 *
 	 * @param string $newPlantAreaAreaNum the new area that will be passed into this PlantArea's plantAreaAreaNum field
 	 * @throws TypeError if $newPlantAreaAreaNum is not a string
-	 * @throws OutOfBoundsException if $newPlantAreaAreaNum is not 2 characters long
-	 * @throws InvalidArgumentException if $newPlantAreaAreaNum does not begin with a number ranging from 4-8
-	 * @throws InvalidArgumentException if $newPlantAreaAreaNum does not end with a character that is either 'a' or 'b'
+	 * @throws \OutOfBoundsException if $newPlantAreaAreaNum is not 2 characters long
+	 * @throws \InvalidArgumentException if $newPlantAreaAreaNum does not begin with a number ranging from 4-8
+	 * @throws \InvalidArgumentException if $newPlantAreaAreaNum does not end with a character that is either 'a' or 'b'
 	 */
 	public function setPlantAreaAreaNum($newPlantAreaAreaNum) {
 		//change: makes sure the $newPlantAreaAreaNum is a string
@@ -238,9 +241,9 @@ class PlantArea implements \JsonSerializable {
 			throw (new \OutOfBoundsException("This is not a valid New Mexico Plant Area Growing Zone"));
 		} elseif((int)(substr($newPlantAreaAreaNum,0,0)) < 8 || (int)(substr($newPlantAreaAreaNum,0,0)) > 4){
 			//change: Validates the $newPlantAreaAreaNum, making sure that it is an integer and between 4-8 in value (The 4 NM growing zones)
-			throw (new InvalidArgumentException("This Plant Area Area Value is not a valid New Mexco growing zone"));
+			throw (new \InvalidArgumentException("This Plant Area Area Value is not a valid New Mexco growing zone"));
 		} elseif(substr($newPlantAreaAreaNum,1) != 'a' && substr($newPlantAreaAreaNum,1) != 'b'){
-			throw (new InvalidArgumentException("This Plant Area Area Value is not a valid New Mexco Growing Zone")); //change: makes sure the last character of the Plant Area Area Number is either a or b (a valid new mexico growing zone consists of a number from 4-8 followed by a character that is either a or b
+			throw (new \InvalidArgumentException("This Plant Area Area Value is not a valid New Mexco Growing Zone")); //change: makes sure the last character of the Plant Area Area Number is either a or b (a valid new mexico growing zone consists of a number from 4-8 followed by a character that is either a or b
 		}
 		// convert and store the plant area area number
 		$this->plantAreaAreaNum = $newPlantAreaAreaNum;
@@ -249,8 +252,8 @@ class PlantArea implements \JsonSerializable {
 	/**
 	 * Updates the plantArea table with this PlantArea instance's state variables
 	 *
-	 * @param PDO $pdo the php data object used to update the plantArea table
-	 * @throws PDOException if an error regarding the php data object occured
+	 * @param \PDO $pdo the php data object used to update the plantArea table
+	 * @throws \PDOException if an error regarding the php data object occured
 	 */
 	public function update(\PDO $pdo) {
 		//Checks if the plantAreaId exists
