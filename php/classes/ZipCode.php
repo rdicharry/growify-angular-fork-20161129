@@ -158,9 +158,9 @@ class ZipCode{
 			throw(new \PDOException("This zipcode cannot be updated because it doesnt exist."));
 		}
 		try{
-			$query = "UPDATE zipCode SET zipCodeCode = :zipCodeCodeNew, zipCodeZone = :zipCodeArea WHERE zipCodeCode = :zipCodeCode";
+			$query = "UPDATE zipCode SET zipCodeCode = :zipCodeCodeNew, zipCodeZone = :zipCodeArea WHERE zipCodeCode = :zipCodeCodeNew";
 			$statement = $pdo->prepare($query);
-			$parameters = ['zipCodeCode' => $this->zipCodeCode, 'zipCodeArea' => $this->zipCodeArea, 'zipCodeCode'=> $this->zipCodeCode];
+			$parameters = ['zipCodeCode' => $this->zipCodeCode, 'zipCodeArea' => $this->zipCodeArea, "zipCodeCodeNew"=>$this->zipCodeCode];
 			$statement->execute($parameters);
 		}catch(\PDOException $pdoException){
 			throw(new \PDOException($pdoException->getMessage(),0,$pdoException));
