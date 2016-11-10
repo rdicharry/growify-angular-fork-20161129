@@ -178,7 +178,7 @@ class GardenTest extends GrowifyTest {
 	 */
 	public function testUpdateInvalidGarden(){
 
-		$garden = new Garden($this>profile->getProfileUserId(), $this->validPlantingDate, $this->plant1->getPlantId());
+		$garden = new Garden($this->profile->getProfileUserId(), $this->validPlantingDate, $this->plant1->getPlantId());
 		$garden->update($this->getPDO());
 
 	}
