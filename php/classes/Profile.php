@@ -392,12 +392,13 @@ class Profile implements \JsonSerializable {
 	 **/
 	public function setProfileSalt($newProfileSalt) {
 		$newProfileSalt = trim($newProfileSalt);
-		$newProfileSalt = filter_var($newProfileSalt,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newProfileSalt)){
+		$newProfileSalt = strtolower($newProfileSalt);
+
+		if(ctype_xdigit($newProfileSalt) === false){
 			throw (new \InvalidArgumentException("salt is empty or has invalid contents"));
 		}
-		if(strlen($newProfileSalt) > 64) {
-			throw(new \RangeException("salt is too large"));
+		if(strlen($newProfileSalt) !== 64) {
+			throw(new \RangeException("salt is incorrect length"));
 		}
 		$this->profileSalt = $newProfileSalt;
 	}
