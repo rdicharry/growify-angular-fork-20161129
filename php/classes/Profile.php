@@ -81,228 +81,6 @@ class Profile implements \JsonSerializable {
 	}
 
 	/**
-	 * accessor method for profile id
-	 * @return int
-	 **/
-	public function getProfileId() {
-		return $this->profileId;
-	}
-
-	/**
-	 * accessor method for user name
-	 * @return string
-	 **/
-	public function getProfileUserName() {
-		return $this->profileUsername;
-	}
-
-	/**
-	 * accessor method for email
-	 * @return string
-	 **/
-	public function getProfileEmail() {
-		return $this->profileEmail;
-	}
-
-	/**
-	 * accessor method for zip code
-	 * @return string
-	 **/
-	public function getProfileZipCode() {
-		return $this->profileZipCode;
-	}
-
-	/**
-	 * accessor method for password hash
-	 * @return string
-	 **/
-	public function getProfileHash() {
-		return $this->profileHash;
-	}
-
-	/**
-	 * accessor method for password salt
-	 * @return string
-	 **/
-	public function getProfileSalt(){
-		return $this->profileSalt;
-	}
-	/**
-	 * accessor method for profile activation state
-	 * @return string
-	 **/
-	public function getProfileActivation(){
-		return $this->profileActivation;
-	}
-
-	/**
-	 * mutator method for profile id
-	 * @param int $newProfileId
-	 * @throws \RangeException if $newProfileId is negative
-	 * @throws \TypeError if $newProfileId is not an integer
-	 **/
-	public function setProfileId($newProfileId) {
-		// if the profile id is null, this is a new profile without an id from mySQL
-		if($newProfileId === null) {
-			$this->profileId = null;
-			return;
-		}
-		// verify that profile id is positive
-		if($newProfileId <= 0) {
-			throw (new \RangeException("profile id is not positive"));
-		}
-		$this->profileId = $newProfileId;
-	}
-
-	/**
-	 * mutator method for profile user name
-	 * @param string $newProfileUsername
-	 * @throws \InvalidArgumentException if $newProfileUsername is empty or is not a string
-	 * @throws \RangeException if $newProfileUsername is too long
-	 **/
-	public function setProfileUserName($newProfileUsername) {
-		$newProfileUsername = trim($newProfileUsername);
-		$newProfileUsername = filter_var($newProfileUsername,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newProfileUsername)){
-			throw (new \InvalidArgumentException("user name is empty or has invalid contents"));
-		}
-		if(strlen($newProfileUsername) > 24) {
-			throw(new \RangeException("user name is too large"));
-		}
-		$this->profileUsername = $newProfileUsername;
-	}
-
-	/**
-	 * mutator method for profile email
-	 * @param string $newProfileEmail
-	 * @throws \InvalidArgumentException if $newProfileEmail is empty or is not a string
-	 * @throws \RangeException if $newProfileEmail is too long
-	 **/
-	public function setProfileEmail($newProfileEmail) {
-		$newProfileEmail = trim($newProfileEmail);
-		$newProfileEmail = filter_var($newProfileEmail,FILTER_SANITIZE_EMAIL, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newProfileEmail)){
-			throw (new \InvalidArgumentException("email is empty or has invalid contents"));
-		}
-		if(strlen($newProfileEmail) > 160) {
-			throw(new \RangeException("email is too large"));
-		}
-		$this->profileEmail = $newProfileEmail;
-	}
-
-	/**
-	 * mutator method for profile zip code
-	 * @param string $newProfileZipCode
-	 * @throws \InvalidArgumentException if $newProfileZipCode is empty or is not a string
-	 * @throws \RangeException if $newProfileZipCode is too long
-	 **/
-	public function setProfileZipCode($newProfileZipCode) {
-
-		$this->profileZipCode = $newProfileZipCode;
-	}
-
-	/**
- * mutator method for profile password hash
- * @param string $newProfileHash
- **/
-	public function setProfileHash($newProfileHash) {
-		$newProfileHash = trim($newProfileHash);
-		$newProfileHash = filter_var($newProfileHash,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newProfileHash)){
-			throw (new \InvalidArgumentException("hash is empty or has invalid contents"));
-		}
-		if(strlen($newProfileHash) > 128) {
-			throw(new \RangeException("hash is too large"));
-		}
-		$this->profileHash = $newProfileHash;
-	}
-
-	/**
-	 * mutator method for profile password salt
-	 * @param string $newProfileSalt
-	 **/
-	public function setProfileSalt($newProfileSalt) {
-		$newProfileSalt = trim($newProfileSalt);
-		$newProfileSalt = filter_var($newProfileSalt,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newProfileSalt)){
-			throw (new \InvalidArgumentException("salt is empty or has invalid contents"));
-		}
-		if(strlen($newProfileSalt) > 64) {
-			throw(new \RangeException("salt is too large"));
-		}
-		$this->profileSalt = $newProfileSalt;
-	}
-
-	/**
-	 * mutator method for profile activation code
-	 * @param string $newProfileActivation
-	 **/
-	public function setProfileActivation($newProfileActivation) {
-		$newProfileActivation = trim($newProfileActivation);
-		$newProfileActivation = filter_var($newProfileActivation,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newProfileActivation)){
-			throw (new \InvalidArgumentException("activation is empty or has invalid contents"));
-		}
-		if(strlen($newProfileActivation) > 16) {
-			throw(new \RangeException("activation is too large"));
-		}
-		$this->profileActivation = $newProfileActivation;
-	}
-	/**
-	 * Insert a new Profile entry.
-	 * @param \PDO $pdo the PDO connection object.
-	 * @throws \PDOException if mySQL related errors occur.
-	 * @throws \TypeError if $pdo is not a PDO connection object.
-	 **/
-	public function insert(\PDO $pdo) {
-		//check to make sure this profile doesn't already exist
-		if($this->profileId !== null) {
-			throw(new \PDOException("not a new profile"));
-		}
-
-		//create query template
-		$query = "INSERT INTO profile(profileId, profileUsername, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation) VALUES (:profileId, :profileUsername, :profileEmail, :profileZipCode, :profileHash, :profileSalt, :profileActivation)";
-		$statement = $pdo->prepare($query);
-
-		// bind member variables to placeholders in the template
-		$parameters = ["profileId"=>$this->profileId, "profileUsername"=> $this->profileUsername, "profileEmail"=>$this->profileEmail, "profileZipCode"=>$this->profileZipCode->getZipCodeCode(), "profileHash"=>$this->profileHash, "profileSalt"=>$this->profileSalt, "profileActivation"=>$this->profileActivation];
-		$statement->execute($parameters);
-
-	}
-
-	/**
-	 * Delete a Profile entry.
-	 * @param \PDO $pdo PDO connection object.
-	 * @throws \PDOException if mySQL related errors occur.
-	 * @throws \TypeError if $pdo is not a PDO object.
-	 **/
-	public function delete(\PDO $pdo) {
-		// create query template
-		$query = "DELETE FROM profile WHERE profileId = :profileId";
-		$statement = $pdo->prepare($query);
-
-		// bind member variables to placeholder in template
-		$parameters = ["profileId" => $this->profileId];
-		$statement->execute($parameters);
-	}
-
-	/**
-	 * Updates the Profile entry in mySQL.
-	 * @param \PDO $pdo PDO connection object
-	 * @throws \PDOException when mySQL related errors occur
-	 * @throws \TypeError if $pdo is not a PDO connection object.
-	 **/
-	public function update(\PDO $pdo) {
-		//create query template
-		$query = "UPDATE profile SET profileId =: profileId, profileUsername =: profileUsername, profileEmail =: profileEmail, profileZipCode =: profileZipCode, profileHash =: profileHash, profileSalt =: profileSalt, profileActivation =: profileActivation";
-		$statement = $pdo->prepare($query);
-
-		// bind member variables to placeholders
-		$parameters = ["profileId"=>$this->profileId, "profileUsername"=> $this->profileUsername, "profileEmail"=>$this->profileEmail, "profileZipCode"=>$this->profileZipCode, "profileHash"=>$this->profileHash, "profileSalt"=>$this->profileSalt, "profileActivation"=>$this->profileActivation];
-		$statement->execute($parameters);
-	}
-
-	/**
 	 * Get profile associated with the specified profile Id.
 	 * @param \PDO $pdo a PDO connection object
 	 * @param int $profileId a valid profile Id
@@ -374,6 +152,7 @@ class Profile implements \JsonSerializable {
 		}
 		return($profiles);
 	}
+
 	/**
 	 * Get all profiles associated with the specified profile zipcode.
 	 * @param \PDO $pdo a PDO connection object
@@ -447,6 +226,7 @@ class Profile implements \JsonSerializable {
 		}
 		return($profile);
 	}
+
 	/**
 	 * Get all Profile objects.
 	 * @param \PDO $pdo PDO connection object
@@ -475,6 +255,231 @@ class Profile implements \JsonSerializable {
 		}
 		return ($profiles);
 	}
+
+	/**
+	 * accessor method for profile id
+	 * @return int
+	 **/
+	public function getProfileId() {
+		return $this->profileId;
+	}
+
+	/**
+	 * mutator method for profile id
+	 * @param int $newProfileId
+	 * @throws \RangeException if $newProfileId is negative
+	 * @throws \TypeError if $newProfileId is not an integer
+	 **/
+	public function setProfileId($newProfileId) {
+		// if the profile id is null, this is a new profile without an id from mySQL
+		if($newProfileId === null) {
+			$this->profileId = null;
+			return;
+		}
+		// verify that profile id is positive
+		if($newProfileId <= 0) {
+			throw (new \RangeException("profile id is not positive"));
+		}
+		$this->profileId = $newProfileId;
+	}
+
+	/**
+	 * accessor method for user name
+	 * @return string
+	 **/
+	public function getProfileUserName() {
+		return $this->profileUsername;
+	}
+
+	/**
+	 * mutator method for profile user name
+	 * @param string $newProfileUsername
+	 * @throws \InvalidArgumentException if $newProfileUsername is empty or is not a string
+	 * @throws \RangeException if $newProfileUsername is too long
+	 **/
+	public function setProfileUserName($newProfileUsername) {
+		$newProfileUsername = trim($newProfileUsername);
+		$newProfileUsername = filter_var($newProfileUsername,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newProfileUsername)){
+			throw (new \InvalidArgumentException("user name is empty or has invalid contents"));
+		}
+		if(strlen($newProfileUsername) > 24) {
+			throw(new \RangeException("user name is too large"));
+		}
+		$this->profileUsername = $newProfileUsername;
+	}
+
+	/**
+	 * accessor method for email
+	 * @return string
+	 **/
+	public function getProfileEmail() {
+		return $this->profileEmail;
+	}
+
+	/**
+	 * mutator method for profile email
+	 * @param string $newProfileEmail
+	 * @throws \InvalidArgumentException if $newProfileEmail is empty or is not a string
+	 * @throws \RangeException if $newProfileEmail is too long
+	 **/
+	public function setProfileEmail($newProfileEmail) {
+		$newProfileEmail = trim($newProfileEmail);
+		$newProfileEmail = filter_var($newProfileEmail,FILTER_SANITIZE_EMAIL, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newProfileEmail)){
+			throw (new \InvalidArgumentException("email is empty or has invalid contents"));
+		}
+		if(strlen($newProfileEmail) > 160) {
+			throw(new \RangeException("email is too large"));
+		}
+		$this->profileEmail = $newProfileEmail;
+	}
+
+	/**
+	 * accessor method for zip code
+	 * @return string
+	 **/
+	public function getProfileZipCode() {
+		return $this->profileZipCode;
+	}
+
+	/**
+	 * mutator method for profile zip code
+	 * @param string $newProfileZipCode
+	 * @throws \InvalidArgumentException if $newProfileZipCode is empty or is not a string
+	 * @throws \RangeException if $newProfileZipCode is too long
+	 **/
+	public function setProfileZipCode($newProfileZipCode) {
+
+		$this->profileZipCode = $newProfileZipCode;
+	}
+
+	/**
+	 * accessor method for password hash
+	 * @return string
+	 **/
+	public function getProfileHash() {
+		return $this->profileHash;
+	}
+
+	/**
+ * mutator method for profile password hash
+ * @param string $newProfileHash
+ **/
+	public function setProfileHash($newProfileHash) {
+		$newProfileHash = trim($newProfileHash);
+		$newProfileHash = filter_var($newProfileHash,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newProfileHash)){
+			throw (new \InvalidArgumentException("hash is empty or has invalid contents"));
+		}
+		if(strlen($newProfileHash) > 128) {
+			throw(new \RangeException("hash is too large"));
+		}
+		$this->profileHash = $newProfileHash;
+	}
+
+	/**
+	 * accessor method for password salt
+	 * @return string
+	 **/
+	public function getProfileSalt(){
+		return $this->profileSalt;
+	}
+
+	/**
+	 * mutator method for profile password salt
+	 * @param string $newProfileSalt
+	 **/
+	public function setProfileSalt($newProfileSalt) {
+		$newProfileSalt = trim($newProfileSalt);
+		$newProfileSalt = filter_var($newProfileSalt,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newProfileSalt)){
+			throw (new \InvalidArgumentException("salt is empty or has invalid contents"));
+		}
+		if(strlen($newProfileSalt) > 64) {
+			throw(new \RangeException("salt is too large"));
+		}
+		$this->profileSalt = $newProfileSalt;
+	}
+
+	/**
+	 * accessor method for profile activation state
+	 * @return string
+	 **/
+	public function getProfileActivation(){
+		return $this->profileActivation;
+	}
+
+	/**
+	 * mutator method for profile activation code
+	 * @param string $newProfileActivation
+	 **/
+	public function setProfileActivation($newProfileActivation) {
+		$newProfileActivation = trim($newProfileActivation);
+		$newProfileActivation = filter_var($newProfileActivation,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newProfileActivation)){
+			throw (new \InvalidArgumentException("activation is empty or has invalid contents"));
+		}
+		if(strlen($newProfileActivation) > 16) {
+			throw(new \RangeException("activation is too large"));
+		}
+		$this->profileActivation = $newProfileActivation;
+	}
+
+	/**
+	 * Insert a new Profile entry.
+	 * @param \PDO $pdo the PDO connection object.
+	 * @throws \PDOException if mySQL related errors occur.
+	 * @throws \TypeError if $pdo is not a PDO connection object.
+	 **/
+	public function insert(\PDO $pdo) {
+		//check to make sure this profile doesn't already exist
+		if($this->profileId !== null) {
+			throw(new \PDOException("not a new profile"));
+		}
+
+		//create query template
+		$query = "INSERT INTO profile(profileId, profileUsername, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation) VALUES (:profileId, :profileUsername, :profileEmail, :profileZipCode, :profileHash, :profileSalt, :profileActivation)";
+		$statement = $pdo->prepare($query);
+
+		// bind member variables to placeholders in the template
+		$parameters = ["profileId"=>$this->profileId, "profileUsername"=> $this->profileUsername, "profileEmail"=>$this->profileEmail, "profileZipCode"=>$this->profileZipCode->getZipCodeCode(), "profileHash"=>$this->profileHash, "profileSalt"=>$this->profileSalt, "profileActivation"=>$this->profileActivation];
+		$statement->execute($parameters);
+
+	}
+
+	/**
+	 * Delete a Profile entry.
+	 * @param \PDO $pdo PDO connection object.
+	 * @throws \PDOException if mySQL related errors occur.
+	 * @throws \TypeError if $pdo is not a PDO object.
+	 **/
+	public function delete(\PDO $pdo) {
+		// create query template
+		$query = "DELETE FROM profile WHERE profileId = :profileId";
+		$statement = $pdo->prepare($query);
+
+		// bind member variables to placeholder in template
+		$parameters = ["profileId" => $this->profileId];
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * Updates the Profile entry in mySQL.
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object.
+	 **/
+	public function update(\PDO $pdo) {
+		//create query template
+		$query = "UPDATE profile SET profileId =: profileId, profileUsername =: profileUsername, profileEmail =: profileEmail, profileZipCode =: profileZipCode, profileHash =: profileHash, profileSalt =: profileSalt, profileActivation =: profileActivation";
+		$statement = $pdo->prepare($query);
+
+		// bind member variables to placeholders
+		$parameters = ["profileId"=>$this->profileId, "profileUsername"=> $this->profileUsername, "profileEmail"=>$this->profileEmail, "profileZipCode"=>$this->profileZipCode, "profileHash"=>$this->profileHash, "profileSalt"=>$this->profileSalt, "profileActivation"=>$this->profileActivation];
+		$statement->execute($parameters);
+	}
+
 	/**
 	 * format state variables for JSON serialization
 	 * @return array an array with serialized state variables
