@@ -1,8 +1,8 @@
 <?php
 
 namespace Edu\Cnm\Growify;
-use Cnm\Edu\Growify\Test\GrowifyTest;
-use  Cnm\Edu\Growify\ZipCode;
+use Edu\Cnm\Growify\Test\GrowifyTest;
+use  Edu\Cnm\Growify\ZipCode;
 
 require_once(dirname(__DIR__).'/test/GrowifyTest.php');
 require_once (dirname(__DIR__).'/classes/ZipCode.php');
