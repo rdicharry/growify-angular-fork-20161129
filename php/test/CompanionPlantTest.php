@@ -52,7 +52,7 @@ class CompanionPlantTest extends GrowifyTest {
 	 * Note: we should be able to get companion plant entries regardless of whether the plantId is found in the first or second entry.
 	 * Note: this should return an array of values (possibly more than one entry for a given companion plant.
 	 *
-	 * @expectedException PDOException
+	 * @expectedException \PDOException
 	 **/
 	public function testInsertValidCompanionPlantEntry() {
 		// store number of rows for later
@@ -60,7 +60,7 @@ class CompanionPlantTest extends GrowifyTest {
 
 		// create a new companion plant entry and insert it into mySQL
 		$companionPlant = new companionPlant($this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId());
-		$companionPlant->insert($this->getPDO());
+		$companionPlant->insert($this->getPDO(null));
 
 		//grab date from mySQL and enforce fields match
 		// e.g. all returned entries have the expected ID as either 1st or 2nd field.
@@ -116,17 +116,16 @@ class CompanionPlantTest extends GrowifyTest {
 
 		// create a new CompanionPlant and insert into mySQL
 		$companionPlant = new CompanionPlant($this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId());
-		$companionPlant->insert($this->getPDO(5));
+		$companionPlant->insert($this->getPDO(null));
 
 		// delete that companionPlant
 		$this->assertEquals($numRows+1, $this->getConnection()->getRowCount("companionPlant"));
-		$companionPlant->delete($this->getPDO(5));
+		$companionPlant->delete($this->getPDO(null));
 
 		// get data from mySQL and enforce the entry was deleted
 		$pdoCompanionPlant = CompanionPlant::getCompanionPlantByBothPlantIds($this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId(5));
 		$this->assertNull($pdoCompanionPlant);
 		$this->assertEquals($numRows, $this->getConnection()->getRowCount("companionPlant"));
-
 	}
 
 	/**
@@ -198,6 +197,5 @@ class CompanionPlantTest extends GrowifyTest {
 		$this->assertEquals($pdoCompanionPlant->getCompanionPlant1Id(),$this->companionPlant1->getPlantId());
 		$this->assertEquals($pdoCompanionPlant->getCompanionPlant2Id(),$this->companionPlant2->getPlantId());
 	}
-
 
 }
