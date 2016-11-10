@@ -262,7 +262,7 @@ class PlantArea implements \JsonSerializable {
 			$statement = $pdo->prepare($query);
 			$parameters = ["plantAreaPlantId" => $this->plantAreaPlantId, "plantAreaStartDate" => $this->plantAreaStartDate, "plantAreaEndDate" => $this->plantAreaEndDate, "plantAreaAreaNum" => $this->plantAreaAreaNum];
 			$statement->execute($parameters);
-		}catch(PDOException $pdoException){
+		}catch(\PDOException $pdoException){
 			throw(new \PDOException($pdoException->getMessage(),0,$pdoException));
 		}
 	}
@@ -271,11 +271,11 @@ class PlantArea implements \JsonSerializable {
 	 * Inserts a row into the plantArea table that represents this plantArea's instance
 	 *
 	 * @param PDO $pdo the php data object used to delete a row from the the plantArea table
-	 * @throws PDOException if an error regarding the php data object occured
+	 * @throws \PDOException if an error regarding the php data object occured
 	 */
 	public function insert(\PDO $pdo){
 		if(is_null($this->plantAreaId)){
-			throw(new PDOException("This Plant Area cannot be inserted into plantArea table because it already exists in the plant area table"));
+			throw(new \PDOException("This Plant Area cannot be inserted into plantArea table because it already exists in the plant area table"));
 		}
 
 		try {
@@ -286,7 +286,7 @@ class PlantArea implements \JsonSerializable {
 			$statement->execute($parameters);
 			//set plantAreaId to integer value given by mySql
 			$this->setPlantAreaId(intval($pdo->lastInsertId()));
-		}catch(PDOException $pdoException){
+		}catch(\PDOException $pdoException){
 			throw(new \PDOException($pdoException->getMessage(),0,$pdoException));
 		}
 	}
@@ -299,14 +299,14 @@ class PlantArea implements \JsonSerializable {
 	 */
 	public function delete(\PDO $pdo) {
 		if(is_null($this->plantAreaId)){
-			throw (new PDOException("Cannot delete plant area because it does not exist in the plant area table"));
+			throw (new \PDOException("Cannot delete plant area because it does not exist in the plant area table"));
 		}
 		try {
 			$query = "DELETE FROM plantArea WHERE plantAreaId = :plantAreaId";
 			$statement = $pdo->prepare($query);
 			$parameters = ["plantAreaId" => $this->plantAreaId];
 			$statement->execute($parameters);
-		}catch(PDOException $pdoException){
+		}catch(\PDOException $pdoException){
 			throw(new \PDOException($pdoException->getMessage(),0,$pdoException));
 		}
 	}

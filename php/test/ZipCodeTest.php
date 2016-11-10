@@ -1,6 +1,6 @@
 <?php
 
-namespace Cnm\Edu\Growify;
+namespace Edu\Cnm\Growify;
 use Cnm\Edu\Growify\Test\GrowifyTest;
 use  Cnm\Edu\Growify\ZipCode;
 
