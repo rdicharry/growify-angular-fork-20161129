@@ -111,91 +111,151 @@ class Plant implements \JsonSerializable{
 	}
 
 	/**
+	 * Get plant associated with the specified plant Id.
+	 * @param \PDO $pdo a PDO connection object
+	 * @param int $plantId a valid plant Id
+	 * @return Plant|null Plant found or null if not found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when parameters are not the correct data type.
+	 **/
+	public static function getPlantByPlantId(\PDO $pdo, int $plantId) {
+		if($plantId <= 0) {
+			throw(new \RangeException("Plant id must be positive."));
+		}
+		// create query template
+		$query = "SELECT plantId, plantName, plantVariety, plantDescription, plantType, plantSpread, plantDaysToHarvest, plantHeight, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantId= :plantId";
+		$statement = $pdo->prepare($query);
+
+		// bind the plant id to the place holder in the template
+		$parameters = ["plantId" => $plantId];
+		$statement->execute($parameters);
+
+		// grab the plant from mySQL
+		try {
+			$plant = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$plant = new Plant($row["plantId"], $row["plantName"], $row["plantVariety"], $row["plantDescription"], $row["plantType"], $row["plantSpread"], $row["plantDaysToHarvest"], $row["plantHeight"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
+			}
+		} catch(\Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($plant);
+	}
+
+	/**
+	 * Get all plants associated with the specified plant name.
+	 * @param \PDO $pdo a PDO connection object
+	 * @param string $plantName name of plant being searched for
+	 * @return \SplFixedArray SplFixedArray of Plants found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when parameters are not the correct data type.
+	 **/
+	public static function getPlantByPlantName(\PDO $pdo, string $plantName) {
+		$plantName = trim($plantName);
+		$plantName = filter_var($plantName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($plantName)) {
+			throw (new \InvalidArgumentException("plant name is invalid"));
+		}
+		// create query template
+		$query = "SELECT plantId, plantName, plantVariety, plantDescription, plantType, plantSpread, plantDaysToHarvest, plantHeight, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantName LIKE :plantName";
+		$statement = $pdo->prepare($query);
+
+		// bind the plant name to the place holder in the template
+		$parameters = ["plantName" => $plantName];
+		$statement->execute($parameters);
+
+		// build an array of plants
+		$plants = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false){
+			try {
+					$plant = new Plant($row["plantId"], $row["plantName"], $row["plantVariety"], $row["plantDescription"], $row["plantType"], $row["plantSpread"], $row["plantDaysToHarvest"], $row["plantHeight"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
+				$plants[$plants->key()] = $plant;
+				$plants->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($plants);
+	}
+
+	/**
+	 * Get all plants associated with the specified plant type.
+	 * @param \PDO $pdo a PDO connection object
+	 * @param string $plantType type of plant being searched for
+	 * @return \SplFixedArray SplFixedArray of Plants found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when parameters are not the correct data type.
+	 **/
+	public static function getPlantByPlantType(\PDO $pdo, string $plantType) {
+		$plantType = trim($plantType);
+		$plantType = filter_var($plantType, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($plantType)) {
+			throw (new \InvalidArgumentException("plant type is invalid"));
+		}
+		// create query template
+		$query = "SELECT plantId, plantName, plantVariety, plantDescription, plantType, plantSpread, plantDaysToHarvest, plantHeight, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantType LIKE :plantType";
+		$statement = $pdo->prepare($query);
+
+		// bind the plant type to the place holder in the template
+		$parameters = ["plantType" => $plantType];
+		$statement->execute($parameters);
+
+		// build an array of plants
+		$plants = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false){
+			try {
+				$plant = new Plant($row["plantId"], $row["plantName"], $row["plantVariety"], $row["plantDescription"], $row["plantType"], $row["plantSpread"], $row["plantDaysToHarvest"], $row["plantHeight"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
+				$plants[$plants->key()] = $plant;
+				$plants->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($plants);
+	}
+
+	/**
+	 * Get all Plant objects.
+	 * @param \PDO $pdo PDO connection object
+	 * @return \SplFixedArray of Plant objects found or null if none found.
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type.
+	 **/
+	public static function getAllPlants(\PDO $pdo){
+		//create query template
+		$query = "SELECT plantId, plantName, plantVariety, plantDescription, plantType, plantSpread, plantDaysToHarvest, plantHeight, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant";
+		$statement = $pdo->prepare($query);
+		$statement->execute();
+
+		// build an array of plant entries
+		$plants = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row=$statement->fetch())!== false){
+			try {
+				$plant = new Plant($row["plantId"], $row["plantName"], $row["plantVariety"], $row["plantDescription"], $row["plantType"], $row["plantSpread"], $row["plantDaysToHarvest"], $row["plantHeight"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
+				$plants[$plants->key()] = $plant;
+				$plants->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($plants);
+	}
+
+	/**
 	 * accessor method for plantId
 	 * @return int
 	 **/
 	public function getPlantId() {
 		return $this->plantId;
-	}
-
-	/**
-	 * accessor method for plantName
-	 * @return string
-	 **/
-	public function getPlantName() {
-		return $this->plantName;
-	}
-
-	/**
-	 * accessor method for plantVariety
-	 * @return string
-	 **/
-	public function getPlantVariety() {
-		return $this->plantVariety;
-	}
-
-	/**
-	 * accessor method for plantDescription
-	 * @return string
-	 **/
-	public function getPlantDescription() {
-		return $this->plantDescription;
-	}
-
-	/**
-	 * accessor method for plantType
-	 * @return string
-	 **/
-	public function getPlantType() {
-		return $this->plantType;
-	}
-
-	/**
-	 * accessor method for plantSpread
-	 * @return float
-	 **/
-	public function getPlantSpread() {
-		return $this->plantSpread;
-	}
-
-	/**
-	 * accessor method for plantDaysToHarvest
-	 * @return int
-	 **/
-	public function getPlantDaysToHarvest() {
-		return $this->plantDaysToHarvest;
-	}
-
-	/**
-	 * accessor method for plantHeight
-	 * @return float
-	 **/
-	public function getPlantHeight() {
-		return $this->plantHeight;
-	}
-
-	/**
-	 * accessor method for plantMinTemp
-	 * @return int
-	 **/
-	public function getPlantMinTemp() {
-		return $this->plantMinTemp;
-	}
-
-	/**
-	 * accessor method for plantMaxTemp
-	 * @return int
-	 **/
-	public function getPlantMaxTemp() {
-		return $this->plantMaxTemp;
-	}
-
-	/**
-	 * accessor method for plantSoilMoisture
-	 * @return string
-	 **/
-	public function getPlantSoilMoisture() {
-		return $this->plantSoilMoisture;
 	}
 
 	/**
@@ -218,6 +278,14 @@ class Plant implements \JsonSerializable{
 	}
 
 	/**
+	 * accessor method for plantName
+	 * @return string
+	 **/
+	public function getPlantName() {
+		return $this->plantName;
+	}
+
+	/**
 	 * mutator method for plantName
 	 * @param string $newPlantName new value of plant name
 	 * @throws \InvalidArgumentException if $newPlantName has invalid contents or is empty
@@ -233,6 +301,14 @@ class Plant implements \JsonSerializable{
 			throw(new \RangeException("name is too large"));
 		}
 		$this->plantName = $newPlantName;
+	}
+
+	/**
+	 * accessor method for plantVariety
+	 * @return string
+	 **/
+	public function getPlantVariety() {
+		return $this->plantVariety;
 	}
 
 	/**
@@ -254,6 +330,14 @@ class Plant implements \JsonSerializable{
 	}
 
 	/**
+	 * accessor method for plantDescription
+	 * @return string
+	 **/
+	public function getPlantDescription() {
+		return $this->plantDescription;
+	}
+
+	/**
 	 * mutator method for plantDescription
 	 * @param string $newPlantDescription new value of plant description
 	 * @throws \InvalidArgumentException if $newPlantDescription has invalid contents or is empty
@@ -269,6 +353,14 @@ class Plant implements \JsonSerializable{
 			throw(new \RangeException("description is too large"));
 		}
 		$this->plantDescription = $newPlantDescription;
+	}
+
+	/**
+	 * accessor method for plantType
+	 * @return string
+	 **/
+	public function getPlantType() {
+		return $this->plantType;
 	}
 
 	/**
@@ -290,6 +382,14 @@ class Plant implements \JsonSerializable{
 	}
 
 	/**
+	 * accessor method for plantSpread
+	 * @return float
+	 **/
+	public function getPlantSpread() {
+		return $this->plantSpread;
+	}
+
+	/**
 	 * mutator method for plantSpread
 	 * @param float $newPlantSpread new value of plant spread
 	 * @throws \UnexpectedValueException if $newPlantSpread is not a float
@@ -304,6 +404,14 @@ class Plant implements \JsonSerializable{
 			throw (new \RangeException("spread is not positive"));
 		}
 		$this->plantSpread = $newPlantSpread;
+	}
+
+	/**
+	 * accessor method for plantDaysToHarvest
+	 * @return int
+	 **/
+	public function getPlantDaysToHarvest() {
+		return $this->plantDaysToHarvest;
 	}
 
 	/**
@@ -324,6 +432,14 @@ class Plant implements \JsonSerializable{
 	}
 
 	/**
+	 * accessor method for plantHeight
+	 * @return float
+	 **/
+	public function getPlantHeight() {
+		return $this->plantHeight;
+	}
+
+	/**
 	 * mutator method for plantHeight
 	 * @param float $newPlantHeight new value of plant mature height
 	 * @throws \UnexpectedValueException if $newPlantHeight is not a float
@@ -341,6 +457,14 @@ class Plant implements \JsonSerializable{
 	}
 
 	/**
+	 * accessor method for plantMinTemp
+	 * @return int
+	 **/
+	public function getPlantMinTemp() {
+		return $this->plantMinTemp;
+	}
+
+	/**
 	 * mutator method for plantMinTemp
 	 * @param int $newPlantMinTemp new value of plant min temp
 	 * @throws \UnexpectedValueException if $newPlantMinTemp is not a int
@@ -354,6 +478,14 @@ class Plant implements \JsonSerializable{
 	}
 
 	/**
+	 * accessor method for plantMaxTemp
+	 * @return int
+	 **/
+	public function getPlantMaxTemp() {
+		return $this->plantMaxTemp;
+	}
+
+	/**
 	 * mutator method for plantMaxTemp
 	 * @param int $newPlantMaxTemp new value of plant max temp
 	 * @throws \UnexpectedValueException if $newPlantMaxTemp is not a int
@@ -364,6 +496,14 @@ class Plant implements \JsonSerializable{
 			throw (new \UnexpectedValueException("max temp is not a valid int"));
 		}
 		$this->plantMaxTemp = $newPlantMaxTemp;
+	}
+
+	/**
+	 * accessor method for plantSoilMoisture
+	 * @return string
+	 **/
+	public function getPlantSoilMoisture() {
+		return $this->plantSoilMoisture;
 	}
 
 	/**
@@ -441,144 +581,6 @@ class Plant implements \JsonSerializable{
 		$statement->execute($parameters);
 	}
 
-	/**
-	 * Get plant associated with the specified plant Id.
-	 * @param \PDO $pdo a PDO connection object
-	 * @param int $plantId a valid plant Id
-	 * @return Plant|null Plant found or null if not found
-	 * @throws \PDOException when mySQL related errors occur
-	 * @throws \TypeError when parameters are not the correct data type.
-	 **/
-	public static function getPlantByPlantId(\PDO $pdo, int $plantId) {
-		if($plantId <= 0) {
-			throw(new \RangeException("Plant id must be positive."));
-		}
-		// create query template
-		$query = "SELECT plantId, plantName, plantVariety, plantDescription, plantType, plantSpread, plantDaysToHarvest, plantHeight, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantId= :plantId";
-		$statement = $pdo->prepare($query);
-
-		// bind the plant id to the place holder in the template
-		$parameters = ["plantId" => $plantId];
-		$statement->execute($parameters);
-
-		// grab the plant from mySQL
-		try {
-			$plant = null;
-			$statement->setFetchMode(\PDO::FETCH_ASSOC);
-			$row = $statement->fetch();
-			if($row !== false) {
-				$plant = new Plant($row["plantId"], $row["plantName"], $row["plantVariety"], $row["plantDescription"], $row["plantType"], $row["plantSpread"], $row["plantDaysToHarvest"], $row["plantHeight"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
-			}
-		} catch(\Exception $exception) {
-			// if the row couldn't be converted, rethrow it
-			throw(new \PDOException($exception->getMessage(), 0, $exception));
-		}
-		return($plant);
-	}
-
-	/**
-	 * Get all plants associated with the specified plant name.
-	 * @param \PDO $pdo a PDO connection object
-	 * @param string $plantName name of plant being searched for
-	 * @return \SplFixedArray SplFixedArray of Plants found
-	 * @throws \PDOException when mySQL related errors occur
-	 * @throws \TypeError when parameters are not the correct data type.
-	 **/
-	public static function getPlantByPlantName(\PDO $pdo, string $plantName) {
-		$plantName = trim($plantName);
-		$plantName = filter_var($plantName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($plantName)) {
-			throw (new \InvalidArgumentException("plant name is invalid"));
-		}
-		// create query template
-		$query = "SELECT plantId, plantName, plantVariety, plantDescription, plantType, plantSpread, plantDaysToHarvest, plantHeight, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantName LIKE :plantName";
-		$statement = $pdo->prepare($query);
-
-		// bind the plant name to the place holder in the template
-		$parameters = ["plantName" => $plantName];
-		$statement->execute($parameters);
-
-		// build an array of plants
-		$plants = new \SplFixedArray($statement->rowCount());
-		$statement->setFetchMode(\PDO::FETCH_ASSOC);
-		while(($row = $statement->fetch()) !== false){
-			try {
-					$plant = new Plant($row["plantId"], $row["plantName"], $row["plantVariety"], $row["plantDescription"], $row["plantType"], $row["plantSpread"], $row["plantDaysToHarvest"], $row["plantHeight"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
-				$plants[$plants->key()] = $plant;
-				$plants->next();
-			} catch(\Exception $exception) {
-				// if the row couldn't be converted, rethrow it
-				throw(new \PDOException($exception->getMessage(), 0, $exception));
-			}
-		}
-		return($plants);
-	}
-	/**
-	 * Get all plants associated with the specified plant type.
-	 * @param \PDO $pdo a PDO connection object
-	 * @param string $plantType type of plant being searched for
-	 * @return \SplFixedArray SplFixedArray of Plants found
-	 * @throws \PDOException when mySQL related errors occur
-	 * @throws \TypeError when parameters are not the correct data type.
-	 **/
-	public static function getPlantByPlantType(\PDO $pdo, string $plantType) {
-		$plantType = trim($plantType);
-		$plantType = filter_var($plantType, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($plantType)) {
-			throw (new \InvalidArgumentException("plant type is invalid"));
-		}
-		// create query template
-		$query = "SELECT plantId, plantName, plantVariety, plantDescription, plantType, plantSpread, plantDaysToHarvest, plantHeight, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantType LIKE :plantType";
-		$statement = $pdo->prepare($query);
-
-		// bind the plant type to the place holder in the template
-		$parameters = ["plantType" => $plantType];
-		$statement->execute($parameters);
-
-		// build an array of plants
-		$plants = new \SplFixedArray($statement->rowCount());
-		$statement->setFetchMode(\PDO::FETCH_ASSOC);
-		while(($row = $statement->fetch()) !== false){
-			try {
-				$plant = new Plant($row["plantId"], $row["plantName"], $row["plantVariety"], $row["plantDescription"], $row["plantType"], $row["plantSpread"], $row["plantDaysToHarvest"], $row["plantHeight"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
-				$plants[$plants->key()] = $plant;
-				$plants->next();
-			} catch(\Exception $exception) {
-				// if the row couldn't be converted, rethrow it
-				throw(new \PDOException($exception->getMessage(), 0, $exception));
-			}
-		}
-		return($plants);
-	}
-
-	/**
-	 * Get all Plant objects.
-	 * @param \PDO $pdo PDO connection object
-	 * @return \SplFixedArray of Plant objects found or null if none found.
-	 * @throws \PDOException when mySQL related errors occur
-	 * @throws \TypeError when variables are not the correct data type.
-	 **/
-	public static function getAllPlants(\PDO $pdo){
-		//create query template
-		$query = "SELECT plantId, plantName, plantVariety, plantDescription, plantType, plantSpread, plantDaysToHarvest, plantHeight, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant";
-		$statement = $pdo->prepare($query);
-		$statement->execute();
-
-		// build an array of plant entries
-		$plants = new \SplFixedArray($statement->rowCount());
-		$statement->setFetchMode(\PDO::FETCH_ASSOC);
-		while(($row=$statement->fetch())!== false){
-			try {
-				$plant = new Plant($row["plantId"], $row["plantName"], $row["plantVariety"], $row["plantDescription"], $row["plantType"], $row["plantSpread"], $row["plantDaysToHarvest"], $row["plantHeight"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
-				$plants[$plants->key()] = $plant;
-				$plants->next();
-			} catch(\Exception $exception) {
-				// if the row couldn't be converted, rethrow it
-				throw(new \PDOException($exception->getMessage(), 0, $exception));
-			}
-		}
-		return ($plants);
-	}
 	/**
 	 * format state variables for JSON serialization
 	 * @return array an array with serialized state variables
