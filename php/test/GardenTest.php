@@ -160,7 +160,7 @@ class GardenTest extends GrowifyTest {
 		$garden->insert($this->getPDO());
 
 		// edit garden & update in mySQL
-		$garden->setGardenPlantId($this->validPlantingDate2);
+		$garden->setGardenDatePlanted($this->validPlantingDate2);
 		$garden->update($this->getPDO());
 
 		// grab the data from mySQL and enforce fields match expected
