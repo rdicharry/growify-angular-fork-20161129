@@ -51,11 +51,9 @@ class ZipCode{
 	 * @throws \OutOfBoundsException if the parameter $zipCodeCode is not 5 characters long (the length of a New Mexico Zipcode)
 	 * @throws \InvalidArgumentException if the parameter $zipCodeCode does not begin with 87 or 88 (The only beginning characters of a New Mexico ZipCode)
 	 **/
-	public function setZipCodeCode($zipCodeCode) {
+	public function setZipCodeCode(string $zipCodeCode) {
 		//Validates $zipCodeCode to make sure it is a string that is 5 characters long beginning with either 87 or 88
-		if(!is_string($zipCodeCode)){
-			throw (new \TypeError('The $zipCodeCode Entered is not a String'));
-		}elseif(strlen($zipCodeCode) != 5){
+		if(strlen($zipCodeCode) != 5){
 			throw (new \OutOfBoundsException('The $zipCodeCode Entered is not 5 characters long and is therefore an invalid New Mexico Zip Code'));
 		}
 		elseif((substr($zipCodeCode, 0,2) !== '87') &&  (substr($zipCodeCode, 0,2) !=='88')){
