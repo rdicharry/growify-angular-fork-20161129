@@ -69,6 +69,7 @@ class GardenTest extends GrowifyTest {
 
 		$activation = bin2hex(random_bytes(8));
 
+
 		// create and insert a Profile to own the test Garden
 		$this->profile = new Profile(null, "lorax1971", "the.lorax@oncelerco.com", $this->zipCode, $hash ,$salt, $activation);
 		$this->profile->insert($this->getPDO());
