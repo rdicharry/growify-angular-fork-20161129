@@ -66,7 +66,7 @@ class CompanionPlant implements \JsonSerializable{
 	 * accessor method for companion plant 1 id
 	 * @return int value of companion plant 1 id
 	 **/
-	public function getCompanionPlant1Id() {
+	public function getCompanionPlant1Id(): int {
 		return ($this->companionPlant1Id);
 	}
 
@@ -92,7 +92,7 @@ class CompanionPlant implements \JsonSerializable{
 	 * @return int value for companion plant 2 id
 	 **/
 	public function getCompanionPlant2Id(): int {
-		return ($this->companionPlant2Id);
+		return $this->companionPlant2Id;
 	}
 	/**
 	 * mutator method for this companion plant 2 id
@@ -110,7 +110,7 @@ class CompanionPlant implements \JsonSerializable{
 			throw(new \RangeException("companion plant is not a positive"));
 	}
 	 // convert and store the companion plant 2
-		$this->companionPlant2Id =$newCompanionPlant;
+		$this->companionPlant2Id = $newCompanionPlant;
 	}
 
 	/**
@@ -141,7 +141,7 @@ class CompanionPlant implements \JsonSerializable{
 	public function delete(\PDO $pdo) {
 		// create query template
 		// note: need to check both cases: companionPlant1Id, companionPlant2Id, and companionPlant2Id, companion1Id since order does not matter
-		$query ="DELETE FROM garden WHERE ((companionPlant1Id= :companionPlant1Id AND companionPlant2Id= :companionPlant2Id) OR (companionPlant1Id = :companionPlant2Id AND companionPlant2Id = :companionPlant1Id))";
+		$query ="DELETE FROM companionPlant WHERE (companionPlant1Id = :companionPlant1Id) AND (companionPlant2Id = :companionPlant2Id)";
 		$statement = $pdo->prepare($query);
 
 		//bind parameters
@@ -151,6 +151,9 @@ class CompanionPlant implements \JsonSerializable{
 		$query = "DELETE FROM companionPlant WHERE (companionPlant1Id = :companionPlant2Id) AND (companionPlant2Id = :companionPlant1Id)";
 		$statement = $pdo->prepare($query);
 
+		//bind parameters
+		$parameters = ["companionPlant1Id" =>$this->companionPlant1Id, "companionPlant2Id"=>$this->companionPlant2Id];
+		$statement->execute($parameters);
 
 	}
 
@@ -205,18 +208,10 @@ class CompanionPlant implements \JsonSerializable{
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throw \TypeError if $pdo is not a PDO conneciton object.
 	 **/
-	public static function getCompanionPlantsByPlantId(\PDO $pdo int $plantId){
+	public static function getCompanionPlantsByPlantId(\PDO $pdo, int $plantId){
 		if($plantId <= 0){
 		throw(new \RangeException("companion plant id must be positive"));
-/**
- * Specify data which should be serialized to JSON
- * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
- * @return mixed data which can be serialized by <b>json_encode</b>,
- * which is a value of any type other than a resource.
- * @since 5.4.0
- */function jsonSerialize() {
-	// TODO: Implement jsonSerialize() method.
-}}
+}
 		// create query template
 		$query = "SELECT companionPlant1Id, CompanionPlant2Id FROM companionPlant WHERE ((companionPlantiId = :plantId) OR (companionPlant2Id=:plantId))";
 		$statement = $pdo->prepare($query);
@@ -228,12 +223,13 @@ $parameters = ["plantId"=>$plantId];
 		// build an array of CompanionPlants
 		$companionPlants = new \SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
-		while(($row = $statement->fetch()) !==false) {
+
+		while(($row = $statement->fetch()) !==false){
 		try{
 			$companionPlant = new companionPlant ($row["companionPlant1Id"], $row["companionPlant2Id"]);
-			$companionPlants[$companionPlants->key()] = $companionPlant;
+			$companionPlants[$companionPlants->key()]=$companionPlant;
 			$companionPlants->next();
-		} catch(\Exception $exception){
+		}catch(\Exception $exception){
 			// if the row couldn't be converted, rethrow it
 			throw(new \PDOException($exception->getMessage(), 0, $exception));
 			}
@@ -247,8 +243,8 @@ $parameters = ["plantId"=>$plantId];
 /**
  * get all companion plants
  * @param \PDO $pdo PDO connection object
- * @return \SplFixedArry SplFixedArray of companion plants found or null if none found
- * @throws \PDOExcpetion when mySQL related errors occur
+ * @return \SplFixedArray SplFixedArray of companion plants found or null if none found
+ * @throws \PDOException when mySQL related errors occur
  * @throws \TypeError if $do is not a PDO connection object.
  **/
 
@@ -261,14 +257,14 @@ public static function getAllCompanionPlants(\PDO $pdo) {
 
 	//build an array of companionPlants
 	$companionPlants = new \SplFixedArray($statement->rowCount());
-	$statement->setFecthMode(\PDO::FETCH_ASSOC);
+	$statement->setFetchMode(\PDO::FETCH_ASSOC);
 
-	while (($row=$statement->fecth()) !=false) {
+	while (($row = $statement->fetch()) !=false) {
 		try {
 			$companionPlant = new CompanionPlant ($row["companionPlant1Id"], $row["companionPlant2Id"]);
 			$companionPlants[$companionPlants->key()] = $companionPlant;
 			$companionPlants->next();
-		}catch(\Exception $exception){
+		} catch(\Exception $exception){
 			//if the row couldn't be converted, rethrow it
 			throw (new \PDOException($exception->getMessage(), 0, $exception));
 		}

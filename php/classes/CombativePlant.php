@@ -91,6 +91,28 @@ class CombativePlant implements \JsonSerializable{
 	}
 
 	/**
+	 * check whethere a mySQL entry for a given pair of plant Ids already exists in the table.
+	 * @param \PDO $pdo a PDO connection object
+	 * @param int $combativePlant1Id a valid plant id
+	 * @param int $combativePlant2Id a valid plant id.
+	 * @return bool true if the entry already exists in mySQL, false if it doesn't
+	 */
+	public static function existsCombativePlantEntry(\PDO $pdo, int $combativePlant1Id, int $combativePlant2Id){
+		// first check if this will create a duplicate DB entry
+		$query = "SELECT combativePlant1Id, combativePlant2Id FROM combativePlant WHERE 
+(combativePlant1Id = :combativePlant1Id AND combativePlant2Id = :combativePlant2Id) OR 
+(combativePlant1Id = :combativePlant2Id AND combativePlant2Id = :combativePlant1Id)";
+		$parameters = ["combativePlant1Id"=>$combativePlant1Id, "combativePlant2Id"=>$combativePlant2Id];
+		$statement = $pdo->prepare($query);
+		$statement->execute($parameters);
+
+		if($statement->rowCount() > 0){
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * insert a new combative plant relationship into mySQL
 	 * @param \PDO $pdo PDO connection object
 	 * @throws \PDOException if mySQL related errors occur
@@ -98,13 +120,18 @@ class CombativePlant implements \JsonSerializable{
 	 */
 	public function insert(\PDO $pdo){
 
-		//create query template
-		$query = "INSERT INTO combativePlant(combativePlant1Id, combativePlant2Id) VALUES (:combativePlant1Id, :combativePlant2Id )";
-		$statement = $pdo->prepare($query);
+		if(CombativePlant::existsCombativePlantEntry($pdo, $this->combativePlant1Id, $this->combativePlant2Id)===false){
+			//bind the member variables to the place holders in the template
+			$parameters = ["combativePlant1Id"=>$this->combativePlant1Id, "combativePlant2Id"=>$this->combativePlant2Id];
 
-		//bind the member variables to the place holders in the template
-		$parameters = ["combativePlant1Id"=>$this->combativePlant1Id, "combativePlant2Id"=>$this->combativePlant2Id];
-		$statement->execute($parameters);
+			//create query template
+			$insertQuery = "INSERT INTO combativePlant(combativePlant1Id, combativePlant2Id) VALUES (:combativePlant1Id, :combativePlant2Id )";
+			$insertStatement = $pdo->prepare($insertQuery);
+
+			$insertStatement->execute($parameters);
+		} else {
+			throw(new \PDOException("cannot insert duplicate combative plant entry"));
+		}
 
 	}
 
@@ -115,6 +142,26 @@ class CombativePlant implements \JsonSerializable{
 	 * @throws \TypeError if $pdo is not a PDO connection object.
 	 */
 	public function delete(\PDO $pdo){
+		// bind parameters
+		$parameters = ["combativePlant1Id"=>$this->combativePlant1Id, "combativePlant2Id"=>$this->combativePlant2Id];
+
+
+		// first check if the entry exists, if not, throw an exception
+		//$query = "SELECT * FROM combativePlant WHERE (combativePlant1Id  = :combativePlant1Id) AND (combativePlant2Id = :combativePlant2Id)";
+		//$statement = $pdo->prepare($query);
+		//$statement->execute($parameters);
+
+		if(CombativePlant::existsCombativePlantEntry($pdo, $this->combativePlant1Id, $this->combativePlant2Id) === false){
+			throw new \PDOException("cannot delete an entry that does not exist");
+		}
+
+		// chech with argument order reversed
+		//$query = "SELECT * FROM combativePlant WHERE (combativePlant1Id  = :combativePlant2Id) AND (combativePlant2Id = :combativePlant1Id)";
+		//$statement = $pdo->prepare($query);
+		//$statement->execute($parameters);
+		//if($statement->columnCount() === 0){
+		//	throw new PDOException("cannot delete an entry that does not exist");
+		//}
 
 		// create query template
 		// note: need to check both cases: combativeplant1Id, combativeplant2Id AND combativeplant2Id, combativeplant1Id since order does not matter

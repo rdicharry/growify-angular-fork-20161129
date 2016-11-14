@@ -43,6 +43,11 @@ class ProfileTest extends GrowifyTest {
 	 **/
 	protected $VALID_ACTIVATION;
 	/**
+	 * invalid activation for testing
+	 * @var string $INVALID_ACTIVATION
+	 **/
+	protected $INVALID_ACTIVATION;
+	/**
 	 * The profile being tested
 	 * @var Profile profile
 	 **/
@@ -65,6 +70,8 @@ class ProfileTest extends GrowifyTest {
 		$this->VALID_HASH = hash_pbkdf2("sha512", "this is a password", $this->VALID_SALT, 262144);
 		//creates activation for testing
 		$this->VALID_ACTIVATION = bin2hex(random_bytes(8));
+		//creates invalid activation for testing
+		$this->INVALID_ACTIVATION = strrev($this->VALID_ACTIVATION);
 	}
 
 	/**
@@ -91,8 +98,7 @@ class ProfileTest extends GrowifyTest {
 
 	/**
 	 * test inserting a Profile that already exists
-	 *
-	 * @expectedException PDOException
+	 * @expectedException \PDOException
 	 **/
 	public function testInsertInvalidProfile() {
 		// create a Profile with a non null profile id and watch it fail
@@ -128,8 +134,6 @@ class ProfileTest extends GrowifyTest {
 
 	/**
 	 * test updating a Profile that does not exist
-	 *
-	 * @expectedException PDOException
 	 **/
 	public function testUpdateInvalidProfile() {
 		// create a Profile, try to update it without actually inserting it and watch it fail
@@ -160,8 +164,6 @@ class ProfileTest extends GrowifyTest {
 
 	/**
 	 * test deleting a Profile that does not exist
-	 *
-	 * @expectedException PDOException
 	 **/
 	public function testDeleteInvalidProfile() {
 		// create a Profile and try to delete it without actually inserting it
@@ -191,7 +193,7 @@ class ProfileTest extends GrowifyTest {
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("profile"));
 		$this->assertEquals($pdoProfile->getProfileUserName(), $this->VALID_USERNAME);
 		$this->assertEquals($pdoProfile->getProfileEmail(), $this->VALID_EMAIL);
-		$this->assertEquals($pdoProfile->getProfileZipCode(), $this->zipcode);
+		$this->assertEquals($pdoProfile->getProfileZipCode(), $this->zipcode->getZipCodeCode());
 		$this->assertEquals($pdoProfile->getProfileHash(), $this->VALID_HASH);
 		$this->assertEquals($pdoProfile->getProfileSalt(), $this->VALID_SALT);
 		$this->assertEquals($pdoProfile->getProfileActivation(), $this->VALID_ACTIVATION);
@@ -226,7 +228,7 @@ class ProfileTest extends GrowifyTest {
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("profile"));
 		$this->assertEquals($pdoProfile->getProfileUserName(), $this->VALID_USERNAME);
 		$this->assertEquals($pdoProfile->getProfileEmail(), $this->VALID_EMAIL);
-		$this->assertEquals($pdoProfile->getProfileZipCode(), $this->zipcode);
+		$this->assertEquals($pdoProfile->getProfileZipCode(), $this->zipcode->getZipCodeCode());
 		$this->assertEquals($pdoProfile->getProfileHash(), $this->VALID_HASH);
 		$this->assertEquals($pdoProfile->getProfileSalt(), $this->VALID_SALT);
 		$this->assertEquals($pdoProfile->getProfileActivation(), $this->VALID_ACTIVATION);
@@ -236,9 +238,9 @@ class ProfileTest extends GrowifyTest {
 	 * test grabbing a Profile by an activation code that does not exist
 	 **/
 	public function testGetInvalidProfileByProfileActivation() {
-		// grab a profile by searching for type that does not exist
-		$profile = Profile::getProfileByProfileActivation($this->getPDO(), bin2hex(random_bytes(8)));
-		$this->assertEquals($profile, $this->VALID_ACTIVATION);
+		// grab a profile by searching for activation code that does not exist
+		$profile = Profile::getProfileByProfileActivation($this->getPDO(), $this->INVALID_ACTIVATION);
+		$this->assertNull($profile);
 	}
 	/**
 	 * test grabbing all Profiles
@@ -262,7 +264,7 @@ class ProfileTest extends GrowifyTest {
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("profile"));
 		$this->assertEquals($pdoProfile->getProfileUserName(), $this->VALID_USERNAME);
 		$this->assertEquals($pdoProfile->getProfileEmail(), $this->VALID_EMAIL);
-		$this->assertEquals($pdoProfile->getProfileZipCode(), $this->zipcode);
+		$this->assertEquals($pdoProfile->getProfileZipCode(), $this->zipcode->getZipCodeCode());
 		$this->assertEquals($pdoProfile->getProfileHash(), $this->VALID_HASH);
 		$this->assertEquals($pdoProfile->getProfileSalt(), $this->VALID_SALT);
 		$this->assertEquals($pdoProfile->getProfileActivation(), $this->VALID_ACTIVATION);
