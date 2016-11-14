@@ -141,8 +141,12 @@ class GardenTest extends GrowifyTest {
 		$garden->update($this->getPDO());
 
 		// grab the data from mySQL and enforce fields match expected
-		$pdoGardens = Garden::getGardensByGardenProfileId($this->getPDO(), $garden->getGardenId());
+		$pdoGardens = Garden::getGardensByGardenProfileId($this->getPDO(), $garden->getGardenProfileId());
 		$this->assertEquals( $this->getConnection()->getRowCount("garden"), $numRows+1);
+		$this->assertCount(1, $pdoGardens);
+		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\Growify\\Garden", $pdoGardens);
+
+		$pdoGarden = $pdoGardens[0];
 		$this->assertEquals($pdoGarden->getGardenProfileId(),$this->profile->getProfileId());
 		$this->assertEquals($pdoGarden->getGardenPlantId(), $this->plant2->getPlantId());
 		$this->assertEquals($pdoGarden->getGardenDatePlanted(), $this->validPlantingDate);
@@ -164,8 +168,12 @@ class GardenTest extends GrowifyTest {
 		$garden->update($this->getPDO());
 
 		// grab the data from mySQL and enforce fields match expected
-		$pdoGarden = Garden::getGardenByProfileId($this->getPDO(), $garden->getGardenId());
+		$pdoGardens = Garden::getGardensByGardenProfileId($this->getPDO(), $garden->getGardenProfileId());
 		$this->assertEquals( $this->getConnection()->getRowCount("garden"), $numRows+1);
+		$this->assertCount(1, $pdoGardens);
+		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\Growify\\Garden", $pdoGardens);
+
+		$pdoGarden = $pdoGardens[0];
 		$this->assertEquals($pdoGarden->getGardenProfileId(),$this->profile->getProfileId());
 		$this->assertEquals($pdoGarden->getGardenPlantId(), $this->plant1->getPlantId());
 		$this->assertEquals($pdoGarden->getGardenDatePlanted(), $this->validPlantingDate2);
@@ -199,9 +207,9 @@ class GardenTest extends GrowifyTest {
 		$garden->delete($this->getPDO());
 
 		// grab data from mySQL and enforce Garden does not exist
-		$pdoGarden = Garden::getGardenByPlantId($this->getPDO(), $garden->getGardenPlantId());
+		$pdoGarden = Garden::getGardensByGardenProfileId($this->getPDO(), $garden->getGardenProfileId());
 		$this->assertNull($pdoGarden);
-		$this->assertEquals($this->getConnection()->getRowCount("garden"), $numRows+1);
+		$this->assertEquals($this->getConnection()->getRowCount("garden"), $numRows);
 	}
 
 	/**
@@ -237,7 +245,7 @@ class GardenTest extends GrowifyTest {
 
 		// get result from the array and validate it
 		$pdoGarden = $results[0];
-		$this->assertEquals($pdoGarden->getGardenProfileId(), $this->profile,getProfileId());
+		$this->assertEquals($pdoGarden->getGardenProfileId(), $this->profile->getProfileId());
 		$this->assertEquals($pdoGarden->getGardenDatePlanted(), $this->validPlantingDate);
 		$this->assertEquals($pdoGarden->getGardenPlantId(), $this->plant1->getPlantId());
 	}
