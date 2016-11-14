@@ -92,10 +92,10 @@ class CombativePlant implements \JsonSerializable{
 
 	/**
 	 * check whethere a mySQL entry for a given pair of plant Ids already exists in the table.
-	 * @param \PDO $pdo
-	 * @param int $combativePlant1Id
-	 * @param int $combativePlant2Id
-	 * @return bool
+	 * @param \PDO $pdo a PDO connection object
+	 * @param int $combativePlant1Id a valid plant id
+	 * @param int $combativePlant2Id a valid plant id.
+	 * @return bool true if the entry already exists in mySQL, false if it doesn't
 	 */
 	public static function existsCombativePlantEntry(\PDO $pdo, int $combativePlant1Id, int $combativePlant2Id){
 		// first check if this will create a duplicate DB entry
