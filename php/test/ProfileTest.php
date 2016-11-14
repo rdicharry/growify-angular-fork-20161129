@@ -91,8 +91,6 @@ class ProfileTest extends GrowifyTest {
 
 	/**
 	 * test inserting a Profile that already exists
-	 *
-	 * @expectedException PDOException
 	 **/
 	public function testInsertInvalidProfile() {
 		// create a Profile with a non null profile id and watch it fail
@@ -128,8 +126,6 @@ class ProfileTest extends GrowifyTest {
 
 	/**
 	 * test updating a Profile that does not exist
-	 *
-	 * @expectedException PDOException
 	 **/
 	public function testUpdateInvalidProfile() {
 		// create a Profile, try to update it without actually inserting it and watch it fail
@@ -160,8 +156,6 @@ class ProfileTest extends GrowifyTest {
 
 	/**
 	 * test deleting a Profile that does not exist
-	 *
-	 * @expectedException PDOException
 	 **/
 	public function testDeleteInvalidProfile() {
 		// create a Profile and try to delete it without actually inserting it
@@ -237,8 +231,13 @@ class ProfileTest extends GrowifyTest {
 	 **/
 	public function testGetInvalidProfileByProfileActivation() {
 		// grab a profile by searching for type that does not exist
+		try{
 		$profile = Profile::getProfileByProfileActivation($this->getPDO(), bin2hex(random_bytes(8)));
-		$this->assertEquals($profile, $this->VALID_ACTIVATION);
+		$this->assertEquals($profile->getProfileActivation(), $this->VALID_ACTIVATION);
+		} catch(\Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
 	}
 	/**
 	 * test grabbing all Profiles
