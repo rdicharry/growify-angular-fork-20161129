@@ -150,8 +150,6 @@ class PlantTest extends GrowifyTest {
 
 	/**
 	 * test updating a Plant that does not exist
-	 *
-	 * @expectedException PDOException
 	 **/
 	public function testUpdateInvalidPlant() {
 		// create a Plant, try to update it without actually inserting it and watch it fail
@@ -182,8 +180,6 @@ class PlantTest extends GrowifyTest {
 
 	/**
 	 * test deleting a Plant that does not exist
-	 *
-	 * @expectedException PDOException
 	 **/
 	public function testDeleteInvalidPlant() {
 		// create a Plant and try to delete it without actually inserting it
