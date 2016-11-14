@@ -299,11 +299,11 @@ class Profile implements \JsonSerializable {
 	 **/
 	public function update(\PDO $pdo) {
 		//create query template
-		$query = "UPDATE profile SET profileId =: profileId, profileUsername =: profileUsername, profileEmail =: profileEmail, profileZipCode =: profileZipCode, profileHash =: profileHash, profileSalt =: profileSalt, profileActivation =: profileActivation";
+		$query = "UPDATE profile SET profileUsername =: profileUsername, profileEmail =: profileEmail, profileZipCode =: profileZipCode, profileHash =: profileHash, profileSalt =: profileSalt, profileActivation =: profileActivation";
 		$statement = $pdo->prepare($query);
 
 		// bind member variables to placeholders
-		$parameters = ["profileId" => $this->profileId, "profileUsername" => $this->profileUsername, "profileEmail" => $this->profileEmail, "profileZipCode" => $this->profileZipCode, "profileHash" => $this->profileHash, "profileSalt" => $this->profileSalt, "profileActivation" => $this->profileActivation];
+		$parameters = ["profileUsername" => $this->profileUsername, "profileEmail" => $this->profileEmail, "profileZipCode" => $this->profileZipCode, "profileHash" => $this->profileHash, "profileSalt" => $this->profileSalt, "profileActivation" => $this->profileActivation];
 		$statement->execute($parameters);
 	}
 
@@ -463,7 +463,7 @@ class Profile implements \JsonSerializable {
 	 **/
 	public static function getAllProfiles(\PDO $pdo) {
 		//create query template
-		$query = "SELECT profileId, profileName, profileVariety, profileDescription, profileType, profileSpread, profileDaysToHarvest, profileHeight, profileMinTemp, profileMaxTemp, profileSoilMoisture FROM profile";
+		$query = "SELECT profileId, profileUserName, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation FROM profile";
 		$statement = $pdo->prepare($query);
 		$statement->execute();
 
@@ -488,7 +488,7 @@ class Profile implements \JsonSerializable {
 	 * @return array an array with serialized state variables
 	 **/
 	public function jsonSerialize() {
-		$fields = array_push($this->getProfileId(),$this->getProfileUserName(),$this->getProfileEmail(),$this->getProfileZipCode(),$this->getProfileActivation());
+		array_push($fields, $this->getProfileId(),$this->getProfileUserName(),$this->getProfileEmail(),$this->getProfileZipCode(),$this->getProfileActivation());
 		return ($fields);
 	}
 }
