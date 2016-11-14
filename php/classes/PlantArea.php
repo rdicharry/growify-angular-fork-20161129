@@ -32,16 +32,30 @@ class PlantArea implements \JsonSerializable {
 
 	/**
 	 * start date for this PlantArea
-	 * @var string $plantAreaStartDate
+	 * @var int $plantAreaStartDate
 	 **/
-	private $plantAreaStartDate;
+	private $plantAreaStartDay;
+
+	/**
+	 * start date for this PlantArea
+	 * @var int $plantAreaStartDate
+	 **/
+	private $plantAreaEndDay;
+
+
+	/**
+	 * start date for this PlantArea
+	 * @var int $plantAreaStartDate
+	 **/
+	private $plantAreaStartMonth;
+
 
 	/**
 	 * end date for this PlantArea
-	 * @var string $plantAreaEndDate
+	 * @var int $plantAreaEndDate
 	 *
 	 **/
-	private $plantAreaEndDate;
+	private $plantAreaEndMonth;
 
 	/**
 	 * area number for this PlantArea
@@ -80,7 +94,7 @@ class PlantArea implements \JsonSerializable {
 	 * @internal param string $plantAreaEndDate end date for this PlantArea
 	 * @internal param int|null $plantAreaAreaNum the area number of this PlantArea
 	 */
-	public function __construct($newPlantAreaPlantId, $newPlantAreaStartDate, $newPlantAreaEndDate, $newPlantAreaAreaNum) {
+	public function __construct($newPlantAreaPlantId, $newPlantAreaStartDay, $newPlantAreaEndDay, $newPlantAreaEndDay, $newPlantAreaEndMonth, $newPlantAreaAreaNum) {
 		try {
 			$this->setPlantAreaPlantId($newPlantAreaPlantId);
 			$this->setPlantAreaStartDate($newPlantAreaStartDate);
@@ -156,31 +170,76 @@ class PlantArea implements \JsonSerializable {
 	}
 
 	/**
-	 * accessor method for plant area start date
+	 * accessor method for plant area start day
 	 *
-	 * $return string value of plant area start date
+	 * $return int of plant area start date
 	 **/
-	public function getPlantAreaStartDate() {
-		return ($this->plantAreaStartDate);
+	public function getPlantAreaStartDay() {
+		return ($this->plantAreaStartDay);
 	}
 
 	/**
-	 * mutator method for plant area start date
+	 * accessor method for plant area start month
 	 *
-	 * @param string $newPlantAreaStartDate plant area start date as a DateTime object or string
-	 * @throw \InvalidArgumentException if $newPlantAreaStartDate is a date that does not exist
-	 * @throws \TypeError if $newPlantAreaStartDate is not a string
-	 * @throws \OutOfBoundsException if $newPlantAreaStartDate is contains more than 5 characters
+	 * $return int of plant area start date
 	 **/
-	public function setPlantAreaStartDate($newPlantAreaStartDate) {
-		//check if $newPlantAreaStartDate is a string, if not throw TypeError
-		if(!is_string($newPlantAreaStartDate)){
-			throw(new \TypeError("Plant Area Start Date is not a string"));
-		}elseif(strlen($newPlantAreaStartDate) > 5){  //change: If plant Area Start Date is longer than 5 characters it will throw an Out of Bounds Error
-			throw (new \OutOfBoundsException("This plantareastartdate is greater than 5 characters long"));
-		} elseif((int)(substr($newPlantAreaStartDate,0,1)) > 31 || (int)(substr($newPlantAreaStartDate,3)) > 12 || (int)(substr($newPlantAreaStartDate,0,1) < 1 || (int)(substr($newPlantAreaStartDate,3) < 1))){ //change: this elseif statement checks the first two and last two numbers of the plantareastartdate and sees if they are valid (makes sure that the day isn't less than 1 or greater than 31, and makes sure the last two characters aren't greater than 12 or less than 1, I can do this because I am briefly turning these strings into numbers using an integer cast by saying (int)([string numbers]). You can do this as long as the string contains only numbers.
-			throw (new \InvalidArgumentException('Plant Area Start Date is not a valid Date: "Day/Month"'));
+	public function getPlantAreaStartMonth() {
+		return ($this->plantAreaStartMonth);
+	}
+
+	/**
+	 * mutator method for plant area start day
+	 *
+	 * @param int $newPlantAreaStartDay plant area start day
+	 * @throws \TypeError if $newPlantAreaStartDay is not an integer
+	 * @throws \OutOfBoundsException if $newPlantAreaStartDay is not a valid day of the month (Less than 1 or greater than 31)
+	 **/
+	public function setPlantAreaStartDay($newPlantAreaStartDay) {
+		//check if $newPlantAreaStartDate is an int, if not throw TypeError
+		if(!is_int($newPlantAreaStartDay)){
+			throw(new \TypeError("Plant Area Start Du is not an Integer"));
+		}elseif($newPlantAreaStartDay < 1 || $newPlantAreaStartDay > 31){
+			throw (new \RangeException("This plantAreaStartDay is not a valid day of the month"));
 		}
+
+		$this->plantAreaStartDay = $newPlantAreaStartDay;
+	}
+
+	/**
+	 * mutator method for plant area end day
+	 *
+	 * @param int $newPlantAreaEndDay plant area end day
+	 * @throws \TypeError if $newPlantAreaEndDay is not an integer
+	 * @throws \OutOfBoundsException if $newPlantAreaEndDay is not a valid day of the month (Less than 1 or greater than 31)
+	 **/
+	public function setPlantAreaEndDay($newPlantAreaEndDay) {
+		//check if $newPlantAreaStartDate is an int, if not throw TypeError
+		if(!is_int($newPlantAreaEndDay)){
+			throw(new \TypeError("Plant Area End Day is not an Integer"));
+		}elseif($newPlantAreaEndDay < 1 || $newPlantAreaEndDay > 3){
+			throw (new \RangeException("This plantAreaEndDay is not a valid day of the month"));
+		}
+
+		$this->plantAreaEndDay = $newPlantAreaEndDay;
+	}
+
+
+	/**
+	 * mutator method for plant area end day
+	 *
+	 * @param int $newPlantAreaEndMonth plant area end day
+	 * @throws \TypeError if $newPlantAreaEndMonth is not an integer
+	 * @throws \OutOfBoundsException if $newPlantAreaEndMonth is not a valid day of the month (Less than 1 or greater than 31)
+	 **/
+	public function setPlantAreaEndMonth($newPlantAreaEndMonth) {
+		//check if $newPlantAreaStartDate is an int, if not throw TypeError
+		if(!is_int($newPlantAreaEndMonth)){
+			throw(new \TypeError("Plant Area End Month is not an Integer"));
+		}elseif($newPlantAreaEndMonth < 1 || $newPlantAreaEndMonth > 3){
+			throw (new \RangeException("This plantAreaEndMonth is not a valid day of the month"));
+		}
+
+		$this->plantAreaEndMonth = $newPlantAreaEndMonth;
 	}
 
 	/**
@@ -189,8 +248,18 @@ class PlantArea implements \JsonSerializable {
 	 * $return \DateTime value of plant area end date
 	 **/
 	public
-	function getPlantAreaEndDate() {
-		return ($this->plantAreaEndDate);
+	function getPlantAreaEndDay() {
+		return ($this->plantAreaEndDay);
+	}
+
+	/**
+	 * accessor method for plant area end date
+	 *
+	 * $return \DateTime value of plant area end date
+	 **/
+	public
+	function getPlantAreaEndMonth() {
+		return ($this->plantAreaEndMonth);
 	}
 
 
