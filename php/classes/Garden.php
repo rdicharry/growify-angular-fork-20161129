@@ -180,6 +180,13 @@ class Garden implements \JsonSerializable {
 		$statement->execute($parameters);
 	}
 
+	/**
+	 * Check whether a garden entry has already been added to mySQL.
+	 * @param \PDO $pdo a PDO connection object
+	 * @param int $gardenProfileId the profile ID of the user who owns this garden
+	 * @param int $gardenPlantId the plant id for the garden entry that we are interested in
+	 * @return bool true if the garden entry already exists, false if it doesn't.
+	 */
 	public static function existsGardenEntry(\PDO $pdo, int $gardenProfileId, int $gardenPlantId){
 
 		// create query template
