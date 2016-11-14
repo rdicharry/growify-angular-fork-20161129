@@ -29,7 +29,7 @@ class Profile implements \JsonSerializable {
 	private $profileEmail;
 	/**
 	 * zip code for this profile
-	 * @var ZipCode $profileZipCode
+	 * @var string $profileZipCode
 	 **/
 	private $profileZipCode;
 	/**
@@ -53,7 +53,7 @@ class Profile implements \JsonSerializable {
 	 * @param $newProfileId
 	 * @param $newProfileUsername
 	 * @param $newProfileEmail
-	 * @param $newProfileZipCode ZipCode object linking a zip code and a planting area.
+	 * @param $newProfileZipCode string linking a zip code and a planting area.
 	 * @param $newProfileHash
 	 * @param $newProfileSalt
 	 * @param $newProfileActivation
@@ -161,7 +161,7 @@ class Profile implements \JsonSerializable {
 
 	/**
 	 * accessor method for zip code
-	 * @return ZipCode
+	 * @return string
 	 **/
 	public function getProfileZipCode() {
 		return $this->profileZipCode;
@@ -169,10 +169,10 @@ class Profile implements \JsonSerializable {
 
 	/**
 	 * mutator method for profile zip code
-	 * @param ZipCode $newProfileZipCode
+	 * @param string $newProfileZipCode
 	 **/
 	public function setProfileZipCode($newProfileZipCode) {
-		$this->zipCode = new ZipCode($newProfileZipCode->getZipCodeCode(), $newProfileZipCode->getZipCodeArea());
+		$this->profileZipCode = $newProfileZipCode;
 	}
 
 	/**
@@ -268,7 +268,7 @@ class Profile implements \JsonSerializable {
 		$statement = $pdo->prepare($query);
 
 		// bind member variables to placeholders in the template
-		$parameters = ["profileUsername" => $this->profileUsername, "profileEmail" => $this->profileEmail, "profileZipCode" => $this->profileZipCode->getZipCodeCode(), "profileHash" => $this->profileHash, "profileSalt" => $this->profileSalt, "profileActivation" => $this->profileActivation];
+		$parameters = ["profileUsername" => $this->profileUsername, "profileEmail" => $this->profileEmail, "profileZipCode" => $this->profileZipCode, "profileHash" => $this->profileHash, "profileSalt" => $this->profileSalt, "profileActivation" => $this->profileActivation];
 		$statement->execute($parameters);
 
 		$this->profileId = intval($pdo->lastInsertId());
@@ -299,7 +299,7 @@ class Profile implements \JsonSerializable {
 	 **/
 	public function update(\PDO $pdo) {
 		//create query template
-		$query = "UPDATE profile SET profileUsername =: profileUsername, profileEmail =: profileEmail, profileZipCode =: profileZipCode, profileHash =: profileHash, profileSalt =: profileSalt, profileActivation =: profileActivation";
+		$query = "UPDATE profile SET profileUsername = :profileUsername, profileEmail = :profileEmail, profileZipCode = :profileZipCode, profileHash = :profileHash, profileSalt = :profileSalt, profileActivation = :profileActivation";
 		$statement = $pdo->prepare($query);
 
 		// bind member variables to placeholders
@@ -333,7 +333,7 @@ class Profile implements \JsonSerializable {
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
-				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
+				$profile = new Profile($row["profileId"], $row["profileUserName"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
 			}
 		} catch(\Exception $exception) {
 			// if the row couldn't be converted, rethrow it
@@ -369,7 +369,7 @@ class Profile implements \JsonSerializable {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
+				$profile = new Profile($row["profileId"], $row["profileUserName"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
 				$profiles[$profiles->key()] = $profile;
 				$profiles->next();
 			} catch(\Exception $exception) {
@@ -383,16 +383,13 @@ class Profile implements \JsonSerializable {
 	/**
 	 * Get all profiles associated with the specified profile zipcode.
 	 * @param \PDO $pdo a PDO connection object
-	 * @param int $profileZipcode zipcode of profiles being searched for
+	 * @param string $profileZipcode  of profiles being searched for
 	 * @return \SplFixedArray SplFixedArray of Profiles found
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when parameters are not the correct data type.
 	 **/
-	public static function getProfileByZipcode(\PDO $pdo, int $profileZipcode) {
-		$profileZipcode = filter_var($profileZipcode, FILTER_VALIDATE_INT);
-		if($profileZipcode <= 0) {
-			throw(new \RangeException("profile zipcode must be positive."));
-		}
+	public static function getProfileByZipcode(\PDO $pdo, string $profileZipcode) {
+
 		// create query template
 		$query = "SELECT profileId, profileUsername, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation FROM profile WHERE profileZipcode = :profileZipcode";
 		$statement = $pdo->prepare($query);
@@ -406,7 +403,7 @@ class Profile implements \JsonSerializable {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
+				$profile = new Profile($row["profileId"], $row["profileUserName"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
 				$profiles[$profiles->key()] = $profile;
 				$profiles->next();
 			} catch(\Exception $exception) {
@@ -423,13 +420,15 @@ class Profile implements \JsonSerializable {
 	 * @param string $profileActivation zipcode of profiles being searched for
 	 * @return Profile profile the profile that was found
 	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \InvalidArgumentException when activation is empty or has invalid contents
 	 * @throws \TypeError when parameters are not the correct data type.
 	 **/
-	public static function getProfileByActivation(\PDO $pdo, string $profileActivation) {
+	public static function getProfileByProfileActivation(\PDO $pdo, string $profileActivation) {
 		$profileActivation = trim($profileActivation);
-		$profileActivation = filter_var($profileActivation, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($profileActivation)) {
-			throw (new \InvalidArgumentException("profile username is invalid"));
+		$profileActivation = strtolower($profileActivation);
+
+		if(ctype_xdigit($profileActivation) === false) {
+			throw (new \InvalidArgumentException("activation is empty or has invalid contents"));
 		}
 		// create query template
 		$query = "SELECT profileId, profileUsername, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation FROM profile WHERE profileActivation LIKE :profileActivation";
@@ -445,7 +444,7 @@ class Profile implements \JsonSerializable {
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
-				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
+				$profile = new Profile($row["profileId"], $row["profileUserName"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
 			}
 		} catch(\Exception $exception) {
 			// if the row couldn't be converted, rethrow it
@@ -472,7 +471,7 @@ class Profile implements \JsonSerializable {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
+				$profile = new Profile($row["profileId"], $row["profileUserName"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
 				$profiles[$profiles->key()] = $profile;
 				$profiles->next();
 			} catch(\Exception $exception) {
