@@ -9,7 +9,7 @@ namespace Edu\Cnm\Growify;
 require_once('autoload.php');
 
 
-class ZipCode{
+class ZipCode implements \JsonSerializable{
 	/**
 	 * @var String the Zip Code corresponding to a USDA Grow Zone (zipCodeArea)
 	 **/
@@ -29,7 +29,7 @@ class ZipCode{
 	 * @throws \InvalidArgumentException if a string passed through zipCodeCode or zipCodeArea has failed to validate (not legitimate grow area or zip code)
 	 * @throws \Exception if an otherwise unspecified error was thrown.
 	 **/
-	public function __construct($zipCodeCode, $zipCodeArea) {
+	public function __construct($zipCodeCode, $zipCodeArea){
 		try {
 			$this->setZipCodeCode($zipCodeCode);
 			$this->setZipCodeArea($zipCodeArea);
@@ -222,6 +222,16 @@ class ZipCode{
 			}
 		}
 		return ($zipCodes);
+	}
+
+	/**
+	 * formats the state variables for JSON serialization
+	 *
+	 * @return array resulting state variables to serialize
+	 **/
+	public function jsonSerialize() {
+		$fields = get_object_vars($this);
+		return($fields);
 	}
 
 
