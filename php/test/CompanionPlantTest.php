@@ -23,12 +23,12 @@ class CompanionPlantTest extends GrowifyTest {
 
 	/**
 	 * Foreign key relationship to Plant
-	 * @var Plant companionPlant1
+	 * @var Plant companionPlant1Id
 	 **/
 	protected $companionPlant1 = null;
 	/**
 	 * Foreign key relationship to Plant
-	 * @var Plant companionPlant2
+	 * @var Plant companionPlant2Id
 	 **/
 	protected $companionPlant2 = null;
 
@@ -39,11 +39,11 @@ class CompanionPlantTest extends GrowifyTest {
 		//run default setUp() method
 		parent::setUp();
 
-		// create and insert a Plant1Id
+		// create and insert a Plant1
 		$this->companionPlant1 = new Plant(null, "wildcarrot", "orangelike", "what bunnies eat", "longish", 7, 200, 55, 38, 89, "c");
 		$this->companionPlant1->insert($this->getPDO());
 
-		// create and insert a Plant2Id
+		// create and insert a Plant2
 		$this->companionPlant2 = new Plant(null, "minitomato", "smallest", "round and shiny", "fruity", 8, 10, 44, 45, 71, "t");
 		$this->companionPlant2->insert($this->getPDO());
 	}
@@ -60,7 +60,7 @@ class CompanionPlantTest extends GrowifyTest {
 
 		// create a new companion plant entry and insert it into mySQL
 		$companionPlant = new companionPlant($this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId());
-		$companionPlant->insert($this->getPDO(null));
+		$companionPlant->insert($this->getPDO());
 
 		//grab date from mySQL and enforce fields match
 		// e.g. all returned entries have the expected ID as either 1st or 2nd field.
