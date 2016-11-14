@@ -67,11 +67,13 @@ class GardenTest extends GrowifyTest {
 		$salt = bin2hex(random_bytes(32));
 		$hash = hash_pbkdf2("sha512", $password, $salt, 262144);
 
+		$activation = bin2hex(random_bytes(8));
+
 		// create and insert a Profile to own the test Garden
-		$this->profile = new Profile(null, "lorax1971", "the.lorax@oncelerco.com", $this->zipCode, $salt, $hash, 1);
+		$this->profile = new Profile(null, "lorax1971", "the.lorax@oncelerco.com", $this->zipCode, $hash ,$salt, $activation);
 		$this->profile->insert($this->getPDO());
 
-		// create and insert a Plant to go into the garden
+		// create and insert a Plant to go into the gardent
 		$this->plant1 = new Plant(null, "truffula tree", "green", "Primary food source for Brown Barbaloots", "tree", 5, 100, 5, 32, 99, "d" );
 		$this->plant1->insert($this->getPDO());
 

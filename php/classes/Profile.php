@@ -191,11 +191,12 @@ class Profile implements \JsonSerializable {
 		$newProfileHash = trim($newProfileHash);
 		$newProfileHash = strtolower($newProfileHash);
 
+
 		if(ctype_xdigit($newProfileHash) === false) {
 			throw (new \InvalidArgumentException("hash is empty or has invalid contents"));
 		}
 		if(strlen($newProfileHash) !== 128) {
-			throw(new \RangeException("hash is incorrect length"));
+			throw(new \RangeException("hash length ". strlen($newProfileHash) .", is incorrect length"));
 		}
 		$this->profileHash = $newProfileHash;
 	}
@@ -245,7 +246,7 @@ class Profile implements \JsonSerializable {
 			throw (new \InvalidArgumentException("activation is empty or has invalid contents"));
 		}
 		if(strlen($newProfileActivation) !== 16) {
-			throw(new \RangeException("activation is incorrect length"));
+			throw(new \RangeException("activation length ". strlen($newProfileActivation)." is incorrect length"));
 		}
 		$this->profileActivation = $newProfileActivation;
 	}
