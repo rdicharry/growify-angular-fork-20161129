@@ -114,6 +114,27 @@ class CompanionPlant implements \JsonSerializable{
 	}
 
 	/**
+	 * check whether a mySQL entry for a given pair of plant ids already exists in the table.
+	 * @param \PDO $pdo a PDO connection object
+	 * @param int $companionPlant1Id a valid plant id
+	 * @param int $companionPlant2Id a valid plant id
+	 * @return bool true if the entry already exists in mySQL, false if it doesn't
+	 **/
+	public static function existsCompanionPlantEntry(\PDO $pdo, int $companionPlant1Id, int $companionPlant2Id) {
+		// first check if this will create a duplicate DB entry
+		$query = "SELECT companionPlant1Id, companionPlant2Id FROM companionPlant WHERE (companionPlant1Id = :companionPlant1Id AND companionPlant2ID) OR (companionPlant1Id - :companionPlant2Id AND companionPlant2Id = :companionPlant1Id)";
+		$parameters = ["companionPlant1Id"=>$companionPlant1Id, "companionPlant2Id"=>$companionPlant2Id];
+		$statement = $pdo->prepare($query);
+		$statement->execute($parameters);
+
+		if($statement->rowCount() > 0) {
+			return true;
+		}
+		return false;
+	}
+
+
+	/**
 	 * insert a new companion plant relationship ito mySQL
 	 * @param \PDO $pdo PDO connection object
 	 * @throws \PDOException if mySQL related errors occur
@@ -121,14 +142,19 @@ class CompanionPlant implements \JsonSerializable{
 	 **/
 	public function insert(\PDO $pdo) {
 
-		//create query template
-		$query = "INSERT INTO companionPlant(companionPlant1Id, companionPlant2Id) VALUES (:companionPlant1Id, :companionPlant2Id)";
-		$statement = $pdo->prepare($query);
+		if(CompanionPlant::existsCompanionPlantEntry($pdo, $this->companionPlant1Id, $this->companionPlant2Id)===false) {
+			// bind the member variables to the place holders in the template
+			$parameters = ["companionPlant1Id" => $this->companionPlant1Id, "companionPlant2Id" => $this->companionPlant2Id];
 
-		//bind the member variables to the place holders in the template
-		$parameters = ["companionPlant1Id"=>$this->companionPlant1Id, "companionPlant2Id"=>$this->companionPlant2Id];
-		$statement->execute($parameters);
+			//create query template
+			$insertQuery = "INSERT INTO companionPlant(companionPlant1Id, companionPlant2Id) VALUES (:companionPlant1Id, :companionPlant2Id)";
+			$insertStatement = $pdo->prepare($insertQuery);
 
+			//bind the member variables to the place holders in the template
+			$insertStatement->execute($parameters);
+		} else {
+			throw(new \PDOException("cannot insert duplicate companion plant entry"));
+		}
 	}
 
 	/**
@@ -139,23 +165,36 @@ class CompanionPlant implements \JsonSerializable{
 	 * @throws \TypeError i $pdo is not a PDO connection object
 	 **/
 	public function delete(\PDO $pdo) {
+		//bind parameters
+		$parameters = ["companionPlant1Id" => $this->companionPlant1Id, "companionPlant2Id" => $this->companionPlant2Id];
+
+		// first check if the entry exists, if not, throw an exception
+		//$query = "SELECT * FROM companionPlant WHERE (companionPlant1Id = :companionPlant1Id) AND (companionPlant2Id = :companionPlant2Id)";
+		//$statement = $pdo->prepare($query);
+		//$statement->execute($parameters);
+
+		if(CompanionPlant::existsCompanionPlantEntry($pdo, $this->companionPlant1Id, $this->companionPlant2Id) === false) {
+			throw new \PDOException("cannot delete an entry that does not exist");
+		}
+
+
 		// create query template
-		// note: need to check both cases: companionPlant1Id, companionPlant2Id, and companionPlant2Id, companion1Id since order does not matter
-		$query ="DELETE FROM companionPlant WHERE (companionPlant1Id = :companionPlant1Id) AND (companionPlant2Id = :companionPlant2Id)";
+		$query = "DELETE FROM companionPlant WHERE (companionPlant1Id = :companionPlant1Id) AND (companionPlant2Id = :companionPlant2Id)";
 		$statement = $pdo->prepare($query);
 
 		//bind parameters
-		$parameters = ["companionPlant1Id" =>$this->companionPlant1Id, "companionPlant2Id"=>$this->companionPlant2Id];
+		$parameters = ["companionPlant1Id" => $this->companionPlant1Id, "companionPlant2Id" => $this->companionPlant2Id];
 		$statement->execute($parameters);
 
-		$query = "DELETE FROM companionPlant WHERE (companionPlant1Id = :companionPlant2Id) AND (companionPlant2Id = :companionPlant1Id)";
+		$query = "DELETE FROM companionPlant WHERE (companionPlant1Id = :companionPlant2Id) AND (companionPlant2Id =:companionPlant1Id)";
 		$statement = $pdo->prepare($query);
 
-		//bind parameters
-		$parameters = ["companionPlant1Id" =>$this->companionPlant1Id, "companionPlant2Id"=>$this->companionPlant2Id];
+		// bind parameters
+		$parameters = ["companionPlant1Id" => $this->companionPlant1Id, "companionPlant2Id" => $this->companionPlant2Id];
 		$statement->execute($parameters);
-
 	}
+
+
 
 /**
  * get a single companion plant entry by specifying BOTH plant ids.
@@ -208,25 +247,25 @@ class CompanionPlant implements \JsonSerializable{
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throw \TypeError if $pdo is not a PDO conneciton object.
 	 **/
-	public static function getCompanionPlantsByPlantId(\PDO $pdo, int $plantId){
+	public static function getAllCompanionPlantsByPlantId(\PDO $pdo, int $plantId){
 		if($plantId <= 0){
 		throw(new \RangeException("companion plant id must be positive"));
 }
 		// create query template
-		$query = "SELECT companionPlant1Id, CompanionPlant2Id FROM companionPlant WHERE ((companionPlantiId = :plantId) OR (companionPlant2Id=:plantId))";
+		$query = "SELECT companionPlant1Id, CompanionPlant2Id FROM companionPlant WHERE ((companionPlant1Id = :plantId) OR (companionPlant2Id=:plantId))";
 		$statement = $pdo->prepare($query);
 
 		//bind parameters
-$parameters = ["plantId"=>$plantId];
-		$statement ->execute($parameters);
+		$parameters = ["plantId"=>$plantId];
+		$statement->execute($parameters);
 
 		// build an array of CompanionPlants
 		$companionPlants = new \SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 
-		while(($row = $statement->fetch()) !==false){
+		while(($row=$statement->fetch()) !==false){
 		try{
-			$companionPlant = new companionPlant ($row["companionPlant1Id"], $row["companionPlant2Id"]);
+			$companionPlant = new CompanionPlant ($row["companionPlant1Id"], $row["companionPlant2Id"]);
 			$companionPlants[$companionPlants->key()]=$companionPlant;
 			$companionPlants->next();
 		}catch(\Exception $exception){
