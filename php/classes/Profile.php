@@ -172,8 +172,7 @@ class Profile implements \JsonSerializable {
 	 * @param ZipCode $newProfileZipCode
 	 **/
 	public function setProfileZipCode($newProfileZipCode) {
-
-		$this->profileZipCode = $newProfileZipCode;
+		$this->zipCode = new ZipCode($newProfileZipCode->getZipCodeCode(), $newProfileZipCode->getZipCodeArea());
 	}
 
 	/**
