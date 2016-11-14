@@ -91,6 +91,7 @@ class ProfileTest extends GrowifyTest {
 
 	/**
 	 * test inserting a Profile that already exists
+	 * @expectedException \PDOException
 	 **/
 	public function testInsertInvalidProfile() {
 		// create a Profile with a non null profile id and watch it fail
