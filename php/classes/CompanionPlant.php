@@ -46,9 +46,7 @@ class CompanionPlant implements \JsonSerializable{
 		try {
 			$this->setCompanionPlant1Id($newCompanionPlant1Id);
 			$this->setCompanionPlant2Id($newCompanionPlant2Id);
-		} catch(\InvalidArgumentException $invalidArgument) {
-			// rethrow the execption to the caller
-			throw(new \InvalidArgumentException($invalidArgument->getMessage(), $invalidArgument));
+
 		} catch(\RangeException $range) {
 			//rethrow the exception to the caller
 			throw(new \RangeException($range->getMessage(), 0, $range));
@@ -122,7 +120,7 @@ class CompanionPlant implements \JsonSerializable{
 	 **/
 	public static function existsCompanionPlantEntry(\PDO $pdo, int $companionPlant1Id, int $companionPlant2Id) {
 		// first check if this will create a duplicate DB entry
-		$query = "SELECT companionPlant1Id, companionPlant2Id FROM companionPlant WHERE (companionPlant1Id = :companionPlant1Id AND companionPlant2ID) OR (companionPlant1Id - :companionPlant2Id AND companionPlant2Id = :companionPlant1Id)";
+		$query = "SELECT companionPlant1Id, companionPlant2Id FROM companionPlant WHERE (companionPlant1Id = :companionPlant1Id AND companionPlant2Id) OR (companionPlant1Id = :companionPlant2Id AND companionPlant2Id = :companionPlant1Id)";
 		$parameters = ["companionPlant1Id"=>$companionPlant1Id, "companionPlant2Id"=>$companionPlant2Id];
 		$statement = $pdo->prepare($query);
 		$statement->execute($parameters);
