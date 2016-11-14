@@ -90,7 +90,7 @@ class ZipCode implements \JsonSerializable{
 	/**
 	 * Returns the value of a $zipCodeArea associated with this Zipcode instance
 	 *
-	 * @return int $zipCodeArea The area associated with a Zipcode Object
+	 * @return string $zipCodeArea The area associated with a Zipcode Object
 	 */
 	public function getZipCodeArea() {
 		return $this->zipCodeArea;
