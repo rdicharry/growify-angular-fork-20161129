@@ -66,6 +66,14 @@ class ProfileTest extends GrowifyTest {
 		//creates activation for testing
 		$this->VALID_ACTIVATION = bin2hex(random_bytes(8));
 	}
+
+	public final function  tearDown() {
+		parent::tearDown();
+
+		$this->zipcode->delete($this->getPDO());
+
+		$this->profile->delete($this->getPDO());
+	}
 	/**
 	 * test inserting a valid Profile and verify that the actual mySQL data matches
 	 **/
