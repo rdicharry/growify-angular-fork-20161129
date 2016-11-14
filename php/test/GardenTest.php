@@ -23,26 +23,26 @@ class GardenTest extends GrowifyTest {
 
 	/**
 	 * The profile that created the garden; this for the foreign key relation.
-	 * @var Profile profile
+	 * @var \Profile profile
 	 */
 	protected $profile = null;
 
 	/**
 	 * The plant that is in the garden entry -
 	 * this is to obtain a foreign key relation.
-	 * @var Plant plant2;
+	 * @var \Plant plant2;
 	 */
 	protected $plant1 = null;
 
 	/**
 	 * For tests that need a second valid plant.
-	 * @var Plant plant2;
+	 * @var \Plant plant2;
 	 */
 	protected $plant2 = null;
 
 	/*
 	 * the date this plant was planted in this garden
-	 * @var DateTime $validPlantingDate
+	 * @var \DateTime $validPlantingDate
 	 */
 	protected $validPlantingDate;
 
@@ -52,6 +52,9 @@ class GardenTest extends GrowifyTest {
 	 */
 	protected $validPlantingDate2;
 
+	/**
+	 * @var \ZipCode zipCode
+	 */
 	protected $zipCode;
 
 	public final function setUp(){
@@ -71,7 +74,7 @@ class GardenTest extends GrowifyTest {
 
 
 		// create and insert a Profile to own the test Garden
-		$this->profile = new Profile(null, "lorax1971", "the.lorax@oncelerco.com", $this->zipCode, $hash ,$salt, $activation);
+		$this->profile = new Profile(null, "lorax1971", "the.lorax@oncelerco.com", $this->zipCode->getZipCodeCode(), $hash ,$salt, $activation);
 		$this->profile->insert($this->getPDO());
 
 		// create and insert a Plant to go into the gardent
@@ -80,11 +83,12 @@ class GardenTest extends GrowifyTest {
 
 		// create and insert a second Plant to go into the garden
 		// for tests that need two plants
-		$this->plant2 = new Plant(null, "Audrey", "custom", "companion", "vine", "carnivorous", 1000, 100, 10, 32, 99, "h");
+		$this->plant2 = new Plant(null, "Audrey", "custom", "companion", "vine",  1000, 100, 10, 32, 99, "h");
 		$this->plant2->insert($this->getPDO());
 
-		$validPlantingDate = new DateTime("2016-03-04");
-		$validPlantingDate2 = new DateTime("2016-02-16");
+		$this->validPlantingDate = new DateTime("2016-03-04");
+
+		$this->validPlantingDate2 = new DateTime("2016-02-16");
 
 	}
 
@@ -103,7 +107,7 @@ class GardenTest extends GrowifyTest {
 		$results = Garden::getGardensByGardenProfileId($this->getPDO(), $this->profile->getProfileId());
 		$this->assertEquals($numRows+1, $this->getConnection()->getRowCount("garden"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\Growify\\Garden");
+		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\Growify\\Garden", $results);
 
 		// get the result from the array and validate it
 		$pdoGarden = $results[0];
@@ -199,10 +203,10 @@ class GardenTest extends GrowifyTest {
 	 */
 	public function testDeleteValidGarden(){
 		// save number of rows to compare later
-		$numRows = $this->getConnection->getRowCount("garden");
+		$numRows = $this->getConnection()->getRowCount("garden");
 
 		// create a new Garden and insert it into the DB
-		$garden = new Garden($this->profile->getProfileUserId(), $this->validPlantingDate, $this->plant1->getPlantId());
+		$garden = new Garden($this->profile->getProfileId(), $this->validPlantingDate, $this->plant1->getPlantId());
 		$garden->insert($this->getPDO());
 
 		// delete Garden from mySQL

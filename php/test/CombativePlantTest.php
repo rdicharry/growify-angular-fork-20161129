@@ -60,7 +60,7 @@ class CombativePlantTest extends GrowifyTest {
 	 * Note: we should be able to get combative plant entries regardless of whether the plantId is found in the first or second entry.
 	 * Note: this should return an array of values (possible more than one entry for a given combative plant.
 	 *
-	 * @expectedException PDOException
+	 *
 	 */
 	public function testInsertValidCombativePlantEntry(){
 		// store number of rows for later
@@ -90,7 +90,7 @@ class CombativePlantTest extends GrowifyTest {
 	 * do we get expected behavior when attempting to create a duplicate entry
 	 * in other words, we expect NOT to be able to insert an identical entry
 	 *
-	 * @expectedException \PDOException
+	 *
 	 */
 	public function testInsertDuplicateValidCombativePlantEntry(){
 
@@ -98,6 +98,9 @@ class CombativePlantTest extends GrowifyTest {
 		$testCombativePlant1->insert($this->getPDO());
 		$testCombativePlant2 = new CombativePlant($this->combativePlant1->getPlantId(), $this->combativePlant2->getPlantId());
 		$testCombativePlant2->insert($this->getPDO());
+
+		$results = CombativePlant::getCombativePlantsByPlantId($this->getPDO(), $this->combativePlant1->getPlantId());
+		$this->assertCount(1, $results);
 	}
 
 	/**
@@ -180,7 +183,7 @@ class CombativePlantTest extends GrowifyTest {
 
 	/**
 	 * test deleting a Combative plant entry that does not exist
-	 * @expectedException PDOException
+	 * @expectedException \PDOException
 	 */
 	public function testDeleteInvalidCombativePlantEntry(){
 		// create a CombativePlant and try to delete without actually inserting it
@@ -225,8 +228,9 @@ class CombativePlantTest extends GrowifyTest {
 	public function testGetInvalidCombativePlantEntryByPlantId(){
 
 		// get a combativeplant entry by searching for a plant that does not exist
-		$combativePlant = CombativePlant::getCombativePlantsByPlantId($this->getPDO(),  $this->combativePlant2->getPlantId());
-		$this->assertEquals(null, $combativePlant);
+		$combativePlants = CombativePlant::getCombativePlantsByPlantId($this->getPDO(),  $this->combativePlant2->getPlantId());
+
+		$this->assertCount(0, $combativePlants);
 
 	}
 

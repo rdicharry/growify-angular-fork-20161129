@@ -196,7 +196,7 @@ class Garden implements \JsonSerializable {
 		}
 
 		// create query template
-		$query = "SELECT gardenDatePlanted, gardenPlantId FROM garden WHERE gardenProfileId= :gardenProfileId";
+		$query = "SELECT gardenDatePlanted, gardenPlantId FROM garden WHERE gardenProfileId = :gardenProfileId";
 		$statement = $pdo->prepare($query);
 
 		// bind the garden profile id to place holder in the template
@@ -208,7 +208,8 @@ class Garden implements \JsonSerializable {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false){
 			try{
-				$garden = new Garden($row["gardenProfileId"], $row["gardenDatePlanted"], $row["gardenPlantId"] );
+				$dateTime = new \DateTime($row['gardenDatePlanted']);
+				$garden = new Garden($gardenProfileId, $dateTime, $row["gardenPlantId"] );
 				$gardens[$gardens->key()] = $garden;
 				$gardens->next();
 			} catch(\Exception $exception){
@@ -237,7 +238,8 @@ class Garden implements \JsonSerializable {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row=$statement->fetch())!== false){
 			try {
-				$garden = new Garden($row["gardenProfileId"], $row["gardenDatePlanted"], $row["gardenPlantId"]);
+				$dateTime = new \DateTime($row['gardenDatePlanted']);
+				$garden = new Garden($row["gardenProfileId"], $dateTime , $row["gardenPlantId"]);
 				$gardens[$gardens->key()] = $garden;
 				$gardens->next();
 			} catch(\Exception $exception){
