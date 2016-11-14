@@ -161,7 +161,7 @@ class Profile implements \JsonSerializable {
 
 	/**
 	 * accessor method for zip code
-	 * @return string
+	 * @return ZipCode
 	 **/
 	public function getProfileZipCode() {
 		return $this->profileZipCode;
@@ -169,9 +169,7 @@ class Profile implements \JsonSerializable {
 
 	/**
 	 * mutator method for profile zip code
-	 * @param string $newProfileZipCode
-	 * @throws \InvalidArgumentException if $newProfileZipCode is empty or is not a string
-	 * @throws \RangeException if $newProfileZipCode is too long
+	 * @param ZipCode $newProfileZipCode
 	 **/
 	public function setProfileZipCode($newProfileZipCode) {
 
@@ -192,12 +190,13 @@ class Profile implements \JsonSerializable {
 	 **/
 	public function setProfileHash($newProfileHash) {
 		$newProfileHash = trim($newProfileHash);
-		$newProfileHash = filter_var($newProfileHash, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newProfileHash)) {
+		$newProfileHash = strtolower($newProfileHash);
+
+		if(ctype_xdigit($newProfileHash) === false) {
 			throw (new \InvalidArgumentException("hash is empty or has invalid contents"));
 		}
-		if(strlen($newProfileHash) > 128) {
-			throw(new \RangeException("hash is too large"));
+		if(strlen($newProfileHash) !== 128) {
+			throw(new \RangeException("hash is incorrect length"));
 		}
 		$this->profileHash = $newProfileHash;
 	}
@@ -241,12 +240,13 @@ class Profile implements \JsonSerializable {
 	 **/
 	public function setProfileActivation($newProfileActivation) {
 		$newProfileActivation = trim($newProfileActivation);
-		$newProfileActivation = filter_var($newProfileActivation, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newProfileActivation)) {
+		$newProfileActivation = strtolower($newProfileActivation);
+
+		if(ctype_xdigit($newProfileActivation) === false) {
 			throw (new \InvalidArgumentException("activation is empty or has invalid contents"));
 		}
-		if(strlen($newProfileActivation) > 16) {
-			throw(new \RangeException("activation is too large"));
+		if(strlen($newProfileActivation) !== 16) {
+			throw(new \RangeException("activation is incorrect length"));
 		}
 		$this->profileActivation = $newProfileActivation;
 	}
