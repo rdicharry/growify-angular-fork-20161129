@@ -43,6 +43,11 @@ class ProfileTest extends GrowifyTest {
 	 **/
 	protected $VALID_ACTIVATION;
 	/**
+	 * invalid activation for testing
+	 * @var string $INVALID_ACTIVATION
+	 **/
+	protected $INVALID_ACTIVATION;
+	/**
 	 * The profile being tested
 	 * @var Profile profile
 	 **/
@@ -65,6 +70,8 @@ class ProfileTest extends GrowifyTest {
 		$this->VALID_HASH = hash_pbkdf2("sha512", "this is a password", $this->VALID_SALT, 262144);
 		//creates activation for testing
 		$this->VALID_ACTIVATION = bin2hex(random_bytes(8));
+		//creates invalid activation for testing
+		$this->INVALID_ACTIVATION = strrev($this->VALID_ACTIVATION);
 	}
 
 	/**
@@ -231,14 +238,9 @@ class ProfileTest extends GrowifyTest {
 	 * test grabbing a Profile by an activation code that does not exist
 	 **/
 	public function testGetInvalidProfileByProfileActivation() {
-		// grab a profile by searching for type that does not exist
-		try{
-		$profile = Profile::getProfileByProfileActivation($this->getPDO(), bin2hex(random_bytes(8)));
-		$this->assertEquals($profile->getProfileActivation(), $this->VALID_ACTIVATION);
-		} catch(\Exception $exception) {
-			// if the row couldn't be converted, rethrow it
-			throw(new \PDOException($exception->getMessage(), 0, $exception));
-		}
+		// grab a profile by searching for activation code that does not exist
+		$profile = Profile::getProfileByProfileActivation($this->getPDO(), $this->INVALID_ACTIVATION);
+		$this->assertNull($profile);
 	}
 	/**
 	 * test grabbing all Profiles
