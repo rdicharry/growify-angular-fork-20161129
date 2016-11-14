@@ -122,7 +122,7 @@ class GardenTest extends GrowifyTest {
 	 * e.g. all three fields duplicates of existing DB data
 	 * @expectedException PDOException
 	 */
-	public function testInsertInvalidGarden(){
+	public function testInsertDuplicateGarden(){
 		$garden1 = new Garden($this->profile->getProfileId(), $this->validPlantingDate, $this->plant1->getPlantId());
 		$garden1->insert($this->getPDO());
 
@@ -137,14 +137,14 @@ class GardenTest extends GrowifyTest {
 	public function testExistsGardenEntry(){
 
 		// if the garden entry hasn't been entered, expect false
-		$this->assertFalse(Garden::existsGardenEntry($this->getPDO(), $this->profile->getProfileId(), $this->plant1->getPlantId()));
+		$this->assertFalse(Garden::existsGardenEntry($this->getPDO(), $this->profile->getProfileId(), $this->validPlantingDate, $this->plant1->getPlantId()));
 
 
 		$garden = new Garden($this->profile->getProfileId(), $this->validPlantingDate, $this->plant1->getPlantId());
 		$garden->insert($this->getPDO());
 
 		// insert the garden, then expect true
-		$this->assertTrue(Garden::existsGardenEntry($this->getPDO(), $this->profile->getProfileId(), $this->plant1->getPlantId()));
+		$this->assertTrue(Garden::existsGardenEntry($this->getPDO(), $this->profile->getProfileId(), $this->validPlantingDate, $this->plant1->getPlantId()));
 
 	}
 
@@ -153,6 +153,7 @@ class GardenTest extends GrowifyTest {
 	/**
 	 * insert a garden entry, edit it and update in DB.
 	 */
+	/*
 	public function testUpdateValidGardenPlantId(){
 		// store numRows to compare later
 		$numRows = $this->getConnection()->getRowCount("garden");
@@ -175,7 +176,8 @@ class GardenTest extends GrowifyTest {
 		$this->assertEquals($pdoGarden->getGardenProfileId(),$this->profile->getProfileId());
 		$this->assertEquals($pdoGarden->getGardenPlantId(), $this->plant2->getPlantId());
 		$this->assertEquals($pdoGarden->getGardenDatePlanted(), $this->validPlantingDate);
-	}
+	}*/ /*TODO remove dead code from ALL files */
+	/* do not need to update plant Id, should only update date planted */
 
 	/**
 	 *
@@ -190,7 +192,7 @@ class GardenTest extends GrowifyTest {
 
 		// edit garden & update in mySQL
 		$garden->setGardenDatePlanted($this->validPlantingDate2);
-		$garden->update($this->getPDO());
+		$garden->updateGardenDatePlanted($this->getPDO());
 
 		// grab the data from mySQL and enforce fields match expected
 		$pdoGardens = Garden::getGardensByGardenProfileId($this->getPDO(), $garden->getGardenProfileId());
@@ -207,12 +209,14 @@ class GardenTest extends GrowifyTest {
 
 	/**
 	 * attempt to update a garden that does not exist
-	 * @expectedException PDOException
+	 * @expectedException \PDOException
 	 */
 	public function testUpdateInvalidGarden(){
+		// make a garden entry , do not insert it
+		$garden = new Garden($this->profile->getProfileId(), $this->validPlantingDate, $this->plant1->getPlantId());
+		// check if we can update an entry that doesnt exist.
 
-		$garden = new Garden($this->profile->getProfileUserId(), $this->validPlantingDate, $this->plant1->getPlantId());
-		$garden->update($this->getPDO());
+		$garden->updateGardenDatePlanted($this->getPDO());
 
 	}
 
@@ -232,8 +236,8 @@ class GardenTest extends GrowifyTest {
 		$garden->delete($this->getPDO());
 
 		// grab data from mySQL and enforce Garden does not exist
-		$pdoGarden = Garden::getGardensByGardenProfileId($this->getPDO(), $garden->getGardenProfileId());
-		$this->assertNull($pdoGarden);
+		$pdoGardens = Garden::getGardensByGardenProfileId($this->getPDO(), $garden->getGardenProfileId());
+		$this->assertCount(0, $pdoGardens);
 		$this->assertEquals($this->getConnection()->getRowCount("garden"), $numRows);
 	}
 
@@ -243,7 +247,7 @@ class GardenTest extends GrowifyTest {
 	 */
 	public function testDeleteInvalidGarden() {
 		// create a Garden and try to delete it without actually inserting it
-		$garden = new Garden($this->profile->getProfileUserId(), $this->validPlantingDate, $this->plant1->getPlantId());
+		$garden = new Garden($this->profile->getProfileId(), $this->validPlantingDate, $this->plant1->getPlantId());
 		$garden->delete($this->getPDO());
 	}
 
