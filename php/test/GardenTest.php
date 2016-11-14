@@ -130,6 +130,24 @@ class GardenTest extends GrowifyTest {
 		$garden2->insert($this->getPDO());
 	}
 
+	/**
+	 * Test if a garden entry exists.  Test if the method returns false when the garden is not there
+	 * and if it returns true after the garden entry has been added.
+	 */
+	public function testExistsGardenEntry(){
+
+		// if the garden entry hasn't been entered, expect false
+		$this->assertFalse(Garden::existsGardenEntry($this->getPDO(), $this->profile->getProfileId(), $this->plant1->getPlantId()));
+
+
+		$garden = new Garden($this->profile->getProfileId(), $this->validPlantingDate, $this->plant1->getPlantId());
+		$garden->insert($this->getPDO());
+
+		// insert the garden, then expect true
+		$this->assertTrue(Garden::existsGardenEntry($this->getPDO(), $this->profile->getProfileId(), $this->plant1->getPlantId()));
+
+	}
+
 
 
 	/**

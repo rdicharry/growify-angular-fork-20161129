@@ -59,9 +59,9 @@ class PlantArea implements \JsonSerializable {
 
 	/**
 	 * area number for this PlantArea
-	 * @var string $plantAreaAreaNum
+	 * @var string $plantAreaNumber
 	 */
-	private $plantAreaAreaNum;
+	private $plantAreaNumber;
 	/**
 	 * change: a variable used to represent the maximum number a SMALLINT can be. A SMALLINT is what will hold the plantId in the database
  	 * Maximum unsigned smallint value that the plantId field cannot exceed
@@ -85,21 +85,23 @@ class PlantArea implements \JsonSerializable {
 	 * @param int $newPlantAreaId
 	 * @param string $newPlantAreaStartDate
 	 * @param string $newPlantAreaEndDate
-	 * @param string $newPlantAreaAreaNum
+	 * @param string $newplantAreaNumber
 	 * @throws Exception if some other exception occurs
 	 * @throws TypeError if data types violate type hints
 	 * @internal param int|null $plantAreaId id for this PlantId
 	 * @internal param null|string $plantAreaPlantId plant id for this plant area
 	 * @internal param string $plantAreaStartDate start date for this PlantArea
 	 * @internal param string $plantAreaEndDate end date for this PlantArea
-	 * @internal param int|null $plantAreaAreaNum the area number of this PlantArea
+	 * @internal param int|null $plantAreaNumber the area number of this PlantArea
 	 */
-	public function __construct($newPlantAreaPlantId, $newPlantAreaStartDay, $newPlantAreaEndDay, $newPlantAreaEndDay, $newPlantAreaEndMonth, $newPlantAreaAreaNum) {
+	public function __construct($newPlantAreaPlantId, $newPlantAreaStartDay, $newPlantAreaEndDay, $newPlantAreaStartMonth, $newPlantAreaEndMonth, $newplantAreaNumber) {
 		try {
 			$this->setPlantAreaPlantId($newPlantAreaPlantId);
-			$this->setPlantAreaStartDate($newPlantAreaStartDate);
-			$this->setPlantAreaEndDate($newPlantAreaEndDate);
-			$this->setPlantAreaAreaNum($newPlantAreaAreaNum);
+			$this->setPlantAreaStartDay($newPlantAreaStartDay);
+			$this->setPlantAreaEndDay($newPlantAreaEndDay);
+			$this->setPlantAreaStartMonth($newPlantAreaStartMonth);
+			$this->setPlantAreaEndMonth($newPlantAreaEndMonth);
+			$this->setplantAreaNumber($newplantAreaNumber);
 		} catch(\InvalidArgumentException $invalidArgument) {
 			// rethrow the execption to the caller
 			throw(new \InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
@@ -223,6 +225,23 @@ class PlantArea implements \JsonSerializable {
 		$this->plantAreaEndDay = $newPlantAreaEndDay;
 	}
 
+	/**
+	 * mutator method for plant area end day
+	 *
+	 * @param int $newPlantAreaStartMonth plant area end day
+	 * @throws \TypeError if $newPlantAreaStartMonth is not an integer
+	 * @throws \OutOfBoundsException if $newPlantAreaEndMonth is not a valid day of the month (Less than 1 or greater than 31)
+	 **/
+	public function setPlantAreaStartMonth($newPlantAreaStartMonth) {
+		//check if $newPlantAreaStartMonth is an int, if not throw TypeError
+		if(!is_int($newPlantAreaStartMonth)){
+			throw(new \TypeError("Plant Area End Month is not an Integer"));
+		}elseif($newPlantAreaStartMonth < 1 || $newPlantAreaStartMonth > 31){
+			throw (new \RangeException("This plantAreaEndMonth is not a valid day of the month"));
+		}
+
+		$this->plantAreaStartMonth = $newPlantAreaStartMonth;
+	}
 
 	/**
 	 * mutator method for plant area end day
@@ -232,10 +251,10 @@ class PlantArea implements \JsonSerializable {
 	 * @throws \OutOfBoundsException if $newPlantAreaEndMonth is not a valid day of the month (Less than 1 or greater than 31)
 	 **/
 	public function setPlantAreaEndMonth($newPlantAreaEndMonth) {
-		//check if $newPlantAreaStartDate is an int, if not throw TypeError
+		//check if $newPlantAreaEndMonth is an int, if not throw TypeError
 		if(!is_int($newPlantAreaEndMonth)){
 			throw(new \TypeError("Plant Area End Month is not an Integer"));
-		}elseif($newPlantAreaEndMonth < 1 || $newPlantAreaEndMonth > 3){
+		}elseif($newPlantAreaEndMonth < 1 || $newPlantAreaEndMonth > 31){
 			throw (new \RangeException("This plantAreaEndMonth is not a valid day of the month"));
 		}
 
@@ -289,33 +308,33 @@ class PlantArea implements \JsonSerializable {
 	 *
 	 * @return int value of plant area profile id
 	 **/
-	public function getPlantAreaAreaNum() {
-		return ($this->plantAreaAreaNum);
+	public function getplantAreaNumber() {
+		return ($this->plantAreaNumber);
 	}
 
 	/**
 	 * @mutator method for plant area area number
 	 *
-	 * @param string $newPlantAreaAreaNum the new area that will be passed into this PlantArea's plantAreaAreaNum field
-	 * @throws TypeError if $newPlantAreaAreaNum is not a string
-	 * @throws \OutOfBoundsException if $newPlantAreaAreaNum is not 2 characters long
-	 * @throws \InvalidArgumentException if $newPlantAreaAreaNum does not begin with a number ranging from 4-8
-	 * @throws \InvalidArgumentException if $newPlantAreaAreaNum does not end with a character that is either 'a' or 'b'
+	 * @param string $newplantAreaNumber the new area that will be passed into this PlantArea's plantAreaNumber field
+	 * @throws TypeError if $newplantAreaNumber is not a string
+	 * @throws \OutOfBoundsException if $newplantAreaNumber is not 2 characters long
+	 * @throws \InvalidArgumentException if $newplantAreaNumber does not begin with a number ranging from 4-8
+	 * @throws \InvalidArgumentException if $newplantAreaNumber does not end with a character that is either 'a' or 'b'
 	 */
-	public function setPlantAreaAreaNum($newPlantAreaAreaNum) {
-		//change: makes sure the $newPlantAreaAreaNum is a string
-		if(!is_string($newPlantAreaAreaNum)){
+	public function setplantAreaNumber($newplantAreaNumber) {
+		//change: makes sure the $newplantAreaNumber is a string
+		if(!is_string($newplantAreaNumber)){
 			throw (new \TypeError("This Plant Area Growing Zone is not a string"));
-		} elseif(strlen($newPlantAreaAreaNum)!= 2){ //change: makes sure the string contains two characters
+		} elseif(strlen($newplantAreaNumber)!= 2){ //change: makes sure the string contains two characters
 			throw (new \OutOfBoundsException("This is not a valid New Mexico Plant Area Growing Zone"));
-		} elseif((int)(substr($newPlantAreaAreaNum,0,0)) < 8 || (int)(substr($newPlantAreaAreaNum,0,0)) > 4){
-			//change: Validates the $newPlantAreaAreaNum, making sure that it is an integer and between 4-8 in value (The 4 NM growing zones)
+		} elseif((int)(substr($newplantAreaNumber,0,0)) < 8 || (int)(substr($newplantAreaNumber,0,0)) > 4){
+			//change: Validates the $newplantAreaNumber, making sure that it is an integer and between 4-8 in value (The 4 NM growing zones)
 			throw (new \InvalidArgumentException("This Plant Area Area Value is not a valid New Mexco growing zone"));
-		} elseif(substr($newPlantAreaAreaNum,1) != 'a' && substr($newPlantAreaAreaNum,1) != 'b'){
+		} elseif(substr($newplantAreaNumber,1) != 'a' && substr($newplantAreaNumber,1) != 'b'){
 			throw (new \InvalidArgumentException("This Plant Area Area Value is not a valid New Mexco Growing Zone")); //change: makes sure the last character of the Plant Area Area Number is either a or b (a valid new mexico growing zone consists of a number from 4-8 followed by a character that is either a or b
 		}
 		// convert and store the plant area area number
-		$this->plantAreaAreaNum = $newPlantAreaAreaNum;
+		$this->plantAreaNumber = $newplantAreaNumber;
 	}
 
 	/**
@@ -330,9 +349,9 @@ class PlantArea implements \JsonSerializable {
 			throw(new \PDOException("This plant area cannot be updated because it doesnt exist."));
 		}
 		try {
-			$query = "UPDATE plantArea SET plantAreaPlantId = :plantAreaPlantId, plantAreaStartDate = :plantAreaStartDate, plantAreaEndDate = :plantAreaEndDate, plantAreaAreaNum = :plantAreaAreaNum WHERE plantAreaId = :plantAreaId";
+			$query = "UPDATE plantArea SET plantAreaPlantId = :plantAreaPlantId, plantAreaStartDay = :plantAreaStartDay, plantAreaEndDay = :plantAreaEndDay, plantAreaStartMonth = :plantAreaStartMonth, plantAreaEndMonth = :plantAreaEndMonth, plantAreaNumber = :plantAreaNumber WHERE plantAreaId = :plantAreaId";
 			$statement = $pdo->prepare($query);
-			$parameters = ["plantAreaPlantId" => $this->plantAreaPlantId, "plantAreaStartDate" => $this->plantAreaStartDate, "plantAreaEndDate" => $this->plantAreaEndDate, "plantAreaAreaNum" => $this->plantAreaAreaNum];
+			$parameters = ["plantAreaPlantId" => $this->plantAreaPlantId, "plantAreaStartDay" => $this->plantAreaStartDay, "plantAreaEndDay" => $this->plantAreaEndDay, "plantAreaStartMonth"=> $this->plantAreaStartMonth, "plantAreaEndMonth"=> $this->plantAreaEndMonth  , "plantAreaNumber" => $this->plantAreaNumber];
 			$statement->execute($parameters);
 		}catch(\PDOException $pdoException){
 			throw(new \PDOException($pdoException->getMessage(),0,$pdoException));
@@ -342,7 +361,7 @@ class PlantArea implements \JsonSerializable {
 	/**
 	 * Inserts a row into the plantArea table that represents this plantArea's instance
 	 *
-	 * @param PDO $pdo the php data object used to delete a row from the the plantArea table
+	 * @param \PDO $pdo the php data object used to delete a row from the the plantArea table
 	 * @throws \PDOException if an error regarding the php data object occured
 	 */
 	public function insert(\PDO $pdo){
@@ -351,10 +370,10 @@ class PlantArea implements \JsonSerializable {
 		}
 
 		try {
-			$query = "INSERT INTO plantArea(plantAreaPlantId, plantAreaStartDate, plantAreaEndDate, plantAreaAreaNum) VALUES(:plantAreaPlantId, :plantAreaStartDate, plantAreaEndDate, :plantAreaAreaNum)";
+			$query = "INSERT INTO plantArea(plantAreaPlantId, plantAreaStartDay, plantAreaEndDay, plantAreaStartMonth, plantAreaEndMonth, plantAreaNumber) VALUES(:plantAreaPlantId, :plantAreaStartDay, :plantAreaEndDay, :plantAreaStartMonth, :plantAreaEndMonth, :plantAreaNumber)";
 			$statement = $pdo->prepare($query);
 
-			$parameters = ["plantAreaPlantId" => $this->plantAreaPlantId, "plantAreaStartDate" => $this->plantAreaStartDate, "plantAreaEndDate"=> $this->plantAreaEndDate, "plantAreaAreaNum" => $this->plantAreaAreaNum];
+			$parameters = ["plantAreaPlantId" => $this->plantAreaPlantId, "plantAreaStartDay" => $this->plantAreaStartDay, "plantAreaEndDay"=> $this->plantAreaEndDay, "plantAreaStartMonth"=> $this->plantAreaStartMonth, "playAreaEndMonth" => $this->plantAreaEndMonth, "plantAreaNumber" => $this->plantAreaNumber];
 			$statement->execute($parameters);
 			//set plantAreaId to integer value given by mySql
 			$this->setPlantAreaId(intval($pdo->lastInsertId()));
@@ -366,8 +385,8 @@ class PlantArea implements \JsonSerializable {
 	/**
 	 * Deletes the row representing this Plant Area instance from the Plant Area table
 	 *
-	 * @param PDO $pdo the php data object used to delete a row from the the Plant Area table
-	 * @throws PDOException if an error regarding the php data object occured
+	 * @param \PDO $pdo the php data object used to delete a row from the the Plant Area table
+	 * @throws \PDOException if an error regarding the php data object occured
 	 */
 	public function delete(\PDO $pdo) {
 		if(is_null($this->plantAreaId)){
@@ -392,14 +411,14 @@ class PlantArea implements \JsonSerializable {
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
 	public static function getAllPlantAreas(\PDO $pdo) {
-		$query = "SELECT plantAreaId, plantAreaPlantId, plantAreaStartDate, plantAreaEndDate, plantAreaAreaNum FROM plantArea";
+		$query = "SELECT plantAreaId, plantAreaPlantId, plantAreaStartDay, plantAreaEndDay, plantAreaStartMonth, plantAreaEndMonth, plantAreaNumber FROM plantArea";
 		$statement = $pdo->prepare($query);
 		$statement->execute();
 		$plantAreas = new \SplFixedArray($statement->rowCount());
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$plantArea = new plantArea($row["plantAreaId"], $row["plantAreaPlantId"], $row["plantAreaStartDate"], $row["plantAreaEndDate"], $row["plantAreaAreaNum"]);
+				$plantArea = new plantArea($row["plantAreaId"], $row["plantAreaPlantId"], $row["plantAreaStartDay"], $row["plantAreaEndDay"], $row["plantAreaStartMonth"], $row["plantAreaEndMonth"], $row["[plantAreaEndMonth"], $row["plantAreaNumber"]);
 				$plantAreas[$plantAreas->key()] = $plantArea;
 				$plantAreas->next();
 			} catch(\Exception $exception) {
@@ -423,7 +442,7 @@ class PlantArea implements \JsonSerializable {
 			throw(new \TypeError("plantAreaId is not valid"));
 		}
 
-		$query = "SELECT plantAreaId, plantAreaPlantId, plantAreaStartDate, plantAreaEndDate, plantAreaAreaNum FROM plantArea WHERE plantAreaId = :plantAreaId";
+		$query = "SELECT plantAreaId, plantAreaPlantId, plantAreaStartDay, plantAreaEndDay, plantAreaStartMonth, plantAreaEndMonth ,plantAreaNumber FROM plantArea WHERE plantAreaId = :plantAreaId";
 		$statement = $pdo->prepare($query);
 		$parameters = ["plantAreaId" => $plantAreaId];
 		$statement->execute($parameters);
@@ -433,7 +452,7 @@ class PlantArea implements \JsonSerializable {
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
-				$plantArea = new PlantArea($row["plantAreaId"], $row["plantAreaPlantId"], $row["plantAreaStartDate"], $row["plantAreaEndDate"], $row["plantAreaAreaNum"]);
+				$plantArea = new PlantArea($row["plantAreaId"], $row["plantAreaPlantId"], $row["plantAreaStartDay"], $row["plantAreaEndDay"], $row["plantAreaStartMonth"], $row["plantAreaEndMonth"], $row["plantAreaNumber"]);
 			}
 		} catch(\Exception $exception) {
 			// if the row couldn't be converted, rethrow it
@@ -452,7 +471,7 @@ class PlantArea implements \JsonSerializable {
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
 	public static function getAllPlantAreasbyPlantAreaPlantId(\PDO $pdo, $plantAreaPlantId) {
-		$query = "SELECT plantAreaId, plantAreaPlantId, plantAreaStartDate, plantAreaEndDate, plantAreaAreaNum FROM plantArea WHERE plantAreaPlantId = :plantAreaPlantId";
+		$query = "SELECT plantAreaId, plantAreaPlantId, plantAreaStartDay, plantAreaEndDay, plantAreaStartMonth, plantAreaEndDay, plantAreaNumber FROM plantArea WHERE plantAreaPlantId = :plantAreaPlantId";
 		$statement = $pdo->prepare($query);
 		$parameters = ["plantAreaPlantId"=> $plantAreaPlantId];
 		$statement->execute($parameters);
@@ -460,7 +479,7 @@ class PlantArea implements \JsonSerializable {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$plantArea = new plantArea($row["plantAreaId"], $row["plantAreaPlantId"], $row["plantAreaStartDate"], $row["plantAreaEndDate"], $row["plantAreaAreaNum"]);
+				$plantArea = new plantArea($row["plantAreaId"], $row["plantAreaPlantId"], $row["plantAreaStartDay"], $row["plantAreaEndDay"], $row["plantAreaStartMonth"], $row["plantAreaNumber"]);
 				$plantAreas[$plantAreas->key()] = $plantArea;
 				$plantAreas->next();
 			} catch(\Exception $exception) {
