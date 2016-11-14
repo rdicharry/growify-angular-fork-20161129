@@ -44,13 +44,13 @@ abstract class GrowifyTest extends \PHPUnit_Extensions_Database_TestCase {
 
 		// add all the tables for the project here
 		// THESE TABLES *MUST* BE LISTED IN THE SAME ORDER THEY WERE CREATED!!!!
+		$dataset->addTable("zipCode");
 		$dataset->addTable("plant");
 		$dataset->addTable("profile");
 		$dataset->addTable("companionPlant");
 		$dataset->addTable("combativePlant");
 		$dataset->addTable("garden");
 		$dataset->addTable("plantArea");
-		$dataset->addTable("zipCode");
 
 		return($dataset);
 	}
