@@ -63,7 +63,7 @@ class Profile implements \JsonSerializable {
 	public function __construct($newProfileId, $newProfileUsername, $newProfileEmail, $newProfileZipCode, $newProfileHash, $newProfileSalt, $newProfileActivation) {
 		try {
 			$this->setProfileId($newProfileId);
-			$this->setProfileUserName($newProfileUsername);
+			$this->setProfileUsername($newProfileUsername);
 			$this->setProfileEmail($newProfileEmail);
 			$this->setProfileZipCode($newProfileZipCode);
 			$this->setProfileHash($newProfileHash);
@@ -111,7 +111,7 @@ class Profile implements \JsonSerializable {
 	 * accessor method for user name
 	 * @return string
 	 **/
-	public function getProfileUserName() {
+	public function getProfileUsername() {
 		return $this->profileUsername;
 	}
 
@@ -121,7 +121,7 @@ class Profile implements \JsonSerializable {
 	 * @throws \InvalidArgumentException if $newProfileUsername is empty or is not a string
 	 * @throws \RangeException if $newProfileUsername is too long
 	 **/
-	public function setProfileUserName($newProfileUsername) {
+	public function setProfileUsername($newProfileUsername) {
 		$newProfileUsername = trim($newProfileUsername);
 		$newProfileUsername = filter_var($newProfileUsername, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($newProfileUsername)) {
@@ -333,7 +333,7 @@ class Profile implements \JsonSerializable {
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
-				$profile = new Profile($row["profileId"], $row["profileUserName"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
+				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
 			}
 		} catch(\Exception $exception) {
 			// if the row couldn't be converted, rethrow it
@@ -369,7 +369,7 @@ class Profile implements \JsonSerializable {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$profile = new Profile($row["profileId"], $row["profileUserName"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
+				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
 				$profiles[$profiles->key()] = $profile;
 				$profiles->next();
 			} catch(\Exception $exception) {
@@ -403,7 +403,7 @@ class Profile implements \JsonSerializable {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$profile = new Profile($row["profileId"], $row["profileUserName"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
+				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
 				$profiles[$profiles->key()] = $profile;
 				$profiles->next();
 			} catch(\Exception $exception) {
@@ -444,7 +444,7 @@ class Profile implements \JsonSerializable {
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
-				$profile = new Profile($row["profileId"], $row["profileUserName"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
+				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
 			}
 		} catch(\Exception $exception) {
 			// if the row couldn't be converted, rethrow it
@@ -462,7 +462,7 @@ class Profile implements \JsonSerializable {
 	 **/
 	public static function getAllProfiles(\PDO $pdo) {
 		//create query template
-		$query = "SELECT profileId, profileUserName, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation FROM profile";
+		$query = "SELECT profileId, profileUsername, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation FROM profile";
 		$statement = $pdo->prepare($query);
 		$statement->execute();
 
@@ -471,7 +471,7 @@ class Profile implements \JsonSerializable {
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false) {
 			try {
-				$profile = new Profile($row["profileId"], $row["profileUserName"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
+				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
 				$profiles[$profiles->key()] = $profile;
 				$profiles->next();
 			} catch(\Exception $exception) {
@@ -487,7 +487,7 @@ class Profile implements \JsonSerializable {
 	 * @return array an array with serialized state variables
 	 **/
 	public function jsonSerialize() {
-		array_push($fields, $this->getProfileId(),$this->getProfileUserName(),$this->getProfileEmail(),$this->getProfileZipCode(),$this->getProfileActivation());
+		array_push($fields, $this->getProfileId(),$this->getProfileUsername(),$this->getProfileEmail(),$this->getProfileZipCode(),$this->getProfileActivation());
 		return ($fields);
 	}
 }
