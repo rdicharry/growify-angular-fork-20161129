@@ -197,5 +197,4 @@ class CompanionPlantTest extends GrowifyTest {
 		$this->assertEquals($pdoCompanionPlant->getCompanionPlant1Id(),$this->companionPlant1->getPlantId());
 		$this->assertEquals($pdoCompanionPlant->getCompanionPlant2Id(),$this->companionPlant2->getPlantId());
 	}
-
 }
