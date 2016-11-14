@@ -24,7 +24,7 @@ class PlantTest extends GrowifyTest {
 	 * 2nd name of the plant, for testing edits and updates
 	 * @var string $VALID_PLANTNAME2
 	 **/
-	protected $VALID_PLANTNAME2 = " Pakkun Flower";
+	protected $VALID_PLANTNAME2 = "Pakkun Flower";
 	/**
 	 * variety of the plant
 	 * @var string $VALID_PLANTVARIETY
@@ -136,7 +136,7 @@ class PlantTest extends GrowifyTest {
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoPlant = Plant::getPlantByPlantId($this->getPDO(), $plant->getPlantId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("plant"));
-		$this->assertEquals($pdoPlant->getPlantName(), $this->VALID_PLANTNAME);
+		$this->assertEquals($pdoPlant->getPlantName(), $this->VALID_PLANTNAME2);
 		$this->assertEquals($pdoPlant->getPlantVariety(), $this->VALID_PLANTVARIETY);
 		$this->assertEquals($pdoPlant->getPlantDescription(), $this->VALID_PLANTDESCRIPTION);
 		$this->assertEquals($pdoPlant->getPlantType(), $this->VALID_PLANTTYPE);
