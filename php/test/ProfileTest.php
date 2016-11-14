@@ -57,7 +57,7 @@ class ProfileTest extends GrowifyTest {
 		//run the default setUp() method
 		parent::setUp();
 		//create new zip code for testing
-		$this->zipcode = new ZipCode(87102, "7a");
+		$this->zipcode = new ZipCode("87102", "7a");
 		$this->zipcode->insert($this->getPDO());
 		//creates password salt for testing
 		$this->VALID_SALT = bin2hex(random_bytes(32));
