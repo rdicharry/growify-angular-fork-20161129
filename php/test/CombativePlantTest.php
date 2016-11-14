@@ -251,7 +251,5 @@ class CombativePlantTest extends GrowifyTest {
 		$pdoCombativePlant = $results[0];
 		$this->assertEquals($pdoCombativePlant->getCombativePlant1Id(), $this->combativePlant1->getPlantId());
 		$this->assertEquals($pdoCombativePlant->getCombativePlant2Id(), $this->combativePlant2->getPlantId());
-
-		
 	}
 }

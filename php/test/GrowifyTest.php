@@ -103,4 +103,5 @@ abstract class GrowifyTest extends \PHPUnit_Extensions_Database_TestCase {
 	public final function getPDO() {
 		return($this->getConnection()->getConnection());
 	}
+
 }
