@@ -29,7 +29,7 @@ class Profile implements \JsonSerializable {
 	private $profileEmail;
 	/**
 	 * zip code for this profile
-	 * @var ZipCode $profileZipCode
+	 * @var string $profileZipCode
 	 **/
 	private $profileZipCode;
 	/**
@@ -53,7 +53,7 @@ class Profile implements \JsonSerializable {
 	 * @param $newProfileId
 	 * @param $newProfileUsername
 	 * @param $newProfileEmail
-	 * @param $newProfileZipCode ZipCode object linking a zip code and a planting area.
+	 * @param $newProfileZipCode string linking a zip code and a planting area.
 	 * @param $newProfileHash
 	 * @param $newProfileSalt
 	 * @param $newProfileActivation
@@ -63,7 +63,7 @@ class Profile implements \JsonSerializable {
 	public function __construct($newProfileId, $newProfileUsername, $newProfileEmail, $newProfileZipCode, $newProfileHash, $newProfileSalt, $newProfileActivation) {
 		try {
 			$this->setProfileId($newProfileId);
-			$this->setProfileUserName($newProfileUsername);
+			$this->setProfileUsername($newProfileUsername);
 			$this->setProfileEmail($newProfileEmail);
 			$this->setProfileZipCode($newProfileZipCode);
 			$this->setProfileHash($newProfileHash);
@@ -111,7 +111,7 @@ class Profile implements \JsonSerializable {
 	 * accessor method for user name
 	 * @return string
 	 **/
-	public function getProfileUserName() {
+	public function getProfileUsername() {
 		return $this->profileUsername;
 	}
 
@@ -121,7 +121,7 @@ class Profile implements \JsonSerializable {
 	 * @throws \InvalidArgumentException if $newProfileUsername is empty or is not a string
 	 * @throws \RangeException if $newProfileUsername is too long
 	 **/
-	public function setProfileUserName($newProfileUsername) {
+	public function setProfileUsername($newProfileUsername) {
 		$newProfileUsername = trim($newProfileUsername);
 		$newProfileUsername = filter_var($newProfileUsername, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($newProfileUsername)) {
@@ -161,7 +161,7 @@ class Profile implements \JsonSerializable {
 
 	/**
 	 * accessor method for zip code
-	 * @return ZipCode
+	 * @return string
 	 **/
 	public function getProfileZipCode() {
 		return $this->profileZipCode;
@@ -169,10 +169,10 @@ class Profile implements \JsonSerializable {
 
 	/**
 	 * mutator method for profile zip code
-	 * @param ZipCode $newProfileZipCode
+	 * @param string $newProfileZipCode
 	 **/
 	public function setProfileZipCode($newProfileZipCode) {
-		$this->zipCode = new ZipCode($newProfileZipCode->getZipCodeCode(), $newProfileZipCode->getZipCodeArea());
+		$this->profileZipCode = $newProfileZipCode;
 	}
 
 	/**
@@ -191,11 +191,12 @@ class Profile implements \JsonSerializable {
 		$newProfileHash = trim($newProfileHash);
 		$newProfileHash = strtolower($newProfileHash);
 
+
 		if(ctype_xdigit($newProfileHash) === false) {
 			throw (new \InvalidArgumentException("hash is empty or has invalid contents"));
 		}
 		if(strlen($newProfileHash) !== 128) {
-			throw(new \RangeException("hash is incorrect length"));
+			throw(new \RangeException("hash length ". strlen($newProfileHash) .", is incorrect length"));
 		}
 		$this->profileHash = $newProfileHash;
 	}
@@ -245,7 +246,7 @@ class Profile implements \JsonSerializable {
 			throw (new \InvalidArgumentException("activation is empty or has invalid contents"));
 		}
 		if(strlen($newProfileActivation) !== 16) {
-			throw(new \RangeException("activation is incorrect length"));
+			throw(new \RangeException("activation length ". strlen($newProfileActivation)." is incorrect length"));
 		}
 		$this->profileActivation = $newProfileActivation;
 	}
@@ -267,7 +268,7 @@ class Profile implements \JsonSerializable {
 		$statement = $pdo->prepare($query);
 
 		// bind member variables to placeholders in the template
-		$parameters = ["profileUsername" => $this->profileUsername, "profileEmail" => $this->profileEmail, "profileZipCode" => $this->profileZipCode->getZipCodeCode(), "profileHash" => $this->profileHash, "profileSalt" => $this->profileSalt, "profileActivation" => $this->profileActivation];
+		$parameters = ["profileUsername" => $this->profileUsername, "profileEmail" => $this->profileEmail, "profileZipCode" => $this->profileZipCode, "profileHash" => $this->profileHash, "profileSalt" => $this->profileSalt, "profileActivation" => $this->profileActivation];
 		$statement->execute($parameters);
 
 		$this->profileId = intval($pdo->lastInsertId());
@@ -298,7 +299,7 @@ class Profile implements \JsonSerializable {
 	 **/
 	public function update(\PDO $pdo) {
 		//create query template
-		$query = "UPDATE profile SET profileUsername =: profileUsername, profileEmail =: profileEmail, profileZipCode =: profileZipCode, profileHash =: profileHash, profileSalt =: profileSalt, profileActivation =: profileActivation";
+		$query = "UPDATE profile SET profileUsername = :profileUsername, profileEmail = :profileEmail, profileZipCode = :profileZipCode, profileHash = :profileHash, profileSalt = :profileSalt, profileActivation = :profileActivation";
 		$statement = $pdo->prepare($query);
 
 		// bind member variables to placeholders
@@ -382,16 +383,13 @@ class Profile implements \JsonSerializable {
 	/**
 	 * Get all profiles associated with the specified profile zipcode.
 	 * @param \PDO $pdo a PDO connection object
-	 * @param int $profileZipcode zipcode of profiles being searched for
+	 * @param string $profileZipcode  of profiles being searched for
 	 * @return \SplFixedArray SplFixedArray of Profiles found
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when parameters are not the correct data type.
 	 **/
-	public static function getProfileByZipcode(\PDO $pdo, int $profileZipcode) {
-		$profileZipcode = filter_var($profileZipcode, FILTER_VALIDATE_INT);
-		if($profileZipcode <= 0) {
-			throw(new \RangeException("profile zipcode must be positive."));
-		}
+	public static function getProfileByZipcode(\PDO $pdo, string $profileZipcode) {
+
 		// create query template
 		$query = "SELECT profileId, profileUsername, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation FROM profile WHERE profileZipcode = :profileZipcode";
 		$statement = $pdo->prepare($query);
@@ -422,13 +420,15 @@ class Profile implements \JsonSerializable {
 	 * @param string $profileActivation zipcode of profiles being searched for
 	 * @return Profile profile the profile that was found
 	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \InvalidArgumentException when activation is empty or has invalid contents
 	 * @throws \TypeError when parameters are not the correct data type.
 	 **/
-	public static function getProfileByActivation(\PDO $pdo, string $profileActivation) {
+	public static function getProfileByProfileActivation(\PDO $pdo, string $profileActivation) {
 		$profileActivation = trim($profileActivation);
-		$profileActivation = filter_var($profileActivation, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($profileActivation)) {
-			throw (new \InvalidArgumentException("profile username is invalid"));
+		$profileActivation = strtolower($profileActivation);
+
+		if(ctype_xdigit($profileActivation) === false) {
+			throw (new \InvalidArgumentException("activation is empty or has invalid contents"));
 		}
 		// create query template
 		$query = "SELECT profileId, profileUsername, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation FROM profile WHERE profileActivation LIKE :profileActivation";
@@ -462,7 +462,7 @@ class Profile implements \JsonSerializable {
 	 **/
 	public static function getAllProfiles(\PDO $pdo) {
 		//create query template
-		$query = "SELECT profileId, profileUserName, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation FROM profile";
+		$query = "SELECT profileId, profileUsername, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation FROM profile";
 		$statement = $pdo->prepare($query);
 		$statement->execute();
 
@@ -487,7 +487,7 @@ class Profile implements \JsonSerializable {
 	 * @return array an array with serialized state variables
 	 **/
 	public function jsonSerialize() {
-		array_push($fields, $this->getProfileId(),$this->getProfileUserName(),$this->getProfileEmail(),$this->getProfileZipCode(),$this->getProfileActivation());
+		array_push($fields, $this->getProfileId(),$this->getProfileUsername(),$this->getProfileEmail(),$this->getProfileZipCode(),$this->getProfileActivation());
 		return ($fields);
 	}
 }

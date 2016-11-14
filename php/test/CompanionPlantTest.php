@@ -68,7 +68,7 @@ class CompanionPlantTest extends GrowifyTest {
 		//first check array parameters
 		$this->assertEquals($numRows+1, $this->getConnection()->getRowCount ("companionPlant"));
 		$this->assertCount(1, $results);
-		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\Growify\\CompanionPlant");
+		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\Growify\\CompanionPlant", $results);
 
 		//get result from the array and validate it
 		$pdoCompanionPlant = $results[0]; //only one entry in this test
@@ -83,12 +83,12 @@ class CompanionPlantTest extends GrowifyTest {
 	 *
 	 * @expectedException \PDOException
 	 **/
-	public function testInsertDuplicateValidCompanionPlantEntry() {
+	public function testInsertDuplicateValidCompanionPlantEntry (){
 
-		$testCompanionPlant1Id = new CompanionPlant ($this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId());
-		$testCompanionPlant1Id->insert($this->getPDO());
-		$testCompanionPlant2Id = new CompanionPlant ($this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId());
-		$testCompanionPlant2Id->insert($this->getPDO());
+		$testCompanionPlant1 = new CompanionPlant ($this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId());
+		$testCompanionPlant1->insert($this->getPDO());
+		$testCompanionPlant2 = new CompanionPlant ($this->companionPlant1->getPlantId(), $this->companionPlant2->getPlantId());
+		$testCompanionPlant2->insert($this->getPDO());
 	}
 
 
@@ -197,5 +197,4 @@ class CompanionPlantTest extends GrowifyTest {
 		$this->assertEquals($pdoCompanionPlant->getCompanionPlant1Id(),$this->companionPlant1->getPlantId());
 		$this->assertEquals($pdoCompanionPlant->getCompanionPlant2Id(),$this->companionPlant2->getPlantId());
 	}
-
 }

@@ -2,12 +2,12 @@
 	<testsuites>
 		<testsuite name="Growify Unit Tests">
 			<!--<file>PlantTest.php</file>
-			<file>CompanionPlantTest.php</file>
+			<file>CompanionPlantTest.php</file>-->
 			<file>CombativePlantTest.php</file>
 			<file>GardenTest.php</file>
-			<file>PlantAreaTest.php</file>-->
+			<!--<file>PlantAreaTest.php</file>
 			<file>ProfileTest.php</file>
-			<file>ZipCodeTest.php</file>
+			<file>ZipCodeTest.php</file>-->
 		</testsuite>
 	</testsuites>
 	<filter>
