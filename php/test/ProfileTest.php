@@ -30,25 +30,25 @@ class ProfileTest extends GrowifyTest {
 	 * just gibberish letters
 	 * @var string $VALID_HASH
 	 **/
-	protected $VALID_HASH = "d7fsdyfsdf79sfds7f7sd87f87dsf7sdf87s87df78ds87f87s87df87dss78f7d8s878f8d7sf7sduihjhjdkskhfkjhsdjkfjkshjfhjdsjkfhkjshdfkjhdsjkfhs";
+	protected $VALID_HASH;
 	/**
 	 * salt for this profile
 	 * just gibberish letters
 	 * @var string $VALID_SALT
 	 **/
-	protected $VALID_SALT = "hshfkksauck994544jumfjf8of8jiuxu7uc7ic8biv9vvob8bocjjf778rusudli" ;
+	protected $VALID_SALT;
 	/**
 	 * activation for this profile
 	 * @var string $VALID_ACTIVATION
 	 **/
-	protected $VALID_ACTIVATION = "jk87289d8fs8d9g9";
+	protected $VALID_ACTIVATION;
 	/**
 	 * The profile being tested
 	 * @var Profile profile
 	 **/
 	protected $profile = null;
 	/**
-	 * zipcode for testing
+	 * zipcode object for testing
 	 * @var ZipCode zipcode
 	 **/
 	protected $zipcode = null;
@@ -59,6 +59,12 @@ class ProfileTest extends GrowifyTest {
 		//create new zip code for testing
 		$this->zipcode = new ZipCode(87102, "7a");
 		$this->zipcode->insert($this->getPDO());
+		//creates password salt for testing
+		$this->VALID_SALT = bin2hex(random_bytes(32));
+		//creates password hash for testing
+		$this->VALID_HASH = hash_pbkdf2("sha512", "this is a password", $this->VALID_SALT, 262144);
+		//creates activation for testing
+		$this->VALID_ACTIVATION = bin2hex(random_bytes(8));
 	}
 	/**
 	 * test inserting a valid Profile and verify that the actual mySQL data matches
@@ -68,7 +74,7 @@ class ProfileTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("profile");
 
 		// create a new Profile and insert to into mySQL
-		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode->getZipCodeCode(), $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
+		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
 		$profile->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -76,7 +82,7 @@ class ProfileTest extends GrowifyTest {
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("profile"));
 		$this->assertEquals($pdoProfile->getProfileUserName(), $this->VALID_USERNAME);
 		$this->assertEquals($pdoProfile->getProfileEmail(), $this->VALID_EMAIL);
-		$this->assertEquals($pdoProfile->getProfileZipCode(), $this->zipcode->getZipCodeCode());
+		$this->assertEquals($pdoProfile->getProfileZipCode(), $this->zipcode);
 		$this->assertEquals($pdoProfile->getProfileHash(), $this->VALID_HASH);
 		$this->assertEquals($pdoProfile->getProfileSalt(), $this->VALID_SALT);
 		$this->assertEquals($pdoProfile->getProfileActivation(), $this->VALID_ACTIVATION);
@@ -89,7 +95,7 @@ class ProfileTest extends GrowifyTest {
 	 **/
 	public function testInsertInvalidProfile() {
 		// create a Profile with a non null profile id and watch it fail
-		$profile = new Profile(GrowifyTest::INVALID_KEY, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode->getZipCodeCode(), $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
+		$profile = new Profile(GrowifyTest::INVALID_KEY, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
 		$profile->insert($this->getPDO());
 	}
 
@@ -101,7 +107,7 @@ class ProfileTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("profile");
 
 		// create a new Profile and insert to into mySQL
-		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode->getZipCodeCode(), $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
+		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
 		$profile->insert($this->getPDO());
 
 		// edit the Profile and update it in mySQL
@@ -113,7 +119,7 @@ class ProfileTest extends GrowifyTest {
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("profile"));
 		$this->assertEquals($pdoProfile->getProfileUserName(), $this->VALID_USERNAME);
 		$this->assertEquals($pdoProfile->getProfileEmail(), $this->VALID_EMAIL);
-		$this->assertEquals($pdoProfile->getProfileZipCode(), $this->zipcode->getZipCodeCode());
+		$this->assertEquals($pdoProfile->getProfileZipCode(), $this->zipcode);
 		$this->assertEquals($pdoProfile->getProfileHash(), $this->VALID_HASH);
 		$this->assertEquals($pdoProfile->getProfileSalt(), $this->VALID_SALT);
 		$this->assertEquals($pdoProfile->getProfileActivation(), $this->VALID_ACTIVATION);
@@ -126,7 +132,7 @@ class ProfileTest extends GrowifyTest {
 	 **/
 	public function testUpdateInvalidProfile() {
 		// create a Profile, try to update it without actually inserting it and watch it fail
-		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode->getZipCodeCode(), $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
+		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
 		$profile->update($this->getPDO());
 	}
 
@@ -138,7 +144,7 @@ class ProfileTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("profile");
 
 		// create a new Profile and insert to into mySQL
-		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode->getZipCodeCode(), $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
+		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
 		$profile->insert($this->getPDO());
 
 		// delete the Profile from mySQL
@@ -158,7 +164,7 @@ class ProfileTest extends GrowifyTest {
 	 **/
 	public function testDeleteInvalidProfile() {
 		// create a Profile and try to delete it without actually inserting it
-		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode->getZipCodeCode(), $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
+		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
 		$profile->delete($this->getPDO());
 	}
 
@@ -170,7 +176,7 @@ class ProfileTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("profile");
 
 		// create a new Profile and insert to into mySQL
-		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode->getZipCodeCode(), $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
+		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
 		$profile->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -184,7 +190,7 @@ class ProfileTest extends GrowifyTest {
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("profile"));
 		$this->assertEquals($pdoProfile->getProfileUserName(), $this->VALID_USERNAME);
 		$this->assertEquals($pdoProfile->getProfileEmail(), $this->VALID_EMAIL);
-		$this->assertEquals($pdoProfile->getProfileZipCode(), $this->zipcode->getZipCodeCode());
+		$this->assertEquals($pdoProfile->getProfileZipCode(), $this->zipcode);
 		$this->assertEquals($pdoProfile->getProfileHash(), $this->VALID_HASH);
 		$this->assertEquals($pdoProfile->getProfileSalt(), $this->VALID_SALT);
 		$this->assertEquals($pdoProfile->getProfileActivation(), $this->VALID_ACTIVATION);
@@ -207,7 +213,7 @@ class ProfileTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("profile");
 
 		// create a new Profile and insert to into mySQL
-		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode->getZipCodeCode(), $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
+		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
 		$profile->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -221,7 +227,7 @@ class ProfileTest extends GrowifyTest {
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("profile"));
 		$this->assertEquals($pdoProfile->getProfileUserName(), $this->VALID_USERNAME);
 		$this->assertEquals($pdoProfile->getProfileEmail(), $this->VALID_EMAIL);
-		$this->assertEquals($pdoProfile->getProfileZipCode(), $this->zipcode->getZipCodeCode());
+		$this->assertEquals($pdoProfile->getProfileZipCode(), $this->zipcode);
 		$this->assertEquals($pdoProfile->getProfileHash(), $this->VALID_HASH);
 		$this->assertEquals($pdoProfile->getProfileSalt(), $this->VALID_SALT);
 		$this->assertEquals($pdoProfile->getProfileActivation(), $this->VALID_ACTIVATION);
@@ -243,7 +249,7 @@ class ProfileTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("profile");
 
 		// create a new Profile and insert to into mySQL
-		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode->getZipCodeCode(), $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
+		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode, $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
 		$profile->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -257,7 +263,7 @@ class ProfileTest extends GrowifyTest {
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("profile"));
 		$this->assertEquals($pdoProfile->getProfileUserName(), $this->VALID_USERNAME);
 		$this->assertEquals($pdoProfile->getProfileEmail(), $this->VALID_EMAIL);
-		$this->assertEquals($pdoProfile->getProfileZipCode(), $this->zipcode->getZipCodeCode());
+		$this->assertEquals($pdoProfile->getProfileZipCode(), $this->zipcode);
 		$this->assertEquals($pdoProfile->getProfileHash(), $this->VALID_HASH);
 		$this->assertEquals($pdoProfile->getProfileSalt(), $this->VALID_SALT);
 		$this->assertEquals($pdoProfile->getProfileActivation(), $this->VALID_ACTIVATION);
