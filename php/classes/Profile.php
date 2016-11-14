@@ -42,7 +42,7 @@ class Profile implements \JsonSerializable {
 	 * @var string $profileSalt
 	 **/
 	private $profileSalt;
-	 /**
+	/**
 	 * activation code for this profile
 	 * @var string $profileActivation
 	 **/
@@ -60,8 +60,8 @@ class Profile implements \JsonSerializable {
 	 * @throws \Exception
 	 * @throws \TypeError
 	 */
-	public function __construct($newProfileId, $newProfileUsername, $newProfileEmail, $newProfileZipCode, $newProfileHash, $newProfileSalt, $newProfileActivation){
-		try{
+	public function __construct($newProfileId, $newProfileUsername, $newProfileEmail, $newProfileZipCode, $newProfileHash, $newProfileSalt, $newProfileActivation) {
+		try {
 			$this->setProfileId($newProfileId);
 			$this->setProfileUserName($newProfileUsername);
 			$this->setProfileEmail($newProfileEmail);
@@ -78,182 +78,6 @@ class Profile implements \JsonSerializable {
 		} catch(\Exception $exception) {
 			throw(new \Exception($exception->getMessage(), 0, $exception));
 		}
-	}
-
-	/**
-	 * Get profile associated with the specified profile Id.
-	 * @param \PDO $pdo a PDO connection object
-	 * @param int $profileId a valid profile Id
-	 * @return Profile|null Profile found or null if not found
-	 * @throws \PDOException when mySQL related errors occur
-	 * @throws \TypeError when parameters are not the correct data type.
-	 **/
-	public static function getProfileByProfileId(\PDO $pdo, int $profileId) {
-		if($profileId <= 0) {
-			throw(new \RangeException("profile id must be positive."));
-		}
-		// create query template
-		$query = "SELECT profileId, profileUsername, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation FROM profile WHERE profileId = :profileId";
-		$statement = $pdo->prepare($query);
-
-		// bind the profile id to the place holder in the template
-		$parameters = ["profileId" => $profileId];
-		$statement->execute($parameters);
-
-		// grab the profile from mySQL
-		try {
-			$profile = null;
-			$statement->setFetchMode(\PDO::FETCH_ASSOC);
-			$row = $statement->fetch();
-			if($row !== false) {
-				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
-			}
-		} catch(\Exception $exception) {
-			// if the row couldn't be converted, rethrow it
-			throw(new \PDOException($exception->getMessage(), 0, $exception));
-		}
-		return($profile);
-	}
-
-	/**
-	 * Get all profiles associated with the specified username.
-	 * @param \PDO $pdo a PDO connection object
-	 * @param string $profileUsername name of profile being searched for
-	 * @return \SplFixedArray SplFixedArray of Profiles found
-	 * @throws \PDOException when mySQL related errors occur
-	 * @throws \TypeError when parameters are not the correct data type.
-	 **/
-	public static function getProfileByProfileUsername(\PDO $pdo, string $profileUsername) {
-		$profileUsername = trim($profileUsername);
-		$profileUsername = filter_var($profileUsername, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($profileUsername)) {
-			throw (new \InvalidArgumentException("profile username is invalid"));
-		}
-		// create query template
-		$query = "SELECT profileId, profileUsername, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation FROM profile WHERE profileUsername LIKE :profileUsername";
-		$statement = $pdo->prepare($query);
-
-		// bind the username to the place holder in the template
-		$parameters = ["profileUsername" => $profileUsername];
-		$statement->execute($parameters);
-
-		// build an array of profiles
-		$profiles = new \SplFixedArray($statement->rowCount());
-		$statement->setFetchMode(\PDO::FETCH_ASSOC);
-		while(($row = $statement->fetch()) !== false){
-			try {
-				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
-				$profiles[$profiles->key()] = $profile;
-				$profiles->next();
-			} catch(\Exception $exception) {
-				// if the row couldn't be converted, rethrow it
-				throw(new \PDOException($exception->getMessage(), 0, $exception));
-			}
-		}
-		return($profiles);
-	}
-
-	/**
-	 * Get all profiles associated with the specified profile zipcode.
-	 * @param \PDO $pdo a PDO connection object
-	 * @param int $profileZipcode zipcode of profiles being searched for
-	 * @return \SplFixedArray SplFixedArray of Profiles found
-	 * @throws \PDOException when mySQL related errors occur
-	 * @throws \TypeError when parameters are not the correct data type.
-	 **/
-	public static function getProfileByZipcode(\PDO $pdo, int $profileZipcode) {
-		$profileZipcode = filter_var($profileZipcode, FILTER_VALIDATE_INT);
-		if($profileZipcode <= 0) {
-			throw(new \RangeException("profile zipcode must be positive."));
-		}
-		// create query template
-		$query = "SELECT profileId, profileUsername, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation FROM profile WHERE profileZipcode = :profileZipcode";
-		$statement = $pdo->prepare($query);
-
-		// bind the profile type to the place holder in the template
-		$parameters = ["profileZipcode" => $profileZipcode];
-		$statement->execute($parameters);
-
-		// build an array of profiles
-		$profiles = new \SplFixedArray($statement->rowCount());
-		$statement->setFetchMode(\PDO::FETCH_ASSOC);
-		while(($row = $statement->fetch()) !== false){
-			try {
-				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
-				$profiles[$profiles->key()] = $profile;
-				$profiles->next();
-			} catch(\Exception $exception) {
-				// if the row couldn't be converted, rethrow it
-				throw(new \PDOException($exception->getMessage(), 0, $exception));
-			}
-		}
-		return($profiles);
-	}
-
-	/**
-	 * Get all profiles associated with the specified profile activation code.
-	 * @param \PDO $pdo a PDO connection object
-	 * @param string $profileActivation zipcode of profiles being searched for
-	 * @return Profile profile the profile that was found
-	 * @throws \PDOException when mySQL related errors occur
-	 * @throws \TypeError when parameters are not the correct data type.
-	 **/
-	public static function getProfileByActivation(\PDO $pdo, string $profileActivation) {
-		$profileActivation = trim($profileActivation);
-		$profileActivation = filter_var($profileActivation, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($profileActivation)) {
-			throw (new \InvalidArgumentException("profile username is invalid"));
-		}
-		// create query template
-		$query = "SELECT profileId, profileUsername, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation FROM profile WHERE profileActivation LIKE :profileActivation";
-		$statement = $pdo->prepare($query);
-
-		// bind the username to the place holder in the template
-		$parameters = ["profileActivation" => $profileActivation];
-		$statement->execute($parameters);
-
-		// grab the profile from mySQL
-		try {
-			$profile = null;
-			$statement->setFetchMode(\PDO::FETCH_ASSOC);
-			$row = $statement->fetch();
-			if($row !== false) {
-				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
-			}
-		} catch(\Exception $exception) {
-			// if the row couldn't be converted, rethrow it
-			throw(new \PDOException($exception->getMessage(), 0, $exception));
-		}
-		return($profile);
-	}
-
-	/**
-	 * Get all Profile objects.
-	 * @param \PDO $pdo PDO connection object
-	 * @return \SplFixedArray of Profile objects found or null if none found.
-	 * @throws \PDOException when mySQL related errors occur
-	 * @throws \TypeError when variables are not the correct data type.
-	 **/
-	public static function getAllProfiles(\PDO $pdo){
-		//create query template
-		$query = "SELECT profileId, profileName, profileVariety, profileDescription, profileType, profileSpread, profileDaysToHarvest, profileHeight, profileMinTemp, profileMaxTemp, profileSoilMoisture FROM profile";
-		$statement = $pdo->prepare($query);
-		$statement->execute();
-
-		// build an array of profile entries
-		$profiles = new \SplFixedArray($statement->rowCount());
-		$statement->setFetchMode(\PDO::FETCH_ASSOC);
-		while(($row=$statement->fetch())!== false){
-			try {
-				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
-				$profiles[$profiles->key()] = $profile;
-				$profiles->next();
-			} catch(\Exception $exception) {
-				// if the row couldn't be converted, rethrow it
-				throw(new \PDOException($exception->getMessage(), 0, $exception));
-			}
-		}
-		return ($profiles);
 	}
 
 	/**
@@ -299,8 +123,8 @@ class Profile implements \JsonSerializable {
 	 **/
 	public function setProfileUserName($newProfileUsername) {
 		$newProfileUsername = trim($newProfileUsername);
-		$newProfileUsername = filter_var($newProfileUsername,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newProfileUsername)){
+		$newProfileUsername = filter_var($newProfileUsername, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newProfileUsername)) {
 			throw (new \InvalidArgumentException("user name is empty or has invalid contents"));
 		}
 		if(strlen($newProfileUsername) > 24) {
@@ -325,8 +149,8 @@ class Profile implements \JsonSerializable {
 	 **/
 	public function setProfileEmail($newProfileEmail) {
 		$newProfileEmail = trim($newProfileEmail);
-		$newProfileEmail = filter_var($newProfileEmail,FILTER_SANITIZE_EMAIL, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newProfileEmail)){
+		$newProfileEmail = filter_var($newProfileEmail, FILTER_SANITIZE_EMAIL, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newProfileEmail)) {
 			throw (new \InvalidArgumentException("email is empty or has invalid contents"));
 		}
 		if(strlen($newProfileEmail) > 160) {
@@ -363,13 +187,13 @@ class Profile implements \JsonSerializable {
 	}
 
 	/**
- * mutator method for profile password hash
- * @param string $newProfileHash
- **/
+	 * mutator method for profile password hash
+	 * @param string $newProfileHash
+	 **/
 	public function setProfileHash($newProfileHash) {
 		$newProfileHash = trim($newProfileHash);
-		$newProfileHash = filter_var($newProfileHash,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newProfileHash)){
+		$newProfileHash = filter_var($newProfileHash, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newProfileHash)) {
 			throw (new \InvalidArgumentException("hash is empty or has invalid contents"));
 		}
 		if(strlen($newProfileHash) > 128) {
@@ -382,7 +206,7 @@ class Profile implements \JsonSerializable {
 	 * accessor method for password salt
 	 * @return string
 	 **/
-	public function getProfileSalt(){
+	public function getProfileSalt() {
 		return $this->profileSalt;
 	}
 
@@ -394,7 +218,7 @@ class Profile implements \JsonSerializable {
 		$newProfileSalt = trim($newProfileSalt);
 		$newProfileSalt = strtolower($newProfileSalt);
 
-		if(ctype_xdigit($newProfileSalt) === false){
+		if(ctype_xdigit($newProfileSalt) === false) {
 			throw (new \InvalidArgumentException("salt is empty or has invalid contents"));
 		}
 		if(strlen($newProfileSalt) !== 64) {
@@ -407,7 +231,7 @@ class Profile implements \JsonSerializable {
 	 * accessor method for profile activation state
 	 * @return string
 	 **/
-	public function getProfileActivation(){
+	public function getProfileActivation() {
 		return $this->profileActivation;
 	}
 
@@ -417,8 +241,8 @@ class Profile implements \JsonSerializable {
 	 **/
 	public function setProfileActivation($newProfileActivation) {
 		$newProfileActivation = trim($newProfileActivation);
-		$newProfileActivation = filter_var($newProfileActivation,FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newProfileActivation)){
+		$newProfileActivation = filter_var($newProfileActivation, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newProfileActivation)) {
 			throw (new \InvalidArgumentException("activation is empty or has invalid contents"));
 		}
 		if(strlen($newProfileActivation) > 16) {
@@ -444,7 +268,7 @@ class Profile implements \JsonSerializable {
 		$statement = $pdo->prepare($query);
 
 		// bind member variables to placeholders in the template
-		$parameters = [ "profileUsername"=> $this->profileUsername, "profileEmail"=>$this->profileEmail, "profileZipCode"=>$this->profileZipCode->getZipCodeCode(), "profileHash"=>$this->profileHash, "profileSalt"=>$this->profileSalt, "profileActivation"=>$this->profileActivation];
+		$parameters = ["profileUsername" => $this->profileUsername, "profileEmail" => $this->profileEmail, "profileZipCode" => $this->profileZipCode->getZipCodeCode(), "profileHash" => $this->profileHash, "profileSalt" => $this->profileSalt, "profileActivation" => $this->profileActivation];
 		$statement->execute($parameters);
 
 		$this->profileId = intval($pdo->lastInsertId());
@@ -479,8 +303,184 @@ class Profile implements \JsonSerializable {
 		$statement = $pdo->prepare($query);
 
 		// bind member variables to placeholders
-		$parameters = ["profileId"=>$this->profileId, "profileUsername"=> $this->profileUsername, "profileEmail"=>$this->profileEmail, "profileZipCode"=>$this->profileZipCode, "profileHash"=>$this->profileHash, "profileSalt"=>$this->profileSalt, "profileActivation"=>$this->profileActivation];
+		$parameters = ["profileId" => $this->profileId, "profileUsername" => $this->profileUsername, "profileEmail" => $this->profileEmail, "profileZipCode" => $this->profileZipCode, "profileHash" => $this->profileHash, "profileSalt" => $this->profileSalt, "profileActivation" => $this->profileActivation];
 		$statement->execute($parameters);
+	}
+
+	/**
+	 * Get profile associated with the specified profile Id.
+	 * @param \PDO $pdo a PDO connection object
+	 * @param int $profileId a valid profile Id
+	 * @return Profile|null Profile found or null if not found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when parameters are not the correct data type.
+	 **/
+	public static function getProfileByProfileId(\PDO $pdo, int $profileId) {
+		if($profileId <= 0) {
+			throw(new \RangeException("profile id must be positive."));
+		}
+		// create query template
+		$query = "SELECT profileId, profileUsername, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation FROM profile WHERE profileId = :profileId";
+		$statement = $pdo->prepare($query);
+
+		// bind the profile id to the place holder in the template
+		$parameters = ["profileId" => $profileId];
+		$statement->execute($parameters);
+
+		// grab the profile from mySQL
+		try {
+			$profile = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
+			}
+		} catch(\Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		return ($profile);
+	}
+
+	/**
+	 * Get all profiles associated with the specified username.
+	 * @param \PDO $pdo a PDO connection object
+	 * @param string $profileUsername name of profile being searched for
+	 * @return \SplFixedArray SplFixedArray of Profiles found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when parameters are not the correct data type.
+	 **/
+	public static function getProfileByProfileUsername(\PDO $pdo, string $profileUsername) {
+		$profileUsername = trim($profileUsername);
+		$profileUsername = filter_var($profileUsername, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($profileUsername)) {
+			throw (new \InvalidArgumentException("profile username is invalid"));
+		}
+		// create query template
+		$query = "SELECT profileId, profileUsername, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation FROM profile WHERE profileUsername LIKE :profileUsername";
+		$statement = $pdo->prepare($query);
+
+		// bind the username to the place holder in the template
+		$parameters = ["profileUsername" => $profileUsername];
+		$statement->execute($parameters);
+
+		// build an array of profiles
+		$profiles = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
+				$profiles[$profiles->key()] = $profile;
+				$profiles->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($profiles);
+	}
+
+	/**
+	 * Get all profiles associated with the specified profile zipcode.
+	 * @param \PDO $pdo a PDO connection object
+	 * @param int $profileZipcode zipcode of profiles being searched for
+	 * @return \SplFixedArray SplFixedArray of Profiles found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when parameters are not the correct data type.
+	 **/
+	public static function getProfileByZipcode(\PDO $pdo, int $profileZipcode) {
+		$profileZipcode = filter_var($profileZipcode, FILTER_VALIDATE_INT);
+		if($profileZipcode <= 0) {
+			throw(new \RangeException("profile zipcode must be positive."));
+		}
+		// create query template
+		$query = "SELECT profileId, profileUsername, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation FROM profile WHERE profileZipcode = :profileZipcode";
+		$statement = $pdo->prepare($query);
+
+		// bind the profile type to the place holder in the template
+		$parameters = ["profileZipcode" => $profileZipcode];
+		$statement->execute($parameters);
+
+		// build an array of profiles
+		$profiles = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
+				$profiles[$profiles->key()] = $profile;
+				$profiles->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($profiles);
+	}
+
+	/**
+	 * Get all profiles associated with the specified profile activation code.
+	 * @param \PDO $pdo a PDO connection object
+	 * @param string $profileActivation zipcode of profiles being searched for
+	 * @return Profile profile the profile that was found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when parameters are not the correct data type.
+	 **/
+	public static function getProfileByActivation(\PDO $pdo, string $profileActivation) {
+		$profileActivation = trim($profileActivation);
+		$profileActivation = filter_var($profileActivation, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($profileActivation)) {
+			throw (new \InvalidArgumentException("profile username is invalid"));
+		}
+		// create query template
+		$query = "SELECT profileId, profileUsername, profileEmail, profileZipCode, profileHash, profileSalt, profileActivation FROM profile WHERE profileActivation LIKE :profileActivation";
+		$statement = $pdo->prepare($query);
+
+		// bind the username to the place holder in the template
+		$parameters = ["profileActivation" => $profileActivation];
+		$statement->execute($parameters);
+
+		// grab the profile from mySQL
+		try {
+			$profile = null;
+			$statement->setFetchMode(\PDO::FETCH_ASSOC);
+			$row = $statement->fetch();
+			if($row !== false) {
+				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
+			}
+		} catch(\Exception $exception) {
+			// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		return ($profile);
+	}
+
+	/**
+	 * Get all Profile objects.
+	 * @param \PDO $pdo PDO connection object
+	 * @return \SplFixedArray of Profile objects found or null if none found.
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type.
+	 **/
+	public static function getAllProfiles(\PDO $pdo) {
+		//create query template
+		$query = "SELECT profileId, profileName, profileVariety, profileDescription, profileType, profileSpread, profileDaysToHarvest, profileHeight, profileMinTemp, profileMaxTemp, profileSoilMoisture FROM profile";
+		$statement = $pdo->prepare($query);
+		$statement->execute();
+
+		// build an array of profile entries
+		$profiles = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$profile = new Profile($row["profileId"], $row["profileUsername"], $row["profileEmail"], $row["profileZipCode"], $row["profileHash"], $row["profileSalt"], $row["profileActivation"]);
+				$profiles[$profiles->key()] = $profile;
+				$profiles->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return ($profiles);
 	}
 
 	/**
@@ -488,7 +488,7 @@ class Profile implements \JsonSerializable {
 	 * @return array an array with serialized state variables
 	 **/
 	public function jsonSerialize() {
-		$fields = get_object_vars($this);
-		return($fields);
+		$fields = array_push($this->getProfileId(),$this->getProfileUserName(),$this->getProfileEmail(),$this->getProfileZipCode(),$this->getProfileActivation());
+		return ($fields);
 	}
 }
