@@ -62,7 +62,7 @@ class ProfileTest extends GrowifyTest {
 		//creates password salt for testing
 		$this->VALID_SALT = bin2hex(random_bytes(32));
 		//creates password hash for testing
-		$this->VALID_HASH = hash_pbkdf2("sha512", "this is a password", $this->VALID_SALT, 262144);
+		$this->VALID_HASH = hash_pbkdf2("sha128", "this is a password", $this->VALID_SALT, 262144);
 		//creates activation for testing
 		$this->VALID_ACTIVATION = bin2hex(random_bytes(8));
 	}
