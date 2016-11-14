@@ -90,6 +90,13 @@ class CombativePlant implements \JsonSerializable{
 		$this->combativePlant2Id = $newCombativePlant;
 	}
 
+	/**
+	 * check whethere a mySQL entry for a given pair of plant Ids already exists in the table.
+	 * @param \PDO $pdo
+	 * @param int $combativePlant1Id
+	 * @param int $combativePlant2Id
+	 * @return bool
+	 */
 	public static function existsCombativePlantEntry(\PDO $pdo, int $combativePlant1Id, int $combativePlant2Id){
 		// first check if this will create a duplicate DB entry
 		$query = "SELECT combativePlant1Id, combativePlant2Id FROM combativePlant WHERE 
@@ -99,10 +106,10 @@ class CombativePlant implements \JsonSerializable{
 		$statement = $pdo->prepare($query);
 		$statement->execute($parameters);
 
-		if($statement->rowCount() === 0){
-			return false;
+		if($statement->rowCount() > 0){
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	/**
@@ -140,21 +147,21 @@ class CombativePlant implements \JsonSerializable{
 
 
 		// first check if the entry exists, if not, throw an exception
-		$query = "SELECT * FROM combativePlant WHERE (combativePlant1Id  = :combativePlant1Id) AND (combativePlant2Id = :combativePlant2Id)";
-		$statement = $pdo->prepare($query);
-		$statement->execute($parameters);
+		//$query = "SELECT * FROM combativePlant WHERE (combativePlant1Id  = :combativePlant1Id) AND (combativePlant2Id = :combativePlant2Id)";
+		//$statement = $pdo->prepare($query);
+		//$statement->execute($parameters);
 
-		if($statement->columnCount() === 0){
-			throw new PDOException("cannot delete an entry that does not exist");
+		if(CombativePlant::existsCombativePlantEntry($pdo, $this->combativePlant1Id, $this->combativePlant2Id) === false){
+			throw new \PDOException("cannot delete an entry that does not exist");
 		}
 
 		// chech with argument order reversed
-		$query = "SELECT * FROM combativePlant WHERE (combativePlant1Id  = :combativePlant2Id) AND (combativePlant2Id = :combativePlant1Id)";
-		$statement = $pdo->prepare($query);
-		$statement->execute($parameters);
-		if($statement->columnCount() === 0){
-			throw new PDOException("cannot delete an entry that does not exist");
-		}
+		//$query = "SELECT * FROM combativePlant WHERE (combativePlant1Id  = :combativePlant2Id) AND (combativePlant2Id = :combativePlant1Id)";
+		//$statement = $pdo->prepare($query);
+		//$statement->execute($parameters);
+		//if($statement->columnCount() === 0){
+		//	throw new PDOException("cannot delete an entry that does not exist");
+		//}
 
 		// create query template
 		// note: need to check both cases: combativeplant1Id, combativeplant2Id AND combativeplant2Id, combativeplant1Id since order does not matter

@@ -95,7 +95,7 @@ class CombativePlantTest extends GrowifyTest {
 		$combativePlant = new CombativePlant($this->combativePlant1->getPlantId(), $this->combativePlant2->getPlantId());
 		$combativePlant->insert($this->getPDO());
 
-		$this->assertTrue( CombativePlant::existsCombativePlantEntry($this->getPDO(), $this->combativePlant1->getPlantId(), $this->combativePlant1->getPlantId() ));
+		$this->assertTrue( CombativePlant::existsCombativePlantEntry($this->getPDO(), $this->combativePlant1->getPlantId(), $this->combativePlant2->getPlantId() ));
 	}
 
 	/**
@@ -105,7 +105,7 @@ class CombativePlantTest extends GrowifyTest {
 	public function testExistsCombativePlantEntryNoEntry(){
 		// ask if the entry exists for an entry that shouldn't
 
-		$this->assertFalse( CombativePlant::existsCombativePlantEntry($this->getPDO(), $this->combativePlant1->getPlantId(), $this->combativePlant1->getPlantId() ));
+		$this->assertFalse( CombativePlant::existsCombativePlantEntry($this->getPDO(), $this->combativePlant1->getPlantId(), $this->combativePlant2->getPlantId() ));
 	}
 
 	/**
