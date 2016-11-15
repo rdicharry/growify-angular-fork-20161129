@@ -186,7 +186,7 @@ class CompanionPlant implements \JsonSerializable{
 		$statement = $pdo->prepare($query);
 
 		// bind parameters
-		$parameters = ["companionPlant1Id" => $this->companionPlant1Id, "companionPlant2Id" => $this->companionPlant2Id];
+		$parameters = ["companionPlant1Id" => $this->companionPlant1Id, "companionPlant2Id"=>$this->companionPlant2Id];
 		$statement->execute($parameters);
 	}
 
@@ -248,7 +248,7 @@ class CompanionPlant implements \JsonSerializable{
 		throw(new \RangeException("companion plant id must be positive"));
 }
 		// create query template
-		$query = "SELECT companionPlant1Id, CompanionPlant2Id FROM companionPlant WHERE ((companionPlant1Id = :plantId) OR (companionPlant2Id=:plantId))";
+		$query = "SELECT companionPlant1Id, companionPlant2Id FROM companionPlant WHERE ((companionPlant1Id = :plantId) OR (companionPlant2Id=:plantId))";
 		$statement = $pdo->prepare($query);
 
 		//bind parameters

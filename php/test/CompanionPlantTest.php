@@ -53,7 +53,6 @@ class CompanionPlantTest extends GrowifyTest {
 	 * Note: we should be able to get companion plant entries regardless of whether the plantId is found in the first or second entry.
 	 * Note: this should return an array of values (possibly more than one entry for a given companion plant.
 	 *
-	 * @expectedException \PDOException
 	 **/
 	public function testInsertValidCompanionPlantEntry() {
 		// store number of rows for later
@@ -184,9 +183,9 @@ $this->assertCount(1, $results);
 
 	/**
 	 * test deleting a companion plant entry that does not exist
-	 * @expectecException PDOException
+	 * @expectedException \PDOException
 	 **/
-	public function testDeleteValidCompanionPlantEntry(){
+	public function testDeleteInvalidCompanionPlantEntry(){
 		// create a CompanionPlant and try to delete without actually inserting it
 		$companionPlant = new CompanionPlant($this->companionPlant1->getPlantId(),$this->companionPlant2->getPlantId());
 		$companionPlant->delete($this->getPDO());
@@ -241,7 +240,7 @@ $this->assertCount(1, $results);
 		$companionPlant->insert($this->getPDO());
 
 		// grab the data and enforce fields match expectations
-		$results = CompanionPlant::getAllCompanionPLants($this->PDO());
+		$results = CompanionPlant::getAllCompanionPlants($this->getPDO());
 		$this->assertEquals($numRows+1, $this->getConnection()->getRowCount("companionPlant"));
 		$this->assertCount(1, $results);
 		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\Growify\\CompanionPlant", $results);
