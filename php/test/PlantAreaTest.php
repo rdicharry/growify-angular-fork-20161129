@@ -83,6 +83,15 @@ class PlantAreaTest extends GrowifyTest {
 	 *
 	 **/
 
+	/**
+	 * test validate date function passes valid dates and failse invalid ones.
+	 */
+	public function testValidateDate(){
+		$this->assertTrue(PlantArea::validateDate(12, 4));
+		$this->assertFalse(PlantArea::validateDate(2,30));
+		$this->assertFalse(PlantArea::validateDate(15, 42));
+	}
+
 
 	public function testInsertValidPlantArea( ){
 		//count the number of rows and save it for later

@@ -3,6 +3,7 @@ namespace Edu\Cnm\Growify;
 
 use Exception;
 use TypeError;
+use DateTime;
 
 require_once("autoload.php");
 
@@ -67,14 +68,14 @@ class PlantArea implements \JsonSerializable {
  	 * Maximum unsigned smallint value that the plantId field cannot exceed
 	 * @var int $MAX_PLANTID
  	*/
-	private static  $MAX_PLANTID = 65535;
+	private   $MAX_PLANTID = 65535;
 
 	/**
 	 * change: a variable used to represent the maximum number a SMALLINT can be. A SMALLINT is what will hold the plantAreaId in the database
 	 * Maximum unsigned smallint value that the plantId field cannot exceed
 	 * @var int $MAX_PLANTAREAID
 	 */
-	private static $MAX_PLANTAREAID = 65535;
+	private  $MAX_PLANTAREAID = 65535;
 
 
 	/**
@@ -225,11 +226,33 @@ class PlantArea implements \JsonSerializable {
 		//check if $newPlantAreaStartDate is an int, if not throw TypeError
 		if(!is_int($newPlantAreaEndDay)){
 			throw(new \TypeError("Plant Area End Day is not an Integer"));
-		}elseif($newPlantAreaEndDay < 1 || $newPlantAreaEndDay > 3){
+		}elseif($newPlantAreaEndDay < 1 || $newPlantAreaEndDay > 31){
 			throw (new \RangeException("This plantAreaEndDay is not a valid day of the month"));
 		}
 
 		$this->plantAreaEndDay = $newPlantAreaEndDay;
+	}
+
+	/**
+	 * verify a set of integers represents a valid date. e.g.
+	 * $month = 13 and $day = 42 is NOT a valid date!
+	 * Includes a check for leap year (assuming the current year).
+	 * @param int $month
+	 * @param int $day
+	 * @throws \RangeException if the given month and day cannot be found in the current calendar year.
+	 */
+	public static function validateDate(int $month, int $day){
+
+		// grab current year
+		$currentDateTime = new DateTime();
+		$date = getDate($currentDateTime->getTimestamp());
+		$year = $date["year"];
+
+		if(!checkdate($month, $day, $year)){
+			return false;
+		}
+
+		return true;
 	}
 
 
