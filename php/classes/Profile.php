@@ -172,7 +172,13 @@ class Profile implements \JsonSerializable {
 	 * @param string $newProfileZipCode
 	 **/
 	public function setProfileZipCode($newProfileZipCode) {
-		$this->profileZipCode = $newProfileZipCode;
+		$newProfileZipCode = filter_var($newProfileZipCode, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(strlen($newProfileZipCode) === 5 || strlen($newProfileZipCode) === 9) {
+			$this->profileZipCode = $newProfileZipCode;
+		}
+		else {
+			throw (new \InvalidArgumentException("zipcode is of invalid length"));
+		}
 	}
 
 	/**
