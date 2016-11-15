@@ -209,6 +209,43 @@ class ProfileTest extends GrowifyTest {
 	}
 
 	/**
+	 * test grabbing a Profile by zip code
+	 **/
+	public function testGetValidProfileByZipCode() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("profile");
+
+		// create a new Profile and insert to into mySQL
+		$profile = new Profile(null, $this->VALID_USERNAME, $this->VALID_EMAIL, $this->zipcode->getZipCodeCode(), $this->VALID_HASH, $this->VALID_SALT, $this->VALID_ACTIVATION);
+		$profile->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$results = Profile::getProfileByZipcode($this->getPDO(), $profile->getProfileZipCode());
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("profile"));
+		$this->assertCount(1, $results);
+		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\Growify\\Profile", $results);
+
+		// grab the result from the array and validate it
+		$pdoProfile = $results[0];
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("profile"));
+		$this->assertEquals($pdoProfile->getProfileUserName(), $this->VALID_USERNAME);
+		$this->assertEquals($pdoProfile->getProfileEmail(), $this->VALID_EMAIL);
+		$this->assertEquals($pdoProfile->getProfileZipCode(), $this->zipcode->getZipCodeCode());
+		$this->assertEquals($pdoProfile->getProfileHash(), $this->VALID_HASH);
+		$this->assertEquals($pdoProfile->getProfileSalt(), $this->VALID_SALT);
+		$this->assertEquals($pdoProfile->getProfileActivation(), $this->VALID_ACTIVATION);
+	}
+
+	/**
+	 * test grabbing a Profile by zipcode that does not exist
+	 **/
+	public function testGetInvalidProfileByZipCode() {
+		// grab a profile by searching for name that does not exist
+		$profile = Profile::getProfileByZipcode($this->getPDO(), "This is not a zipcode");
+		$this->assertCount(0, $profile);
+	}
+
+	/**
 	 * test grabbing a Profile by profile activation code
 	 **/
 	public function testGetValidProfileByProfileActivation() {
