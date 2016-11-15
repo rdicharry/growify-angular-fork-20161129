@@ -148,7 +148,9 @@ class PlantAreaTest extends GrowifyTest {
 		$this->assertEquals($pdoPlantArea->getplantAreaNumber(),$this->VALID_PLANTAREANUM);
 	}
 
-	// -------------------------------------***** LEFT OFF HERE ******------------------------****************************
+	// -------------------------------------***** LEFT OFF HERE
+	//
+	// ******------------------------****************************
 
 	/**
  	* test updating a PlantArea that that does not exist
