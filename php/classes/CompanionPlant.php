@@ -75,8 +75,7 @@ class CompanionPlant implements \JsonSerializable{
 	 * @throws \RangeException if $newCompanionPlant1Id is not positive
 	 * @throws \TypeError if $newCompanionPlant1Id is not an integer
 	 **/
-	public function setCompanionPlant1Id
-	(int $newCompanionPlant) {
+	public function setCompanionPlant1Id (int $newCompanionPlant) {
 		// verify the companion plant 1 is positive
 		if($newCompanionPlant <= 0) {
 			throw(new \RangeException("companion plant is not a positive"));
@@ -101,8 +100,7 @@ class CompanionPlant implements \JsonSerializable{
 	 *
 	 **/
 
-	public function setCompanionPlant2Id
-	(int $newCompanionPlant) {
+	public function setCompanionPlant2Id (int $newCompanionPlant) {
 		// verify the companion plant 2 is positive
 		if($newCompanionPlant <= 0) {
 			throw(new \RangeException("companion plant is not a positive"));
@@ -120,7 +118,7 @@ class CompanionPlant implements \JsonSerializable{
 	 **/
 	public static function existsCompanionPlantEntry(\PDO $pdo, int $companionPlant1Id, int $companionPlant2Id) {
 		// first check if this will create a duplicate DB entry
-		$query = "SELECT companionPlant1Id, companionPlant2Id FROM companionPlant WHERE (companionPlant1Id = :companionPlant1Id AND companionPlant2Id) OR (companionPlant1Id = :companionPlant2Id AND companionPlant2Id = :companionPlant1Id)";
+		$query = "SELECT companionPlant1Id, companionPlant2Id FROM companionPlant WHERE (companionPlant1Id = :companionPlant1Id AND companionPlant2Id = :companionPlant2Id) OR (companionPlant1Id = :companionPlant2Id AND companionPlant2Id = :companionPlant1Id)";
 		$parameters = ["companionPlant1Id"=>$companionPlant1Id, "companionPlant2Id"=>$companionPlant2Id];
 		$statement = $pdo->prepare($query);
 		$statement->execute($parameters);
@@ -188,7 +186,7 @@ class CompanionPlant implements \JsonSerializable{
 		$statement = $pdo->prepare($query);
 
 		// bind parameters
-		$parameters = ["companionPlant1Id" => $this->companionPlant1Id, "companionPlant2Id" => $this->companionPlant2Id];
+		$parameters = ["companionPlant1Id" => $this->companionPlant1Id, "companionPlant2Id"=>$this->companionPlant2Id];
 		$statement->execute($parameters);
 	}
 
@@ -245,12 +243,12 @@ class CompanionPlant implements \JsonSerializable{
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throw \TypeError if $pdo is not a PDO conneciton object.
 	 **/
-	public static function getAllCompanionPlantsByPlantId(\PDO $pdo, int $plantId){
+	public static function getCompanionPlantsByPlantId(\PDO $pdo, int $plantId){
 		if($plantId <= 0){
 		throw(new \RangeException("companion plant id must be positive"));
 }
 		// create query template
-		$query = "SELECT companionPlant1Id, CompanionPlant2Id FROM companionPlant WHERE ((companionPlant1Id = :plantId) OR (companionPlant2Id=:plantId))";
+		$query = "SELECT companionPlant1Id, companionPlant2Id FROM companionPlant WHERE ((companionPlant1Id = :plantId) OR (companionPlant2Id=:plantId))";
 		$statement = $pdo->prepare($query);
 
 		//bind parameters

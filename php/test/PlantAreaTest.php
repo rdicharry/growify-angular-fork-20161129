@@ -86,7 +86,7 @@ class PlantAreaTest extends GrowifyTest {
 
 	/**
 	 * test inserting a valid PlantArea and verify that the actual mySQL data matches
-	 * @expectedException \PDOException
+	 *
 	 **/
 
 
@@ -112,7 +112,7 @@ class PlantAreaTest extends GrowifyTest {
 	/**
 	 * test inserting a PlantArea that already exists
 	 *
-	 * @expectedException \PDOException
+	 *
 	 */
 	public function testInsertInvalidPlantArea () {
 		// create a PlantArea with a non null plant area id and watch it fail
@@ -126,7 +126,7 @@ class PlantAreaTest extends GrowifyTest {
 
 	public function testUpdateValidPlantArea () {
 		// count the number of rows and save it for later
-		$numRows = $this->getconnection()->getRowCount("plantArea");
+		$numRows = $this->getConnection()->getRowCount("plantArea");
 
 		// create a new PlantArea and insert into mySQL
 		$plantArea = new PlantArea($this->plant->getPlantId(), $this->VALID_PLANTAREAID, $this->VALID_PLANTAREASTARTDAY, $this->VALID_PLANTAREAENDDAY, $this->VALID_PLANTAREASTARTMONTH, $this->VALID_PLANTAREAENDMONTH, $this->VALID_PLANTAREANUM);
@@ -154,7 +154,7 @@ class PlantAreaTest extends GrowifyTest {
 
 	/**
  	* test updating a PlantArea that that does not exist
- 	* @expectedException \PDOException
+ 	*
  	**/
 	public function testUpdateInvalidPlantArea() {
 		// create a PlantArea and try to delete it without actually inserting it
