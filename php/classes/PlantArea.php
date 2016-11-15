@@ -67,14 +67,14 @@ class PlantArea implements \JsonSerializable {
  	 * Maximum unsigned smallint value that the plantId field cannot exceed
 	 * @var int $MAX_PLANTID
  	*/
-	private $MAX_PLANTID = 65535;
+	private static  $MAX_PLANTID = 65535;
 
 	/**
 	 * change: a variable used to represent the maximum number a SMALLINT can be. A SMALLINT is what will hold the plantAreaId in the database
 	 * Maximum unsigned smallint value that the plantId field cannot exceed
 	 * @var int $MAX_PLANTAREAID
 	 */
-	private $MAX_PLANTAREAID = 65535;
+	private static $MAX_PLANTAREAID = 65535;
 
 
 	/**
@@ -437,8 +437,8 @@ class PlantArea implements \JsonSerializable {
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
-	public function getPlantAreaByPlantId(\PDO $pdo, $plantAreaId){
-		if(!is_int($plantAreaId || $plantAreaId < $this->MAX_PLANTAREAID)) {
+	public static function getPlantAreaByPlantAreaId(\PDO $pdo, $plantAreaId){
+		if(!is_int($plantAreaId || $plantAreaId < 65535)){
 			throw(new \TypeError("plantAreaId is not valid"));
 		}
 

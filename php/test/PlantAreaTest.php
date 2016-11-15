@@ -31,31 +31,45 @@ class PlantAreaTest extends GrowifyTest {
 	 * int of a valid plant area plant id
 	 * @var int $VALID_PLANTAREAPLANTID
 	 **/
-	protected $VALID_PLANTAREAPLANTID;
+	protected $VALID_PLANTAREADATEPLANTED;
 
 	/**
-	 * string of a valid plant area start date
-	 * @var string $VALID_PLANTAREASTARTDATE
+	 * string of a valid plant area start day
+	 * @var int $VALID_PLANTAREASTARTDAY
 	 **/
 
-	protected $VALID_PLANTAREASTARTDATE = "22";
+	protected $VALID_PLANTAREASTARTDAY = 1;
 
 	/**
-	 * string of a valid plant area end date
-	 * @var string $VALID_PLANTAREAENDDATE
+	 * string of a valid plant area end day
+	 * @var int $VALID_PLANTAREAENDDAY
 	 **/
-	protected $VALID_PLANTAREAENDDATE = "78";
+	protected $VALID_PLANTAREAENDDAY = 12;
+
+	/**
+	 * string of a valid plant area start month
+	 * @var int $VALID_PLANTAREASTARTMONTH
+	 **/
+	protected $VALID_PLANTAREASTARTMONTH = 1;
+
+	/**
+	 * string of a valid plant area end month
+	 * @var int $VALID_PLANTAREAENDMONTH
+	 **/
+	protected $VALID_PLANTAREAENDMONTH = 12;
 
 	/**
 	 * string of a valid plant area number
 	 * @var string $VALID_PLANTAREANUM
 	 **/
-
 	protected $VALID_PLANTAREANUM = "7a";
 
+	/**
+	 * @var plant The variable which will contain a plant object used for testing purposes
+	 */
 	protected $plant;
 
-	protected $plantId;
+	//protected $plantId; Dont see why this is necessary
 
 	/**
 	 *Create depend objects before running each test
@@ -81,7 +95,7 @@ class PlantAreaTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("plantArea");
 
 		// create a new PlantArea and insert into mySQL
-		$plantArea = new PlantArea(null, $this->plant->getPlantId(), $this->VALID_PLANTAREAID, $this->VALID_PLANTAREAPLANTID, $this->VALID_PLANTAREASTARTDATE, $this->VALID_PLANTAREAENDDATE, $this->VALID_PLANTAREANUM);
+		$plantArea = new PlantArea(null, $this->plant->getPlantId(), $this->VALID_PLANTAREASTARTDAY, $this->VALID_PLANTAREAENDDAY, $this->VALID_PLANTAREASTARTMONTH, $this->VALID_PLANTAREAENDMONTH, $this->VALID_PLANTAREANUM);
 		$plantArea->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -102,7 +116,7 @@ class PlantAreaTest extends GrowifyTest {
 	 */
 	public function testInsertInvalidPlantArea () {
 		// create a PlantArea with a non null plant area id and watch it fail
-		$plantArea = new PlantArea(GrowifyTest::INVALID_KEY, $this->plant->getPlantId(), $this->VALID_PLANTAREASTARTDATE, $this->VALID_PLANTAREAENDDATE, $this->VALID_PLANTAREANUM);
+		$plantArea = new PlantArea($this->plant->getPlantId(), $this->VALID_PLANTAREASTARTDAY, $this->VALID_PLANTAREAENDDAY, $this->VALID_PLANTAREASTARTMONTH, $this->VALID_PLANTAREAENDMONTH,$this->VALID_PLANTAREANUM);
 		$plantArea->insert($this->getPDO());
 	}
 
@@ -115,7 +129,7 @@ class PlantAreaTest extends GrowifyTest {
 		$numRows = $this->getconnection()->getRowCount("plantArea");
 
 		// create a new PlantArea and insert into mySQL
-		$plantArea = new PlantArea(null, $this->plant->getPlantId(), $this->VALID_PLANTAREAID, $this->VALID_PLANTAREASTARTDATE, $this->VALID_PLANTAREAENDDATE, $this->VALID_PLANTAREANUM);
+		$plantArea = new PlantArea($this->plant->getPlantId(), $this->VALID_PLANTAREAID, $this->VALID_PLANTAREASTARTDAY, $this->VALID_PLANTAREAENDDAY, $this->VALID_PLANTAREASTARTMONTH, $this->VALID_PLANTAREAENDMONTH, $this->VALID_PLANTAREANUM);
 		$plantArea->insert($this->getPDO());
 
 		// edit the PlantArea and update it in mySQL
@@ -125,13 +139,16 @@ class PlantAreaTest extends GrowifyTest {
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoPlantArea =PlantArea::getPlantAreaByPlantAreaId($this->getPDO(), $plantArea->getPlantAreaId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("plantArea"));
-		$this->assertEquals($pdoPlantArea->getPlantId(), $this->plant->getPlantId());
 		$this->assertEquals($pdoPlantArea->getPlantAreaId(), $this->VALID_PLANTAREAID);
-		$this->assertEquals($pdoPlantArea->getPlantAreaPlantId(),$this->VALID_PLANTAREAPLANTID);
-		$this->assertEquals($pdoPlantArea->getPlantAreaStartDate(),$this->VALID_PLANTAREASTARTDATE);
-		$this->assertEquals($pdoPlantArea->getPlantAreaEndDate(),$this->VALID_PLANTAREAENDDATE);
-		$this->assertEquals($pdoPlantArea->getPlantAreaNum(),$this->VALID_PLANTAREANUM);
+		$this->assertEquals($pdoPlantArea->getPlantAreaPlantId($this->getPDO(),$plantArea->getPlantAreaId()),$plantArea->getPlantAreaId());
+		$this->assertEquals($pdoPlantArea->getPlantAreaStartDay(),$this->VALID_PLANTAREASTARTDAY);
+		$this->assertEquals($pdoPlantArea->getPlantAreaEndDay(),$this->VALID_PLANTAREAENDDAY);
+		$this->assertEquals($pdoPlantArea->getPlantAreaStartMonth(),$this->VALID_PLANTAREASTARTMONTH);
+		$this->assertEquals($pdoPlantArea->getPlantAreaEndMonth(),$this->VALID_PLANTAREAENDMONTH);
+		$this->assertEquals($pdoPlantArea->getplantAreaNumber(),$this->VALID_PLANTAREANUM);
 	}
+
+	// -------------------------------------***** LEFT OFF HERE ******------------------------****************************
 
 	/**
  	* test updating a PlantArea that that does not exist
