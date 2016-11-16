@@ -71,17 +71,17 @@ class CompanionPlant implements \JsonSerializable{
 	/**
 	 * mutator method for this companion plant 1 id
 	 *
-	 * @param int|null $newCompanionPlantId new value of companion plant 1 id
+	 * @param int|null $newCompanionPlant1Id new value of companion plant 1 id
 	 * @throws \RangeException if $newCompanionPlant1Id is not positive
 	 * @throws \TypeError if $newCompanionPlant1Id is not an integer
 	 **/
-	public function setCompanionPlant1Id (int $newCompanionPlantId) {
+	public function setCompanionPlant1Id (int $newCompanionPlant1Id) {
 		// verify the companion plant 1 is positive
-		if($newCompanionPlantId <= 0) {
-			throw(new \RangeException("companion plant is not a positive"));
+		if($newCompanionPlant1Id <= 0) {
+			throw(new \RangeException("companion plant  1is not a positive"));
 		}
 		// convert and store the companion plant 1 id
-		$this->companionPlant1Id =$newCompanionPlantId;
+		$this->companionPlant1Id =$newCompanionPlant1Id;
 	}
 	/**
 	 * accessor method for companion plant 2 id
