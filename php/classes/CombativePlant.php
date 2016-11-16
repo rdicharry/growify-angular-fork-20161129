@@ -128,6 +128,7 @@ class CombativePlant implements \JsonSerializable{
 			$insertQuery = "INSERT INTO combativePlant(combativePlant1Id, combativePlant2Id) VALUES (:combativePlant1Id, :combativePlant2Id )";
 			$insertStatement = $pdo->prepare($insertQuery);
 
+			// bind the member variables to the place holders in the template
 			$insertStatement->execute($parameters);
 		} else {
 			throw(new \PDOException("cannot insert duplicate combative plant entry"));

@@ -258,7 +258,6 @@ class CombativePlantTest extends GrowifyTest {
 		$combativePlants = CombativePlant::getCombativePlantsByPlantId($this->getPDO(),  $this->combativePlant2->getPlantId());
 
 		$this->assertCount(0, $combativePlants);
-
 	}
 
 	/**

@@ -172,7 +172,13 @@ class Profile implements \JsonSerializable {
 	 * @param string $newProfileZipCode
 	 **/
 	public function setProfileZipCode($newProfileZipCode) {
-		$this->profileZipCode = $newProfileZipCode;
+		$newProfileZipCode = filter_var($newProfileZipCode, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(strlen($newProfileZipCode) === 5 || strlen($newProfileZipCode) === 9) {
+			$this->profileZipCode = $newProfileZipCode;
+		}
+		else {
+			throw (new \InvalidArgumentException("zipcode is of invalid length"));
+		}
 	}
 
 	/**
@@ -299,11 +305,11 @@ class Profile implements \JsonSerializable {
 	 **/
 	public function update(\PDO $pdo) {
 		//create query template
-		$query = "UPDATE profile SET profileUsername = :profileUsername, profileEmail = :profileEmail, profileZipCode = :profileZipCode, profileHash = :profileHash, profileSalt = :profileSalt, profileActivation = :profileActivation";
+		$query = "UPDATE profile SET profileUsername = :profileUsername, profileEmail = :profileEmail, profileZipCode = :profileZipCode, profileHash = :profileHash, profileSalt = :profileSalt, profileActivation = :profileActivation WHERE profileId = :profileId";
 		$statement = $pdo->prepare($query);
 
 		// bind member variables to placeholders
-		$parameters = ["profileUsername" => $this->profileUsername, "profileEmail" => $this->profileEmail, "profileZipCode" => $this->profileZipCode, "profileHash" => $this->profileHash, "profileSalt" => $this->profileSalt, "profileActivation" => $this->profileActivation];
+		$parameters = ["profileId" => $this->profileId, "profileUsername" => $this->profileUsername, "profileEmail" => $this->profileEmail, "profileZipCode" => $this->profileZipCode, "profileHash" => $this->profileHash, "profileSalt" => $this->profileSalt, "profileActivation" => $this->profileActivation];
 		$statement->execute($parameters);
 	}
 
