@@ -70,11 +70,6 @@ class PlantTest extends GrowifyTest {
 	 * @var string $VALID_PLANTSOILMOISTURE
 	 **/
 	protected $VALID_PLANTSOILMOISTURE = "D";
-	/**
-	 * The plant being tested
-	 * @var Plant plant
-	 **/
-	protected $plant = null;
 
 	public final function setUp() {
 		// run the default setUp() method
