@@ -110,7 +110,7 @@ class ZipCode implements \JsonSerializable{
 	 *
 	 * @param \PDO $pdo the php data object used to delete a row from the the zipCode table
 	 * @throws \PDOException if an error regarding the php data object occured
-	 **/
+	 */
 	public function insert(\PDO $pdo){
 		try {
 			$query = "INSERT INTO zipCode(zipCodeCode, zipCodeZone) VALUES(:zipCodeCode, :zipCodeZone)";
