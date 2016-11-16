@@ -168,46 +168,7 @@ class CombativePlant implements \JsonSerializable{
 
 /*	no update for this object - we do not have a use case for it. public function update(\PDO $pdo){	}*/
 
-	/**
-	 * Get a single combative plant entry by specifying BOTH plant Ids.
-	 * Note that the order plant ids are specified does not matter.
-	 *
-	 * @param \PDO $pdo a PDO connection object
-	 * @param int $plant1Id a valid plantId
-	 * @param int $plant2Id another valid plant Id.
-	 * @return CombativePlant|null return a CombativePlant that has
-	 * both specifiec plantIds (however, they may have been stored in the reversed order), or none if ther is no combative plant entry that has BOTH of the specified plant ids.
-	 * @throws \PDOException when mySQL related errors occur.
-	 * @throws \TypeError if the parameters don't match the type hints.
-	 */
-	/*
-	public static function getCombativePlantByBothPlantIds(\PDO $pdo, int $plant1Id, int $plant2Id){
-		if($plant1Id <=0 || $plant1Id <=0){
-			throw(new \RangeException("combative plant id must be positive"));
-		}
 
-		// create query template
-		$query = "SELECT combativePlant1Id, combativePlant2Id FROM combativePlant WHERE ((combativePlant1Id = :plant1Id, combativePlant2Id = :plant2Id) OR (combativePlant1Id = :plant2Id, combativePlant2Id = :plant1Id))";
-		$statement = $pdo->prepare($query);
-
-		// bind parameters
-		$parameters = ["plant1Id"=>$plant1Id, "plant2Id"=>$plant2Id];
-		$statement->execute($parameters);
-
-		// get result from mySQL
-		try {
-			$combativePlant = null;
-			$statement->setFetchMode(\PDO::FETCH_ASSOC);
-			$row = $statement->fetch();
-			if($row !== false){
-				$combativePlant = new CombativePlant($row["combativePlant1Id"], $row["combativePlant2Id"]);
-			}
-		} catch(\Exception $exception){
-				// if row couldn't be converted, rethrow it
-			throw(new \PDOException($exception->getMessage(), 0, $exception));
-		}
-		return $combativePlant;
-	}*/
 
 	/**
 	 * Get all of the Combative Plant entries that have the specified plant Id.

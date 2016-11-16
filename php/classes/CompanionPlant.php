@@ -182,47 +182,7 @@ class CompanionPlant implements \JsonSerializable{
 
 
 
-/**
- * get a single companion plant entry by specifying BOTH plant ids.
- *  order of plant ids does not matter
- *
- * @param \PDO $pdo a PDO connection object
- * @param int $plant1Id a valid plant id
- * @param int $plant2Id a valid plant id
- * @return CompanionPlant|null return a CompanionPlant that has both specific plant ids (in any order), or none if there is not companion plant entry that has BOTH of the specified plant ids.
- * @throws \PDOException when mySQL related errors occur
- * @throws \TypeError if the parameters don't match the type hints
- **/
-/*public static function getCompanionPlantsByPlantId(\PDO $pdo, int $plant1Id) {
-	if($plant1Id <=0) {
-		throw(new\RangeException("companion plant id must be positive"));
-	}
 
-		//create query template
-	$query = "SELECT companionPlant1Id, companionPlant2Id FROM companionPlant WHERE ((companionPlant1Id = :plant1Id) OR (companionPlant2Id = :plantId))";
-		$statement = $pdo->prepare($query);
-
-		//bind parameters
-		$parameters = ["plant1Id"=>$plant1Id];
-		$statement->execute($parameters);
-
-		// build an array of companionPlants
-		$companionPlants = new \SplFixedArray($statement->rowCount());
-		$statement->setFetchMode(\PDO::FETCH_ASSOC);
-		while(($row=$statement->fetch()) !== false) {
-			try {
-				$companionPlant = new CompanionPlant ($row["companionPlant1Id"], $row["companionPlant2Id"]);
-				$companionPlants[$companionPlants->key()]=$companionPlant;
-				$companionPlants->new();
-			}catch(\Exception $exception){
-				//if the row couldn't be converted, rethrow it
-				throw(new \PDOException($exception->getMessage(), 0, $exception));
-			}
-
-		}
-		return ($companionPlants);
-}
-	*/
 
 	/**
 	 * Gets all Companion Plant entries that have the specified plant id.
