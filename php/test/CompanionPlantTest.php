@@ -64,7 +64,7 @@ class CompanionPlantTest extends GrowifyTest {
 
 		//grab date from mySQL and enforce fields match
 		// e.g. all returned entries have the expected ID as either 1st or 2nd field.
-		$results = CompanionPlant::getCompanionPlantsByPlantId($this->getPDO(), $companionPlant->getCompanionPlant1Id());
+		$results = CompanionPlant::getAllCompanionPlantsByPlantId($this->getPDO(), $companionPlant->getCompanionPlant1Id());
 
 		//first check array parameters
 		$this->assertEquals($numRows+1, $this->getConnection()->getRowCount("companionPlant"));
@@ -116,7 +116,7 @@ $this->assertTrue(true); // caught expected exception
 }
 
 // check that no rows are affected.
-$results = CompanionPlant::getCompanionPlantsByPlantId($this->getPDO(), $this->companionPlant1->getPlantId());
+$results = CompanionPlant::getAllCompanionPlantsByPlantId($this->getPDO(), $this->companionPlant1->getPlantId());
 $this->assertCount(1, $results);
 }
 	/**
@@ -151,7 +151,7 @@ $this->assertCount(1, $results);
 
 		// get data from mySQL and enforce the entry was deleted
 
-		$pdoCompanionPlants = CompanionPlant::getCompanionPlantsByPlantId ($this->getPDO(), $this->companionPlant1->getPlantId());
+		$pdoCompanionPlants = CompanionPlant::getAllCompanionPlantsByPlantId ($this->getPDO(), $this->companionPlant1->getPlantId());
 		$this->assertEquals($numRows, $this->getConnection()->getRowCount("companionPlant"));
 	}
 
@@ -175,7 +175,7 @@ $this->assertCount(1, $results);
 		$companionPlant2->delete($this->getPDO());
 
 		// get data from mySQL and enforce the entry was deleted.
-		$pdoCompanionPlant = CompanionPlant::getCompanionPlantsByPlantId ($this->getPDO(), $this->companionPlant1->getPlantId());
+		$pdoCompanionPlant = CompanionPlant::getAllCompanionPlantsByPlantId ($this->getPDO(), $this->companionPlant1->getPlantId());
 		//$this->assertEmpty($pdoCompanionPlant);
 		$this->assertEquals($numRows, $this->getConnection()->getRowCount ("companionPlant"));
 
@@ -194,7 +194,7 @@ $this->assertCount(1, $results);
 	/**
 	 * test ability to retrieve the CompanionPlant record by the second Plant entry (companionPlant2)
 	 **/
-	public function testGetValidCombativePlantEntryByPlantId(){
+	public function testGetValidCompanionPlantEntryByPlantId(){
 
 		//we shouldn't know what order the plants will be inside the DB so need to test against either one (two plant id's)
 		//a query for a particular companion plant should return all valid plants
@@ -207,7 +207,7 @@ $this->assertCount(1, $results);
 		$companionPlant->insert($this->getPDO());
 
 		// grab the data and enforce fields match expectations
-		$results = CompanionPlant::getCompanionPlantsByPlantId($this->getPDO(), $this->companionPlant2->getPlantId());
+		$results = CompanionPlant::getAllCompanionPlantsByPlantId($this->getPDO(), $this->companionPlant2->getPlantId());
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("companionPlant"));
 		$this->assertCount(1, $results);
 		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\Growify\\CompanionPlant", $results);
@@ -225,7 +225,7 @@ $this->assertCount(1, $results);
 
 		// get a CompanionPlant entry by searching for a plant that does not exist
 
-		$companionPlants = CompanionPlant::getCompanionPlantsByPlantId($this->getPDO(), $this->companionPlant2->getPlantId());
+		$companionPlants = CompanionPlant::getAllCompanionPlantsByPlantId($this->getPDO(), $this->companionPlant2->getPlantId());
 		$this->assertCount(0, $companionPlants);
 	}
 	/**
