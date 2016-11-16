@@ -187,7 +187,7 @@ $this->assertCount(1, $results);
 	 **/
 	public function testDeleteInvalidCompanionPlantEntry(){
 		// create a CompanionPlant and try to delete without actually inserting it
-		$companionPlant = new CompanionPlant($this->companionPlant1->getPlantId(),$this->companionPlant2->getPlantId());
+		$companionPlant = new CompanionPlant(GrowifyTest::INVALID_KEY,$this->companionPlant2->getPlantId());
 		$companionPlant->delete($this->getPDO());
 	}
 
