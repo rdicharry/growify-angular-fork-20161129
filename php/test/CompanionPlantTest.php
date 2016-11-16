@@ -152,6 +152,7 @@ $this->assertCount(1, $results);
 		// get data from mySQL and enforce the entry was deleted
 
 		$pdoCompanionPlants = CompanionPlant::getAllCompanionPlantsByPlantId ($this->getPDO(), $this->companionPlant1->getPlantId());
+		$this->assertCount(0, $pdoCompanionPlants);
 		$this->assertEquals($numRows, $this->getConnection()->getRowCount("companionPlant"));
 	}
 

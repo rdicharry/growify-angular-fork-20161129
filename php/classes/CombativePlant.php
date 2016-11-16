@@ -143,42 +143,26 @@ class CombativePlant implements \JsonSerializable{
 	 * @throws \TypeError if $pdo is not a PDO connection object.
 	 */
 	public function delete(\PDO $pdo){
-		// bind parameters
-		$parameters = ["combativePlant1Id"=>$this->combativePlant1Id, "combativePlant2Id"=>$this->combativePlant2Id];
-
-
-		// first check if the entry exists, if not, throw an exception
-		//$query = "SELECT * FROM combativePlant WHERE (combativePlant1Id  = :combativePlant1Id) AND (combativePlant2Id = :combativePlant2Id)";
-		//$statement = $pdo->prepare($query);
-		//$statement->execute($parameters);
-
+		/// first check if the entry exists, if not, throw an exception
 		if(CombativePlant::existsCombativePlantEntry($pdo, $this->combativePlant1Id, $this->combativePlant2Id) === false){
 			throw new \PDOException("cannot delete an entry that does not exist");
 		}
 
-		// chech with argument order reversed
-		//$query = "SELECT * FROM combativePlant WHERE (combativePlant1Id  = :combativePlant2Id) AND (combativePlant2Id = :combativePlant1Id)";
-		//$statement = $pdo->prepare($query);
-		//$statement->execute($parameters);
-		//if($statement->columnCount() === 0){
-		//	throw new PDOException("cannot delete an entry that does not exist");
-		//}
+		// bind parameters
+		$parameters = ["combativePlant1Id"=>$this->combativePlant1Id, "combativePlant2Id"=>$this->combativePlant2Id];
 
 		// create query template
-		// note: need to check both cases: combativeplant1Id, combativeplant2Id AND combativeplant2Id, combativeplant1Id since order does not matter
-		// TODO ensure that we have done this check in companion plant as well!
 		$query = "DELETE FROM combativePlant WHERE (combativePlant1Id  = :combativePlant1Id) AND (combativePlant2Id = :combativePlant2Id)";
 		$statement = $pdo->prepare($query);
 
-		// bind parameters
-		$parameters = ["combativePlant1Id"=>$this->combativePlant1Id, "combativePlant2Id"=>$this->combativePlant2Id];
+		// execute statement
 		$statement->execute($parameters);
 
+		// switch order of parameters input into mySQL, and run new query
 		$query = "DELETE FROM combativePlant WHERE (combativePlant1Id  = :combativePlant2Id) AND ( combativePlant2Id = :combativePlant1Id)";
 		$statement = $pdo->prepare($query);
 
-		// bind parameters
-		$parameters = ["combativePlant1Id"=>$this->combativePlant1Id, "combativePlant2Id"=>$this->combativePlant2Id];
+		// execute statement
 		$statement->execute($parameters);
 	}
 

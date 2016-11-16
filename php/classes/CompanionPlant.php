@@ -161,11 +161,22 @@ class CompanionPlant implements \JsonSerializable{
 	 * @throws \TypeError i $pdo is not a PDO connection object
 	 **/
 	public function delete(\PDO $pdo) {
+		// first check if the entry exists in order to delete , throw an error otherwise
+		if(CompanionPlant::existsCompanionPlantEntry($pdo, $this->companionPlant1Id, $this->companionPlant2Id) === false){
+			throw new \PDOException("cannot delete an entry that does not exist");
+		}
+
+		// bind parameters
+		$parameters = ["companionPlant1Id" => $this->companionPlant1Id, "companionPlant2Id" => $this->companionPlant2Id];
+
+		// create query template and execute
+		$query = "DELETE FROM companionPlant WHERE (companionPlant1Id  = :companionPlant1Id) AND (companionPlant2Id = :companionPlant2Id)";
+		$statement = $pdo->prepare($query);
+		$statement->execute($parameters);
+
+		// switch order of parameters input int mySQL, and run the new query
 		$query = "DELETE FROM companionPlant WHERE (companionPlant1Id = :companionPlant2Id) AND (companionPlant2Id =:companionPlant1Id)";
 		$statement = $pdo->prepare($query);
-
-		//bind parameters
-		$parameters = ["companionPlant1Id" => $this->companionPlant1Id, "companionPlant2Id" => $this->companionPlant2Id];
 		$statement->execute($parameters);
 	}
 
