@@ -99,11 +99,10 @@ class PlantArea implements \JsonSerializable {
 		try {
 			$this->setPlantAreaId ($newPlantAreaId);
 			$this->setPlantAreaPlantId($newPlantAreaPlantId);
-			$this->setPlantAreaStartDay($newPlantAreaStartDay);
-			$this->setPlantAreaEndDay($newPlantAreaEndDay);
-			$this->setPlantAreaStartMonth($newPlantAreaStartMonth);
-			$this->setPlantAreaEndMonth($newPlantAreaEndMonth);
-			$this->setplantAreaNumber($newplantAreaNumber);
+			$this->setPlantAreaStartMonthAndDay($newPlantAreaStartMonth, $newPlantAreaStartDay);
+			$this->setPlantAreaEndMonthAndDay($newPlantAreaEndMonth, $newPlantAreaEndDay);
+
+			$this->setPlantAreaNumber($newplantAreaNumber);
 		} catch(\InvalidArgumentException $invalidArgument) {
 			// rethrow the execption to the caller
 			throw(new \InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
@@ -188,23 +187,7 @@ class PlantArea implements \JsonSerializable {
 		return ($this->plantAreaStartDay);
 	}
 
-	/**
-	 * mutator method for plant area start day
-	 *
-	 * @param int $newPlantAreaStartDay plant area start day
-	 * @throws \TypeError if $newPlantAreaStartDay is not an integer
-	 * @throws \OutOfBoundsException if $newPlantAreaStartDay is not a valid day of the month (Less than 1 or greater than 31)
-	 **/
-	public function setPlantAreaStartDay($newPlantAreaStartDay) {
-		//check if $newPlantAreaStartDate is an int, if not throw TypeError
-		if(!is_int($newPlantAreaStartDay)){
-			throw(new \TypeError("Plant Area Start Day is not an Integer"));
-		}elseif($newPlantAreaStartDay < 1 || $newPlantAreaStartDay > 31){
-			throw (new \RangeException("This plantAreaStartDay is not a valid day of the month"));
-		}
 
-		$this->plantAreaStartDay = $newPlantAreaStartDay;
-	}
 
 	/**
 	 * accessor method for plant area end day
@@ -215,23 +198,7 @@ class PlantArea implements \JsonSerializable {
 		return ($this->plantAreaEndDay);
 	}
 
-	/**
-	 * mutator method for plant area end day
-	 *
-	 * @param int $newPlantAreaEndDay plant area end day
-	 * @throws \TypeError if $newPlantAreaEndDay is not an integer
-	 * @throws \OutOfBoundsException if $newPlantAreaEndDay is not a valid day of the month (Less than 1 or greater than 31)
-	 **/
-	public function setPlantAreaEndDay($newPlantAreaEndDay) {
-		//check if $newPlantAreaStartDate is an int, if not throw TypeError
-		if(!is_int($newPlantAreaEndDay)){
-			throw(new \TypeError("Plant Area End Day is not an Integer"));
-		}elseif($newPlantAreaEndDay < 1 || $newPlantAreaEndDay > 31){
-			throw (new \RangeException("This plantAreaEndDay is not a valid day of the month"));
-		}
 
-		$this->plantAreaEndDay = $newPlantAreaEndDay;
-	}
 
 	/**
 	 * verify a set of integers represents a valid date. e.g.
@@ -272,15 +239,19 @@ class PlantArea implements \JsonSerializable {
 	 * @throws \TypeError if $newPlantAreaStartMonth is not an integer
 	 * @throws \OutOfBoundsException if $newPlantAreaEndMonth is not a valid day of the month (Less than 1 or greater than 31)
 	 **/
-	public function setPlantAreaStartMonth($newPlantAreaStartMonth) {
+	public function setPlantAreaStartMonthandDay($newPlantAreaStartMonth, $newPlantAreaStartDay) {
 		//check if $newPlantAreaStartMonth is an int, if not throw TypeError
 		if(!is_int($newPlantAreaStartMonth)){
 			throw(new \TypeError("Plant Area Start Month is not an Integer"));
 		}elseif($newPlantAreaStartMonth < 1 || $newPlantAreaStartMonth > 31){
 			throw (new \RangeException("This plantAreaStartMonth is not a valid day of the month"));
 		}
+		if(!self::validateDate($newPlantAreaStartMonth, $newPlantAreaStartDay)) {
+			throw(new \RangeException("not a valid plant area start date"));
+		}
 
 		$this->plantAreaStartMonth = $newPlantAreaStartMonth;
+		$this->plantAreaStartDay = $newPlantAreaStartDay;
 	}
 
 	/**
@@ -299,15 +270,20 @@ class PlantArea implements \JsonSerializable {
 	 * @throws \TypeError if $newPlantAreaEndMonth is not an integer
 	 * @throws \OutOfBoundsException if $newPlantAreaEndMonth is not a valid day of the month (Less than 1 or greater than 31)
 	 **/
-	public function setPlantAreaEndMonth($newPlantAreaEndMonth) {
+	public function setPlantAreaEndMonthAndDay($newPlantAreaEndMonth, $newPlantAreaEndDay) {
 		//check if $newPlantAreaEndMonth is an int, if not throw TypeError
 		if(!is_int($newPlantAreaEndMonth)){
 			throw(new \TypeError("Plant Area End Month is not an Integer"));
-		}elseif($newPlantAreaEndMonth < 1 || $newPlantAreaEndMonth > 31){
-			throw (new \RangeException("This plantAreaEndMonth is not a valid day of the month"));
+		}elseif($newPlantAreaEndMonth < 1 || $newPlantAreaEndMonth > 12){
+			throw (new \RangeException("This plantAreaEndMonth is not a valid  month"));
+		}
+
+		if(!self::validateDate($newPlantAreaEndMonth, $newPlantAreaEndDay)){
+			throw(new \RangeException("not a valid date"));
 		}
 
 		$this->plantAreaEndMonth = $newPlantAreaEndMonth;
+		$this->plantAreaEndDay = $newPlantAreaEndDay;
 	}
 
 
@@ -329,16 +305,16 @@ class PlantArea implements \JsonSerializable {
 	 * @throws \InvalidArgumentException if $newplantAreaNumber does not begin with a number ranging from 4-8
 	 * @throws \InvalidArgumentException if $newplantAreaNumber does not end with a character that is either 'a' or 'b'
 	 */
-	public function setplantAreaNumber($newplantAreaNumber) {
+	public function setPlantAreaNumber($newplantAreaNumber) {
 		//change: makes sure the $newplantAreaNumber is a string
 		if(!is_string($newplantAreaNumber)){
 			throw (new \TypeError("This Plant Area Growing Zone is not a string"));
 		} elseif(strlen($newplantAreaNumber)!= 2){ //change: makes sure the string contains two characters
 			throw (new \OutOfBoundsException("This is not a valid New Mexico Plant Area Growing Zone"));
-		} elseif((int)(substr($newplantAreaNumber,0,0)) < 8 || (int)(substr($newplantAreaNumber,0,0)) > 4){
+		} elseif(intval(substr($newplantAreaNumber,0,1)) > 8 || intval(substr($newplantAreaNumber,0,1)) < 4){
 			//change: Validates the $newplantAreaNumber, making sure that it is an integer and between 4-8 in value (The 4 NM growing zones)
 			throw (new \InvalidArgumentException("This Plant Area Area Value is not a valid New Mexco growing zone"));
-		} elseif(substr($newplantAreaNumber,1) != 'a' && substr($newplantAreaNumber,1) != 'b'){
+		} elseif(!(substr($newplantAreaNumber,1) === 'a' || substr($newplantAreaNumber,1) === 'b')){
 			throw (new \InvalidArgumentException("This Plant Area Area Value is not a valid New Mexco Growing Zone")); //change: makes sure the last character of the Plant Area Area Number is either a or b (a valid new mexico growing zone consists of a number from 4-8 followed by a character that is either a or b
 		}
 		// convert and store the plant area area number

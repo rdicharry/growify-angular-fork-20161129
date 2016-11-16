@@ -98,7 +98,7 @@ class PlantAreaTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("plantArea");
 
 		// create a new PlantArea and insert into mySQL
-		$plantArea = new PlantArea(null, $this->plant->getPlantId(), $this->VALID_PLANTAREASTARTDAY, $this->VALID_PLANTAREAENDDAY, $this->VALID_PLANTAREASTARTMONTH, $this->VALID_PLANTAREAENDMONTH, $this->VALID_PLANTAREANUMBER);
+		$plantArea = new PlantArea(null, $this->plant->getPlantAreaId(), $this->VALID_PLANTAREASTARTDAY, $this->VALID_PLANTAREAENDDAY, $this->VALID_PLANTAREASTARTMONTH, $this->VALID_PLANTAREAENDMONTH, $this->VALID_PLANTAREANUMBER);
 		$plantArea->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
