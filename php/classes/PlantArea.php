@@ -84,25 +84,23 @@ class PlantArea implements \JsonSerializable {
 	 * plantAreaId is not included in the parameters because it will be set once inserted into a table.
 	 *
 	 * @param int $newPlantAreaId
-	 * @param string $newPlantAreaStartDate
-	 * @param string $newPlantAreaEndDate
-	 * @param string $newplantAreaNumber
+	 * @param int $newPlantAreaPlantId
+	 * @param string $newPlantAreaStartDay
+	 * @param string $newPlantAreaEndDay
+	 * @param string $newPlantAreaStartMonth
+	 * @param string $newPlantAreaEndMonth
+	 * @param string $newPlantAreaNumber
 	 * @throws Exception if some other exception occurs
 	 * @throws TypeError if data types violate type hints
-	 * @internal param int|null $plantAreaId id for this PlantId
-	 * @internal param null|string $plantAreaPlantId plant id for this plant area
-	 * @internal param string $plantAreaStartDate start date for this PlantArea
-	 * @internal param string $plantAreaEndDate end date for this PlantArea
-	 * @internal param int|null $plantAreaNumber the area number of this PlantArea
 	 */
-	public function __construct($newPlantAreaId, $newPlantAreaPlantId, $newPlantAreaStartDay, $newPlantAreaEndDay, $newPlantAreaStartMonth, $newPlantAreaEndMonth, $newplantAreaNumber) {
+	public function __construct($newPlantAreaId, $newPlantAreaPlantId, $newPlantAreaStartDay, $newPlantAreaEndDay, $newPlantAreaStartMonth, $newPlantAreaEndMonth, $newPlantAreaNumber) {
 		try {
 			$this->setPlantAreaId ($newPlantAreaId);
 			$this->setPlantAreaPlantId($newPlantAreaPlantId);
 			$this->setPlantAreaStartMonthAndDay($newPlantAreaStartMonth, $newPlantAreaStartDay);
 			$this->setPlantAreaEndMonthAndDay($newPlantAreaEndMonth, $newPlantAreaEndDay);
 
-			$this->setPlantAreaNumber($newplantAreaNumber);
+			$this->setPlantAreaNumber($newPlantAreaNumber);
 		} catch(\InvalidArgumentException $invalidArgument) {
 			// rethrow the execption to the caller
 			throw(new \InvalidArgumentException($invalidArgument->getMessage(), 0, $invalidArgument));
@@ -299,26 +297,26 @@ class PlantArea implements \JsonSerializable {
 	/**
 	 * @mutator method for plant area area number
 	 *
-	 * @param string $newplantAreaNumber the new area that will be passed into this PlantArea's plantAreaNumber field
-	 * @throws TypeError if $newplantAreaNumber is not a string
-	 * @throws \OutOfBoundsException if $newplantAreaNumber is not 2 characters long
-	 * @throws \InvalidArgumentException if $newplantAreaNumber does not begin with a number ranging from 4-8
-	 * @throws \InvalidArgumentException if $newplantAreaNumber does not end with a character that is either 'a' or 'b'
+	 * @param string $newPlantAreaNumber the new area that will be passed into this PlantArea's plantAreaNumber field
+	 * @throws TypeError if $newPlantAreaNumber is not a string
+	 * @throws \OutOfBoundsException if $newPlantAreaNumber is not 2 characters long
+	 * @throws \InvalidArgumentException if $newPlantAreaNumber does not begin with a number ranging from 4-8
+	 * @throws \InvalidArgumentException if $newPlantAreaNumber does not end with a character that is either 'a' or 'b'
 	 */
-	public function setPlantAreaNumber($newplantAreaNumber) {
-		//change: makes sure the $newplantAreaNumber is a string
-		if(!is_string($newplantAreaNumber)){
+	public function setPlantAreaNumber($newPlantAreaNumber) {
+		//change: makes sure the $newPlantAreaNumber is a string
+		if(!is_string($newPlantAreaNumber)){
 			throw (new \TypeError("This Plant Area Growing Zone is not a string"));
-		} elseif(strlen($newplantAreaNumber)!= 2){ //change: makes sure the string contains two characters
+		} elseif(strlen($newPlantAreaNumber)!= 2){ //change: makes sure the string contains two characters
 			throw (new \OutOfBoundsException("This is not a valid New Mexico Plant Area Growing Zone"));
-		} elseif(intval(substr($newplantAreaNumber,0,1)) > 8 || intval(substr($newplantAreaNumber,0,1)) < 4){
-			//change: Validates the $newplantAreaNumber, making sure that it is an integer and between 4-8 in value (The 4 NM growing zones)
+		} elseif(intval(substr($newPlantAreaNumber,0,1)) > 8 || intval(substr($newPlantAreaNumber,0,1)) < 4){
+			//change: Validates the $newPlantAreaNumber, making sure that it is an integer and between 4-8 in value (The 4 NM growing zones)
 			throw (new \InvalidArgumentException("This Plant Area Area Value is not a valid New Mexco growing zone"));
-		} elseif(!(substr($newplantAreaNumber,1) === 'a' || substr($newplantAreaNumber,1) === 'b')){
+		} elseif(!(substr($newPlantAreaNumber,1) === 'a' || substr($newPlantAreaNumber,1) === 'b')){
 			throw (new \InvalidArgumentException("This Plant Area Area Value is not a valid New Mexco Growing Zone")); //change: makes sure the last character of the Plant Area Area Number is either a or b (a valid new mexico growing zone consists of a number from 4-8 followed by a character that is either a or b
 		}
 		// convert and store the plant area area number
-		$this->plantAreaNumber = $newplantAreaNumber;
+		$this->plantAreaNumber = $newPlantAreaNumber;
 	}
 
 	/**
