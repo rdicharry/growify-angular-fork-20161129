@@ -6,7 +6,10 @@
  * Time: 9:34 PM
  */
 
-
+/**
+ * Connect to encrypted config and get PDO object
+ * Array of zipcodes/fakearea
+ */
 $file = file_get_contents('zip_code_database.csv');
 $csv = str_getcsv($file);
 for($x = 0; $x < (count($csv) - 3); $x += 3){

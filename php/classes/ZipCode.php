@@ -78,10 +78,10 @@ class ZipCode implements \JsonSerializable{
 			throw (new \TypeError("This zip code area is not a string"));
 		} elseif(strlen($zipCodeArea)!= 2){
 			throw (new \OutOfBoundsException("This is not a valid New Mexico growing Zone"));
-		} elseif(substr($zipCodeArea,0,1)!= '4' && substr($zipCodeArea,0,1)!= '5' && substr($zipCodeArea,0,1)!= '6' && substr($zipCodeArea,0,1)!= '7' && substr($zipCodeArea,0,1)!= '8'){
-			throw (new \InvalidArgumentException("This zip code area is not a valid New Mexco growing zone"));
+		} elseif($zipCodeArea[0] < '4' || $zipCodeArea[0] > '8') {// elseif(substr($zipCodeArea,0,1)!= '4' && substr($zipCodeArea,0,1)!= '5' && substr($zipCodeArea,0,1)!= '6' && substr($zipCodeArea,0,1)!= '7' && substr($zipCodeArea,0,1)!= '8'){
+			throw (new \InvalidArgumentException("This zip code area is not a valid New Mexico growing zone"));
 		} elseif(substr($zipCodeArea,1,1) != 'a' && substr($zipCodeArea,1,1) != 'b'){
-			throw (new \InvalidArgumentException("This zip code area is not a valid New Mexco growing zone"));
+			throw (new \InvalidArgumentException("This zip code area is not a valid New Mexico growing zone"));
 		}
 		//Set this object's value of zipCodeArea to the specified ZipCodeArea in the Parameter
 		$this->zipCodeArea = $zipCodeArea;
