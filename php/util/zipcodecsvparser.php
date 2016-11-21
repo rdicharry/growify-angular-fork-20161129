@@ -30,7 +30,7 @@ function csvParse() {
 	$zipCodeAreaArray = array();
 	$csv = str_getcsv($file);
 	for($x = 0; $x < (count($csv) - 3); $x += 3) {
-		if(substr($csv[$x], 0, 2) == "NM") {
+		if(substr($csv[$x], 0, 2) === "NM") {
 			$zipcode = substr($csv[$x - 3], 2);
 			$city = $csv[$x - 2];
 			$additionalarea = ($csv[$x - 1]);
