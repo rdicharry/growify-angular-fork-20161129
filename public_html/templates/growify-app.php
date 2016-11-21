@@ -18,7 +18,7 @@
 					<ul class="nav navbar-nav navbar-right">
 						<li><a routerLink="">Home</a></li>
 						<li><a routerLink="/login">Login</a></li>
-						<li><a routerLink="/signIn">Sign In</a></li>
+						<li><a routerLink="/signup">Sign Up</a></li>
 					</ul>
 				</div><!-- /.navbar-collapse -->
 			</div><!-- /.container-fluid -->
