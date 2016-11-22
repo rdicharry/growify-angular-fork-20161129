@@ -38,17 +38,17 @@ CREATE TABLE profile(
 CREATE TABLE plant(
 
 	plantId SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT, -- PRIMARY KEY
-	plantSoilMoisture VARCHAR(3) NOT NULL,
-	plantDescription VARCHAR(512),
-	plantSpread FLOAT UNSIGNED NOT NULL,
-	plantHeight FLOAT UNSIGNED NOT NULL,
-	plantType VARCHAR(9) NOT NULL ,
-	plantDaysToHarvest SMALLINT UNSIGNED NOT NULL,
+	plantName VARCHAR(26) ,
+	plantLatinName VARCHAR (72) UNIQUE,
 	plantVariety VARCHAR(64) NOT NULL,
-	plantName VARCHAR(26) UNIQUE NOT NULL,
-	plantMaxTemp TINYINT UNSIGNED NOT NULL,
-	plantMinTemp TINYINT SIGNED NOT NULL,
-
+	plantType VARCHAR(9) NOT NULL ,
+	plantDescription VARCHAR(1526),
+	plantSpread FLOAT UNSIGNED ,
+	plantHeight FLOAT UNSIGNED ,
+	plantDaysToHarvest SMALLINT UNSIGNED ,
+	plantMinTemp TINYINT SIGNED ,
+	plantMaxTemp TINYINT SIGNED ,
+	plantSoilMoisture VARCHAR(3) ,
 	PRIMARY KEY (plantId) -- ,
 	-- FOREIGN KEY (plantId) REFERENCES garden(gardenPlantId),
 	-- FOREIGN KEY (plantId) REFERENCES plantArea(plantAreaPlantId)
