@@ -1,5 +1,5 @@
 <body>
-	<main>
+		<main>
 		<!-- Insert Bootstrap navbar, with Angular-friendly links -->
 		<nav class="navbar navbar-default">
 			<div class="container">
