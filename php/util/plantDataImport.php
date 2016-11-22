@@ -52,8 +52,16 @@ use Edu\Cnm\Growify\Plant;
 ];
 
 require_once "/etc/apache2/capstone-mysql/encrypted-config.php";
+require_once(dirname(__DIR__) . "/classes/autoload.php");
+
 
 $pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/growify.ini");
+
+// works best if you insert plants for afuture first.
+function insertPlantData($pdo){
+	insertPlantsForAFuture($pdo);
+	//insertNMSUPlantData($pdo);
+}
 
 // iterate over PlantsForAFuture data and add to Plant table.
 function insertPlantsForAFuture(\PDO $pdo){
@@ -61,56 +69,72 @@ function insertPlantsForAFuture(\PDO $pdo){
 	global $usdaHardinessZones;
 
 // get line-by-line with pdo object.
-	// TODO - currently only getting 1 record to test.
-	$query = "SELECT `Latin name`, `Common name`, `Habit`, `Height`, `Width`, `Hardyness`, `FrostTender`, `Moisture`, `Edible uses`, `Uses notes`, `Cultivation details`, `Propagation 1`, `Author`, `Botanical references` FROM PlantsForAFuture LIMIT 1";
+	$query = "SELECT `Latin name`, `Common name`, `Habit`, `Height`, `Width`, `Hardyness`, `FrostTender`, `Moisture`, `Edible uses`, `Uses notes`, `Cultivation details`, `Propagation 1`, `Author`, `Botanical references` FROM PlantsForAFuture ";
 	$statement = $pdo->prepare($query);
-	$statement = $pdo->execute();
+	$statement->execute();
 
 	// get data from PDO object
 	try {
 		$plant = null;
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
-		$row = $statement->fetch();
 
-		if($row !== false) {
-			$plantName = $row["Common name"];
-			$latinName = $row["Latin name"];
-			$plantVariety = null;
-			$plantType = $row["Habit"];
 
-			// plant description - take from plant uses, uses notes, cultivation details, propagation, author, references
-			$plantDescription = $row["Edible uses"].$row["Uses notes"].$row["Cultivation details"].$row["Propagation 1"].$row["Author"].$row["Botanical references"];
-			$plantSpread = $row["Width"]; // meters - convert to feet
-			$plantHeight = $row["Height"]; // meters - convert to feet
-			$plantDaysToHarvest = null; // not provided in this table
+		while(($row = $statement->fetch()) !== false ){}
+			if($row !== false) {
+				$plantName = $row["Common name"];
+				$latinName = $row["Latin name"];
+				$plantVariety = null;
+				$plantType = $row["Habit"];
 
-			// get min temps -
-			// if hardiness data available get from there
-			$plantMinTemp = 32; // default min temp is 32 F
-			$hardiness = null;
-			if($row["Hardiness"]!== null) {
-				$hardiness = intval($row["Hardiness"]);
-				if($hardiness > 0) {
+				// plant description - take from plant uses, uses notes, cultivation details, propagation, author, references
+				$plantDescription = $row["Edible uses"] . $row["Uses notes"] . $row["Cultivation details"] . $row["Propagation 1"] . $row["Author"] . $row["Botanical references"];
+				$plantSpread = $row["Width"]; // meters - convert to feet
+				$plantHeight = $row["Height"]; // meters - convert to feet
+				$plantDaysToHarvest = null; // not provided in this table
 
-					$plantMinTemp = $usdaHardinessZones[$hardiness."b"];
+				// get min temps -
+				// if hardiness data available get from there
+				$plantMinTemp = 32; // default min temp is 32 F
+				$hardiness = null;
+				if($row["Hardyness"] !== null) {
+					$hardiness = intval($row["Hardyness"]);
+					if($hardiness > 0) {
+
+						$plantMinTemp = $usdaHardinessZones[$hardiness . "b"];
 					}
-			}
-
-			// if plant is "frost tender" then set to 32F (esp. if this is higher than hardiness zone temp
-			if($row["Frost Tender"] === "Y"){
-				if($plantMinTemp < 32){
-					$plantMinTemp = 32;
 				}
-			}
-			// (if nothing specified, default to 32F)
 
-			$plantMaxTemp = null; // we dont have ANY data for this. :P
+				// if plant is "frost tender" then set to 32F (esp. if this is higher than hardiness zone temp
+				if($row["FrostTender"] === "Y") {
+					if($plantMinTemp < 32) {
+						$plantMinTemp = 32;
+					}
+				}
+				// (if nothing specified, default to 32F)
 
-			$plantSoilMoisture = $row["Moisture"];
+				$plantMaxTemp = null; // we dont have ANY data for this. :P
 
-			$plant = new Plant($plantName, $latinName, $plantVariety, $plantType, $plantDescription, $plantSpread, $plantHeight, $plantDaysToHarvest, $plantMinTemp, $plantMaxTemp, $plantSoilMoisture);
-			$plant->insert($pdo);
+				$plantSoilMoisture = $row["Moisture"];
+
+				$plant = new Plant(null, $plantName, $latinName, $plantVariety, $plantType, $plantDescription, $plantSpread, $plantHeight, $plantDaysToHarvest, $plantMinTemp, $plantMaxTemp, $plantSoilMoisture);
+				$plant->insert($pdo);
 		}
+
+			/*echo $plant->getPlantId()."<br>";
+			echo $plant->getPlantName()."<br>";
+			echo $plant->getPlantLatinName()."<br>";
+			echo $plant->getPlantVariety()."<br>";
+			echo $plant->getPlantType()."<br>";
+			echo $plant->getPlantDescription()."<br>";
+			echo $plant->getPlantSpread()."<br>";
+			echo $plant->getPlantHeight()."<br>";
+			echo $plant->getPlantDaysToHarvest()."<br>";
+			echo $plant->getPlantMinTemp()."<br>";
+			echo $plant->getPlantMaxTemp()."<br>";
+			echo $plant->getPlantSoilMoisture()."<br>";*/
+
+
+
 	} catch (\PDOException $pdoe){
 		throw(new \PDOException($pdoe->getMessage(), 0, $pdoe));
 
@@ -120,7 +144,15 @@ function insertPlantsForAFuture(\PDO $pdo){
 // iterate over NMSU Vegetable Data and add to Plant table (remember to check if an entry already exists for a given Plant Name.
 function insertNMSUPlantData(){
 
+	// first step - see if this plant already has an entry
+	// query on plantName
+
+	// if the entry is there, update it
+
+	// if the entry is not there, insert it.
 
 }
 
 // Add herb data?
+
+insertPlantData($pdo);
