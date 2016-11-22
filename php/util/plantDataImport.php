@@ -1,8 +1,16 @@
 <?php
 
+use Edu\Cnm\Growify\Plant;
+
 // minimum temp (degrees F) for USDA plant hardiness zones in NM
 // source: http://planthardiness.ars.usda.gov/
-$usdaHardinessZones = [
+ $usdaHardinessZones = [
+ 	"1a" => -60.0,
+	"1b" => -55.0,
+	"2a" => -50.0,
+	"2b" => -45.0,
+	"3a" => -40.0,
+	"3b" => -35.0,
 	"4a" => -30.0,
 	"4b" => -25.0,
 	"5a" => -20.0,
@@ -14,14 +22,21 @@ $usdaHardinessZones = [
 	"8a" => 10.0,
 	"8b" => 15.0,
 	"9a" => 20.0,
-	"9b" => 25.0
-
+	"9b" => 25.0,
+	"10a" => 30,
+	"10b" => 35,
+	"11a" => 40,
+	"11b" => 45,
+	"12a" => 50,
+	"12b" => 55,
+	"13a" => 60,
+	"13b" => 65
 ];
 
 // cross-reference USDA plant hardiness (min winter temp) to NMSU planting areas
 // source http://aces.nmsu.edu/pubs/_circulars/CR457B.pdf
 
-$usdaHardinessToNMSUAreas = [
+ $usdaHardinessToNMSUAreas = [
 	"4a" => 3,
 	"4b" => 3,
 	"5a" => 3,
@@ -34,7 +49,6 @@ $usdaHardinessToNMSUAreas = [
 	"8b" => 1,
 	"9a" => 1,
 	"9b" => 1
-
 ];
 
 require_once "/etc/apache2/capstone-mysql/encrypted-config.php";
@@ -43,6 +57,8 @@ $pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/growify.ini");
 
 // iterate over PlantsForAFuture data and add to Plant table.
 function insertPlantsForAFuture(\PDO $pdo){
+
+	global $usdaHardinessZones;
 
 // get line-by-line with pdo object.
 	// TODO - currently only getting 1 record to test.
@@ -61,18 +77,39 @@ function insertPlantsForAFuture(\PDO $pdo){
 			$latinName = $row["Latin name"];
 			$plantVariety = null;
 			$plantType = $row["Habit"];
+
+			// plant description - take from plant uses, uses notes, cultivation details, propagation, author, references
 			$plantDescription = $row["Edible uses"].$row["Uses notes"].$row["Cultivation details"].$row["Propagation 1"].$row["Author"].$row["Botanical references"];
-			$plantSpread = $row["Width"];
+			$plantSpread = $row["Width"]; // meters - convert to feet
+			$plantHeight = $row["Height"]; // meters - convert to feet
+			$plantDaysToHarvest = null; // not provided in this table
 
-// get min temps -
-// if hardiness data available get from there
+			// get min temps -
+			// if hardiness data available get from there
+			$plantMinTemp = 32; // default min temp is 32 F
+			$hardiness = null;
+			if($row["Hardiness"]!== null) {
+				$hardiness = intval($row["Hardiness"]);
+				if($hardiness > 0) {
 
-// if plant is "frost tender" then set to 32F (esp. if this is higher than hardiness zone temp
+					$plantMinTemp = $usdaHardinessZones[$hardiness."b"];
+					}
+			}
 
-// if nothing specified, set to 32F
+			// if plant is "frost tender" then set to 32F (esp. if this is higher than hardiness zone temp
+			if($row["Frost Tender"] === "Y"){
+				if($plantMinTemp < 32){
+					$plantMinTemp = 32;
+				}
+			}
+			// (if nothing specified, default to 32F)
 
+			$plantMaxTemp = null; // we dont have ANY data for this. :P
 
-// plant description - take from plant uses, uses notes, cultivation details, propagation, author, references
+			$plantSoilMoisture = $row["Moisture"];
+
+			$plant = new Plant($plantName, $latinName, $plantVariety, $plantType, $plantDescription, $plantSpread, $plantHeight, $plantDaysToHarvest, $plantMinTemp, $plantMaxTemp, $plantSoilMoisture);
+			$plant->insert($pdo);
 		}
 	} catch (\PDOException $pdoe){
 		throw(new \PDOException($pdoe->getMessage(), 0, $pdoe));

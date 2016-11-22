@@ -46,12 +46,12 @@ class Plant implements \JsonSerializable{
 	private $plantDescription;
 	/**
 	 * planting distance between this plant and others (in feet)
-	 * @var float $plantSpread
+	 * @var float $plantSpread in FEET
 	 **/
 	private $plantSpread;
 	/**
 	 * average mature height for this plant
-	 * @var float plantHeight
+	 * @var float plantHeight in FEET
 	 **/
 	private $plantHeight;
 
@@ -63,12 +63,12 @@ class Plant implements \JsonSerializable{
 
 	/**
 	 * minimum growing temperature for this plant
-	 * @var int plantMinTemp
+	 * @var int plantMinTemp in degrees F
 	 **/
 	private $plantMinTemp;
 	/**
 	 * maximum growing temperature for this plant
-	 * @var int plantMaxTemp
+	 * @var int plantMaxTemp in degrees F
 	 **/
 	private $plantMaxTemp;
 	/**
