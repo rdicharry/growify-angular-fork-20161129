@@ -34,6 +34,7 @@ CREATE TABLE profile(
 	FOREIGN KEY (profileZipCode) REFERENCES zipCode(zipCodeCode)
 );
 
+
 CREATE TABLE plant(
 
 	plantId SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT, -- PRIMARY KEY

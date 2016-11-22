@@ -37,6 +37,7 @@ class Plant implements \JsonSerializable{
 	 * type of plant
 	 * @var string $plantType
 	 **/
+
 	private $plantType;
 	/**
 	 * planting distance between this plant and others (in feet)
