@@ -39,6 +39,8 @@ $usdaHardinessToNMSUAreas = [
 
 // iterate over PlantsForAFuture data and add to Plant table.
 
+// get line-by-line with pdo object.
+
 // get min temps -
 // if hardiness data available get from there
 
