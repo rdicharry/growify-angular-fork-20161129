@@ -53,6 +53,7 @@ class ZipCode implements \JsonSerializable{
 	 **/
 	public function setZipCodeCode(string $zipCodeCode) {
 		//Validates $zipCodeCode to make sure it is a string that is 5 characters long beginning with either 87 or 88
+		$zipCodeCode = trim($zipCodeCode);
 		if(strlen($zipCodeCode) != 5){
 			throw (new \OutOfBoundsException('The $zipCodeCode Entered is not 5 characters long and is therefore an invalid New Mexico Zip Code'));
 		}
@@ -74,6 +75,8 @@ class ZipCode implements \JsonSerializable{
 	 **/
 	public function setZipCodeArea($zipCodeArea) {
 		//Validates the Zip code area, making sure that it is an intenger and between 1-3 in value (The three NM growing zones)
+
+		$zipCodeArea = trim($zipCodeArea);
 		if(!is_string($zipCodeArea)){
 			throw (new \TypeError("This zip code area is not a string"));
 		} elseif(strlen($zipCodeArea)!= 2){

@@ -15,12 +15,12 @@ require_once("Setup.php");
 
 function csvParse() {
 	$file = file_get_contents('zip_code_database.csv');
-	$zonesFile = file_get_contents('zones-and-towns.csv');
+	$zonesFile = file_get_contents('zones-and-towns-utf8.csv');
 
 	//INITIALIZE TOWNZONEARRAY
 	$zoneCsv = str_getcsv($zonesFile);
 	$townZoneArray = array();
-	for($x = 0; $x < count($zoneCsv); $x += 2) {
+	for($x = 0; $x < count($zoneCsv)-1; $x += 2) {
 		$areavar = $zoneCsv[$x];
 		$zonevar = $zoneCsv[$x + 1];
 		$townZoneArray[] = [$areavar, $zonevar];
@@ -42,16 +42,34 @@ function csvParse() {
 	for($x = 0; $x < count($zipCodeAreaArray); $x++) {
 		for($y = 0; $y < count($townZoneArray); $y++) {
 			if(trim(filter_var($townZoneArray[$y][0], FILTER_SANITIZE_STRING)) === trim(filter_var($zipCodeAreaArray[$x][1], FILTER_SANITIZE_STRING))) {
-				$zipCode[] = [$zipCodeAreaArray[$x][0], $townZoneArray[$x][1]];
+				$zipCode[] = [$zipCodeAreaArray[$x][0], $townZoneArray[$y][1]];
 				break;
-			} else {
+			}else{
+				//echo 'Additional Array: '.$zipCodeAreaArray[$x][2]."  townZoneArray: ".$townZoneArray[$y][0]. "<br>";
+				$areas = explode(",",$zipCodeAreaArray[$x][2]);
+				for($z = 0; $z < count($areas); $z++){
+					//echo   "AREA:".$areas[$z]." TOWNZONE" .$townZoneArray[$y][0]. "<br>";
+
+					if(filter_var(trim($areas[$z]), FILTER_SANITIZE_STRING) === filter_var(trim($townZoneArray[$y][0]),FILTER_SANITIZE_STRING)){
+						if(!($zipCodeAreaArray[$x][0] === $zipCodeAreaArray[$x-1][0])){
+							$zipCode[] = [$zipCodeAreaArray[$x][0],$areas[$z]];
+							echo "match: " ."  AREA  ".$areas[$z]." TOWNZONE  " .$townZoneArray[$y][0]. ' ZIPCODE: ' .$zipCodeAreaArray[$x][0] ." MAINAREA ". $zipCodeAreaArray[$x][1] ."<br>";
+						}
+					}
+
+				}
 			}
 		}
 	}
-
+	//$pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/growify.ini");
 	for($x = 0; $x < count($zipCode); $x++) {
-		echo $zipCode[$x][0].$zipCode[$x][1]."<br>";
-		//$zipcode->insert($pdo)
+		//$zipCodeObject
+				//$zipCodeObject->insert($pdo);
 	}
+	echo count($townZoneArray)."<br>";
+	echo count($zipCodeAreaArray). "<br>";
+	echo count($zipCode);
 }
 csvParse();
+
+
