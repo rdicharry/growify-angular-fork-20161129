@@ -42,7 +42,7 @@ CREATE TABLE plant(
 	plantLatinName VARCHAR (72) UNIQUE,
 	plantVariety VARCHAR(64) ,
 	plantType VARCHAR(32)  ,
-	plantDescription VARCHAR(1536),
+	plantDescription VARCHAR(2560),
 	plantSpread FLOAT UNSIGNED ,
 	plantHeight FLOAT UNSIGNED ,
 	plantDaysToHarvest SMALLINT UNSIGNED ,
