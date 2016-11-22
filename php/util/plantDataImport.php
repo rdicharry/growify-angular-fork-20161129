@@ -79,7 +79,7 @@ function insertPlantsForAFuture(\PDO $pdo){
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 
 
-		while(($row = $statement->fetch()) !== false ){}
+		while(($row = $statement->fetch()) !== false ) {
 			if($row !== false) {
 				$plantName = $row["Common name"];
 				$latinName = $row["Latin name"];
@@ -118,6 +118,7 @@ function insertPlantsForAFuture(\PDO $pdo){
 
 				$plant = new Plant(null, $plantName, $latinName, $plantVariety, $plantType, $plantDescription, $plantSpread, $plantHeight, $plantDaysToHarvest, $plantMinTemp, $plantMaxTemp, $plantSoilMoisture);
 				$plant->insert($pdo);
+			}
 		}
 
 			/*echo $plant->getPlantId()."<br>";
