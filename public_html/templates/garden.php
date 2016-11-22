@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
 <main>
 	<!-- Insert Bootstrap navbar, with Angular-friendly links -->
 	<nav class="navbar navbar-default">
@@ -27,3 +30,4 @@
 	</nav>
 	<router-outlet></router-outlet>
 </main>
+</body>
