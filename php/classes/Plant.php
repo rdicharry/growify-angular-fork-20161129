@@ -24,15 +24,15 @@ class Plant implements \JsonSerializable{
 	 **/
 	private $plantName;
 	/**
+	 * latin name of this plant
+	 * @var string $plantLatinName
+	 **/
+	private $plantLatinName;
+	/**
 	 * variety of this plant
 	 * @var string $plantVariety
 	 **/
 	private $plantVariety;
-	/**
-	 * description of this plant
-	 * @var string $plantDescription
-	 **/
-	private $plantDescription;
 	/**
 	 * type of plant
 	 * @var string $plantType
@@ -40,20 +40,27 @@ class Plant implements \JsonSerializable{
 
 	private $plantType;
 	/**
+	 * description of this plant
+	 * @var string $plantDescription
+	 **/
+	private $plantDescription;
+	/**
 	 * planting distance between this plant and others (in feet)
 	 * @var float $plantSpread
 	 **/
 	private $plantSpread;
 	/**
-	 * amount of days before this plant should be harvested
-	 * @var int plantDaysToHarvest
-	 **/
-	private $plantDaysToHarvest;
-	/**
 	 * average mature height for this plant
 	 * @var float plantHeight
 	 **/
 	private $plantHeight;
+
+	/**
+	 * amount of days before this plant should be harvested
+	 * @var int plantDaysToHarvest
+	 **/
+	private $plantDaysToHarvest;
+
 	/**
 	 * minimum growing temperature for this plant
 	 * @var int plantMinTemp
@@ -73,12 +80,13 @@ class Plant implements \JsonSerializable{
 	/**
 	 * @param int|null $newPlantId
 	 * @param string $newPlantName
+	 * @param string $newPlantLatinName
 	 * @param string $newPlantVariety
-	 * @param string $newPlantDescription
 	 * @param string $newPlantType
+	 * @param string $newPlantDescription
 	 * @param float $newPlantSpread
-	 * @param int $newPlantDaysToHarvest
 	 * @param float $newPlantHeight
+	 * @param int $newPlantDaysToHarvest	 *
 	 * @param int $newPlantMinTemp
 	 * @param int $newPlantMaxTemp
 	 * @param string $newPlantSoilMoisture
@@ -87,10 +95,22 @@ class Plant implements \JsonSerializable{
 	 * @throws \TypeError if data types violate type
 	 * @throws \Exception for other exceptions
 	 **/
-	public function __construct($newPlantId, $newPlantName, $newPlantVariety, $newPlantDescription, $newPlantType, $newPlantSpread, $newPlantDaysToHarvest, $newPlantHeight, $newPlantMinTemp, $newPlantMaxTemp, $newPlantSoilMoisture) {
+	public function __construct($newPlantId,
+										 $newPlantName,
+										 $newPlantLatinName,
+										 $newPlantVariety,
+										 $newPlantType,
+										 $newPlantDescription,
+										 $newPlantSpread,
+										 $newPlantHeight,
+										 $newPlantDaysToHarvest,
+										 $newPlantMinTemp,
+										 $newPlantMaxTemp,
+										 $newPlantSoilMoisture) {
 		try {
 			$this->setPlantId($newPlantId);
 			$this->setPlantName($newPlantName);
+			$this->setPlantLatinName($newPlantLatinName);
 			$this->setPlantVariety($newPlantVariety);
 			$this->setPlantDescription($newPlantDescription);
 			$this->setPlantType($newPlantType);
@@ -158,10 +178,34 @@ class Plant implements \JsonSerializable{
 		if(empty($newPlantName)) {
 			throw (new \InvalidArgumentException("name is empty or has invalid contents"));
 		}
-		if(strlen($newPlantName) > 26) {
+		if(strlen($newPlantName) > 32) {
 			throw(new \RangeException("name is too large"));
 		}
 		$this->plantName = $newPlantName;
+	}
+
+	/**
+	 * accessor method for plantLatinName
+	 * @return string the latin name for this plant
+	 **/
+	public function getPlantLatinName(){
+		return $this->plantLatinName;
+	}
+
+	/**
+	 * mutator method for plantLatinName
+	 * @param string $newPlantLatinName new value of plant latin name
+	 * @throws \InvalidArgumentException if $newPlantLatinName has invalid contents or is empty
+	 * @throws \RangeException if $newPlantLatinName is too long
+	 **/
+	public function setPlantLatinName($newPlantLatinName){
+		$newPlantLatinName = trim($newPlantLatinName);
+		$newPlantLatinName = filter_var($newPlantLatinName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+
+		if(strlen($newPlantLatinName)>72) {
+			throw(new \RangeException("latin name is too large"));
+		}
+		$this->plantLatinName = $newPlantLatinName;
 	}
 
 	/**

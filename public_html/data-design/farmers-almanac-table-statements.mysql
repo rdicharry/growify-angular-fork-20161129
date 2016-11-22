@@ -38,10 +38,10 @@ CREATE TABLE profile(
 CREATE TABLE plant(
 
 	plantId SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT, -- PRIMARY KEY
-	plantName VARCHAR(26) ,
+	plantName VARCHAR(32) ,
 	plantLatinName VARCHAR (72) UNIQUE,
-	plantVariety VARCHAR(64) NOT NULL,
-	plantType VARCHAR(9) NOT NULL ,
+	plantVariety VARCHAR(64) ,
+	plantType VARCHAR(32)  ,
 	plantDescription VARCHAR(1526),
 	plantSpread FLOAT UNSIGNED ,
 	plantHeight FLOAT UNSIGNED ,
