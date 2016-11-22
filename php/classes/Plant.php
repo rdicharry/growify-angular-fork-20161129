@@ -552,11 +552,33 @@ class Plant implements \JsonSerializable{
 	 **/
 	public function update(\PDO $pdo) {
 		//create query template
-		$query = "UPDATE plant SET plantName = :plantName, plantVariety = :plantVariety, plantDescription = :plantDescription, plantType = :plantType, plantSpread = :plantSpread, plantDaysToHarvest = :plantDaysToHarvest, plantHeight = :plantHeight, plantMinTemp = :plantMinTemp, plantMaxTemp = :plantMaxTemp, plantSoilMoisture = :plantSoilMoisture WHERE plantId = :plantId";
+		$query = "UPDATE plant SET plantName = :plantName, 
+						plantLatinName = :plantLatinName,
+						plantVariety = :plantVariety, 
+						plantType = :plantType, 
+						plantDescription = :plantDescription, 						
+						plantSpread = :plantSpread, 
+						plantHeight = :plantHeight,
+						plantDaysToHarvest = :plantDaysToHarvest, 						 
+						plantMinTemp = :plantMinTemp, 
+						plantMaxTemp = :plantMaxTemp, 
+						plantSoilMoisture = :plantSoilMoisture 
+						WHERE plantId = :plantId";
 		$statement = $pdo->prepare($query);
 
 		// bind member variables to placeholders
-		$parameters = ["plantId" => $this->plantId, "plantName" => $this->plantName, "plantVariety" => $this->plantVariety, "plantDescription" => $this->plantDescription, "plantType" => $this->plantType, "plantSpread" => $this->plantSpread, "plantDaysToHarvest" => $this->plantDaysToHarvest, "plantHeight" => $this->plantHeight, "plantMinTemp" => $this->plantMinTemp, "plantMaxTemp" => $this->plantMaxTemp, "plantSoilMoisture" => $this->plantSoilMoisture];
+		$parameters = ["plantId" => $this->plantId,
+			"plantName" => $this->plantName,
+			"plantLatinName" => $this->plantLatinName,
+			"plantVariety" => $this->plantVariety,
+			"plantType" => $this->plantType,
+			"plantDescription" => $this->plantDescription,
+			"plantSpread" => $this->plantSpread,
+			"plantHeight" => $this->plantHeight,
+			"plantDaysToHarvest" => $this->plantDaysToHarvest,
+			"plantMinTemp" => $this->plantMinTemp,
+			"plantMaxTemp" => $this->plantMaxTemp,
+			"plantSoilMoisture" => $this->plantSoilMoisture];
 		$statement->execute($parameters);
 	}
 
