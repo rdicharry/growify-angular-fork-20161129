@@ -37,9 +37,32 @@ $usdaHardinessToNMSUAreas = [
 
 ];
 
+require_once "/etc/apache2/capstone-mysql/encrypted-config.php";
+
+$pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/growify.ini");
+
 // iterate over PlantsForAFuture data and add to Plant table.
+function insertPlantsForAFuture(\PDO $pdo){
 
 // get line-by-line with pdo object.
+	// TODO - currently only getting 1 record to test.
+	$query = "SELECT `Latin name`, `Common name`, `Habit`, `Height`, `Width`, `Hardyness`, `FrostTender`, `Moisture`, `Edible uses`, `Uses notes`, `Cultivation details`, `Propagation 1`, `Author`, `Botanical references` FROM PlantsForAFuture LIMIT 1";
+	$statement = $pdo->prepare($query);
+	$statement = $pdo->execute();
+
+	// get data from PDO object
+	try {
+		$plant = null;
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		$row = $statement->fetch();
+
+		if($row !== false) {
+			$plantName = $row["Common name"];
+			$latinName = $row["Latin name"];
+			$plantVariety = null;
+			$plantType = $row["Habit"];
+			$plantDescription = $row["Edible uses"].$row["Uses notes"].$row["Cultivation details"].$row["Propagation 1"].$row["Author"].$row["Botanical references"];
+			$plantSpread = $row["Width"];
 
 // get min temps -
 // if hardiness data available get from there
@@ -50,9 +73,17 @@ $usdaHardinessToNMSUAreas = [
 
 
 // plant description - take from plant uses, uses notes, cultivation details, propagation, author, references
+		}
+	} catch (\PDOException $pdoe){
+		throw(new \PDOException($pdoe->getMessage(), 0, $pdoe));
 
+	}
+}
 
 // iterate over NMSU Vegetable Data and add to Plant table (remember to check if an entry already exists for a given Plant Name.
+function insertNMSUPlantData(){
 
+
+}
 
 // Add herb data?
