@@ -59,8 +59,8 @@ $pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/growify.ini");
 
 // works best if you insert plants for afuture first.
 function insertPlantData($pdo){
-	insertPlantsForAFuture($pdo);
-	//insertNMSUPlantData($pdo);
+	//insertPlantsForAFuture($pdo);
+	insertNMSUPlantData($pdo);
 }
 
 // iterate over PlantsForAFuture data and add to Plant table.
@@ -144,6 +144,8 @@ function insertPlantsForAFuture(\PDO $pdo){
 
 // iterate over NMSU Vegetable Data and add to Plant table (remember to check if an entry already exists for a given Plant Name.
 function insertNMSUPlantData(){
+
+	// get a row from CSV
 
 	// first step - see if this plant already has an entry
 	// query on plantName

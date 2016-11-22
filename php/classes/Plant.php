@@ -388,7 +388,7 @@ class Plant implements \JsonSerializable{
 		if($newPlantHeight === false) {
 			throw (new \UnexpectedValueException("height is not a valid float"));
 		}
-		if($newPlantHeight <= 0) {
+		if($newPlantHeight < 0) { // some plants have height zero! lol
 			throw (new \RangeException("height is not positive"));
 		}
 		$this->plantHeight = $newPlantHeight;
