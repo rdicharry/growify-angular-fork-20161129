@@ -485,11 +485,42 @@ class Plant implements \JsonSerializable{
 		}
 
 		//create query template
-		$query = "INSERT INTO plant( plantName, plantVariety, plantDescription, plantType, plantSpread, plantDaysToHarvest, plantHeight, plantMinTemp, plantMaxTemp, plantSoilMoisture) VALUES (:plantName, :plantVariety, :plantDescription, :plantType, :plantSpread, :plantDaysToHarvest, :plantHeight,:plantMinTemp,:plantMaxTemp, :plantSoilMoisture)";
+		$query = "INSERT INTO plant( plantName, 
+						plantLatinName, 
+						plantVariety, 
+						plantType, 
+						plantDescription,  
+						plantSpread, 
+						plantHeight, 
+						plantDaysToHarvest, 
+						plantMinTemp, 
+						plantMaxTemp, 
+						plantSoilMoisture) 
+						VALUES (:plantName, 
+						:plantLatinName,
+						:plantVariety, 
+						:plantType, 
+						:plantDescription,
+						:plantSpread, 
+						:plantHeight,
+						:plantDaysToHarvest, 
+						:plantMinTemp,
+						:plantMaxTemp, 
+						:plantSoilMoisture)";
 		$statement = $pdo->prepare($query);
 
 		// bind member variables to placeholders in the template
-		$parameters = ["plantName" => $this->plantName, "plantVariety" => $this->plantVariety, "plantDescription" => $this->plantDescription, "plantType" => $this->plantType, "plantSpread" => $this->plantSpread, "plantDaysToHarvest" => $this->plantDaysToHarvest, "plantHeight" => $this->plantHeight, "plantMinTemp" => $this->plantMinTemp, "plantMaxTemp" => $this->plantMaxTemp, "plantSoilMoisture" => $this->plantSoilMoisture];
+		$parameters = ["plantName" => $this->plantName,
+			"plantLatinName" => $this->plantLatinName,
+			"plantVariety" => $this->plantVariety,
+			"plantType" => $this->plantType,
+			"plantDescription" => $this->plantDescription,
+			"plantSpread" => $this->plantSpread,
+			"plantHeight" => $this->plantHeight,
+			"plantDaysToHarvest" => $this->plantDaysToHarvest,
+			"plantMinTemp" => $this->plantMinTemp,
+			"plantMaxTemp" => $this->plantMaxTemp,
+			"plantSoilMoisture" => $this->plantSoilMoisture];
 		$statement->execute($parameters);
 
 		// get auto-assigned plant id from mysql
