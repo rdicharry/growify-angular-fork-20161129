@@ -264,7 +264,7 @@ class Plant implements \JsonSerializable{
 		//if(empty($newPlantDescription)) {
 		//	throw (new \InvalidArgumentException("description is empty or has invalid contents"));
 		//}
-		if(strlen($newPlantDescription) > 1536) {
+		if(strlen($newPlantDescription) > 2560) {
 			throw(new \RangeException("description is too large"));
 		}
 		$this->plantDescription = $newPlantDescription;
