@@ -221,6 +221,39 @@ class PlantTest extends GrowifyTest {
 		$this->assertEquals($pdoPlant->getPlantSoilMoisture(), $this->VALID_PLANTSOILMOISTURE);
 	}
 
+
+	/**
+	 * test grabbing a Plant by its latin name
+	 **/
+	public function testGetValidPlantByLatinName() {
+		// count the number of rows and save it for later
+		$numRows = $this->getConnection()->getRowCount("plant");
+
+		// create a new Plant and insert to into mySQL
+		$plant = new Plant(null, $this->VALID_PLANTNAME, $this->VALID_LATINNAME, $this->VALID_PLANTVARIETY, $this->VALID_PLANTTYPE, $this->VALID_PLANTDESCRIPTION,  $this->VALID_PLANTSPREAD, $this->VALID_PLANTHEIGHT, $this->VALID_PLANTDAYSTOHARVEST,  $this->VALID_PLANTMINTEMP, $this->VALID_PLANTMAXTEMP, $this->VALID_PLANTSOILMOISTURE);
+		$plant->insert($this->getPDO());
+
+		// grab the data from mySQL and enforce the fields match our expectations
+		$results = Plant::getPlantByPlantLatinName($this->getPDO(), $plant->getPlantLatinName());
+		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("plant"));
+		$this->assertCount(1, $results);
+		$this->assertContainsOnlyInstancesOf("Edu\\Cnm\\Growify\\Plant", $results);
+
+		// grab the result from the array and validate it
+		$pdoPlant = $results[0];
+		$this->assertEquals($pdoPlant->getPlantName(), $this->VALID_PLANTNAME);
+		$this->assertEquals($pdoPlant->getPlantLatinName(), $this->VALID_LATINNAME);
+		$this->assertEquals($pdoPlant->getPlantVariety(), $this->VALID_PLANTVARIETY);
+		$this->assertEquals($pdoPlant->getPlantDescription(), $this->VALID_PLANTDESCRIPTION);
+		$this->assertEquals($pdoPlant->getPlantType(), $this->VALID_PLANTTYPE);
+		$this->assertEquals($pdoPlant->getPlantSpread(), $this->VALID_PLANTSPREAD);
+		$this->assertEquals($pdoPlant->getPlantDaysToHarvest(), $this->VALID_PLANTDAYSTOHARVEST);
+		$this->assertEquals($pdoPlant->getPlantHeight(), $this->VALID_PLANTHEIGHT);
+		$this->assertEquals($pdoPlant->getPlantMinTemp(), $this->VALID_PLANTMINTEMP);
+		$this->assertEquals($pdoPlant->getPlantMaxTemp(), $this->VALID_PLANTMAXTEMP);
+		$this->assertEquals($pdoPlant->getPlantSoilMoisture(), $this->VALID_PLANTSOILMOISTURE);
+	}
+
 	/**
 	 * test grabbing a Plant by name that does not exist
 	 **/
