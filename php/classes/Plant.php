@@ -175,9 +175,9 @@ class Plant implements \JsonSerializable{
 	public function setPlantName(string $newPlantName) {
 		$newPlantName = trim($newPlantName);
 		$newPlantName = filter_var($newPlantName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newPlantName)) {
-			throw (new \InvalidArgumentException("name is empty or has invalid contents"));
-		}
+		//if(empty($newPlantName)) {
+		//	throw (new \InvalidArgumentException("name is empty or has invalid contents"));
+		//}
 		if(strlen($newPlantName) > 32) {
 			throw(new \RangeException("name is too large"));
 		}
@@ -223,12 +223,17 @@ class Plant implements \JsonSerializable{
 	 * @throws \RangeException if $newPlantVariety is too long
 	 **/
 	public function setPlantVariety($newPlantVariety) {
+
+		if($newPlantVariety === null){
+			$this->plantVariety = null;
+			return;
+		}
 		$newPlantVariety = trim($newPlantVariety);
 		$newPlantVariety = filter_var($newPlantVariety, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newPlantVariety)) {
-			throw (new \InvalidArgumentException("variety is empty or has invalid contents"));
-		}
-		if(strlen($newPlantVariety) > 26) {
+		//if(empty($newPlantVariety)) {
+		//	throw (new \InvalidArgumentException("variety is empty or has invalid contents"));
+		//}
+		if(strlen($newPlantVariety) > 64) {
 			throw(new \RangeException("variety is too large"));
 		}
 		$this->plantVariety = $newPlantVariety;
@@ -249,12 +254,17 @@ class Plant implements \JsonSerializable{
 	 * @throws \RangeException if $newPlantDescription is too long
 	 **/
 	public function setPlantDescription($newPlantDescription) {
+
+		if($newPlantDescription === null){
+			$this->plantDescription = null;
+		}
+
 		$newPlantDescription = trim($newPlantDescription);
 		$newPlantDescription = filter_var($newPlantDescription, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newPlantDescription)) {
-			throw (new \InvalidArgumentException("description is empty or has invalid contents"));
-		}
-		if(strlen($newPlantDescription) > 512) {
+		//if(empty($newPlantDescription)) {
+		//	throw (new \InvalidArgumentException("description is empty or has invalid contents"));
+		//}
+		if(strlen($newPlantDescription) > 1536) {
 			throw(new \RangeException("description is too large"));
 		}
 		$this->plantDescription = $newPlantDescription;
@@ -275,12 +285,17 @@ class Plant implements \JsonSerializable{
 	 * @throws \RangeException if $newPlantType is too long
 	 **/
 	public function setPlantType($newPlantType) {
+		 if($newPlantType === null){
+			 $this->plantType = null;
+			 return;
+		 }
+
 		$newPlantType = trim($newPlantType);
 		$newPlantType = filter_var($newPlantType, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newPlantType)) {
-			throw (new \InvalidArgumentException("type is empty or has invalid contents"));
-		}
-		if(strlen($newPlantType) > 9) {
+		//if(empty($newPlantType)) {
+		//	throw (new \InvalidArgumentException("type is empty or has invalid contents"));
+		//}
+		if(strlen($newPlantType) > 32) {
 			throw(new \RangeException("type is too large"));
 		}
 		$this->plantType = $newPlantType;
@@ -301,6 +316,12 @@ class Plant implements \JsonSerializable{
 	 * @throws \RangeException if $newPlantSpread is negative
 	 **/
 	public function setPlantSpread($newPlantSpread) {
+
+		if($newPlantSpread === null){
+			$this->plantSpread = null;
+			return;
+		}
+
 		$newPlantSpread = filter_var($newPlantSpread, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 		if($newPlantSpread === false) {
 			throw (new \UnexpectedValueException("spread is not a valid float"));
@@ -326,6 +347,12 @@ class Plant implements \JsonSerializable{
 	 * @throws \RangeException if $newPlantDaysToHarvest is negative
 	 **/
 	public function setPlantDaysToHarvest($newPlantDaysToHarvest) {
+
+		if($newPlantDaysToHarvest === null){
+			$this->plantDaysToHarvest = null;
+			return;
+		}
+
 		$newPlantDaysToHarvest = filter_var($newPlantDaysToHarvest, FILTER_VALIDATE_INT);
 		if($newPlantDaysToHarvest === false) {
 			throw (new \UnexpectedValueException("days to harvest is not a valid int"));
@@ -351,6 +378,12 @@ class Plant implements \JsonSerializable{
 	 * @throws \RangeException if $newPlantHeight is negative
 	 **/
 	public function setPlantHeight($newPlantHeight) {
+
+		if($newPlantHeight === null){
+			$this->plantHeight = null;
+			return;
+		}
+
 		$newPlantHeight = filter_var($newPlantHeight, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 		if($newPlantHeight === false) {
 			throw (new \UnexpectedValueException("height is not a valid float"));
@@ -396,6 +429,11 @@ class Plant implements \JsonSerializable{
 	 * @throws \UnexpectedValueException if $newPlantMaxTemp is not a int
 	 **/
 	public function setPlantMaxTemp($newPlantMaxTemp) {
+
+		if($newPlantMaxTemp === null){
+			$this->plantMaxTemp = null;
+			return;
+		}
 		$newPlantMaxTemp = filter_var($newPlantMaxTemp, FILTER_VALIDATE_INT);
 		if($newPlantMaxTemp === false) {
 			throw (new \UnexpectedValueException("max temp is not a valid int"));
@@ -418,6 +456,11 @@ class Plant implements \JsonSerializable{
 	 * @throws \RangeException if $newPlantSoilMoisture is too long
 	 **/
 	public function setPlantSoilMoisture($newPlantSoilMoisture) {
+		if($newPlantSoilMoisture === null){
+			$this->plantSoilMoisture = null;
+			return;
+		}
+
 		$newPlantSoilMoisture = trim($newPlantSoilMoisture);
 		$newPlantSoilMoisture = filter_var($newPlantSoilMoisture, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($newPlantSoilMoisture)) {
