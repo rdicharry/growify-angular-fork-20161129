@@ -164,8 +164,18 @@ function insertNMSUPlantData(\PDO $pdo){
 				$rowFromPlantPDO = $statement->fetch();
 
 				// if the entry is there, update it
+				if($rowFromPlantPDO !== false) {
+
+				$query = "UPDATE plant SET plantType = "Vegetable", plantDaysToHarvest = :plantDaysToHarvest, plantMinTemp???"
+
+
+
+
+				} else {
+
 
 				// if the entry is not there, insert it.
+
 
 				// TODO query and don't overwrite if it exists
 				$plantLatinName = null;
@@ -182,6 +192,7 @@ function insertNMSUPlantData(\PDO $pdo){
 				// query and don't overwrite if it exists (moisture)
 				$plantSoilMoisture = null;
 
+			}
 
 			} catch(\Exception $e){
 				throw(new \PDOException($e->getMessage(), 0, $e ));
