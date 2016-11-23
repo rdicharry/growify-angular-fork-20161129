@@ -90,11 +90,11 @@
 "Eggplant", "Easter Egg", 69, " April 1—30", " April 15— May 15", " May 1—30", 1/4—1/2, 18—30, 24—48
 "Eggplant", "Orient Express", 58, " April 1—30", " April 15— May 15", " May 1—30", 1/4—1/2, 18—30, 24—48
 "Eggplant", "Ichiban Hybrid", 65, " April 1—30", " April 15— May 15", " May 1—30", 1/4—1/2, 18—30, 24—48
-"Garlic, hardneck", "Spanish Roja", 8—10 months, " Oct 1— Nov 30", " Sept 15— Nov 15", " Sept 1— Oct 31", 1—3, 3—6, 12—36
-"Garlic, hardneck", "Carpathian", 8—10 months, " Oct 1— Nov 30", " Sept 15— Nov 15", " Sept 1— Oct 31", 1—3, 3—6, 12—36
-"Garlic, softneck", "Inchelium Red", 8—10 months, " Oct 1— Nov 30", " Sept 15— Nov 15", " Sept 1— Oct 31", 1—3, 3—6, 12—36
-"Garlic, softneck", "California Early", 8—10 months, " Oct 1— Nov 30", " Sept 15— Nov 15", " Sept 1— Oct 31", 1—3, 3—6, 12—36
-"Garlic, softneck", "Silverskin (S & H)", 8—10 months, " Oct 1— Nov 30", " Sept 15— Nov 15", " Sept 1— Oct 31", 1—3, 3—6, 12—36
+"Garlic, hardneck", "Spanish Roja", 120, " Oct 1— Nov 30", " Sept 15— Nov 15", " Sept 1— Oct 31", 1—3, 3—6, 12—36
+"Garlic, hardneck", "Carpathian", 120, " Oct 1— Nov 30", " Sept 15— Nov 15", " Sept 1— Oct 31", 1—3, 3—6, 12—36
+"Garlic, softneck", "Inchelium Red", 120, " Oct 1— Nov 30", " Sept 15— Nov 15", " Sept 1— Oct 31", 1—3, 3—6, 12—36
+"Garlic, softneck", "California Early", 120, " Oct 1— Nov 30", " Sept 15— Nov 15", " Sept 1— Oct 31", 1—3, 3—6, 12—36
+"Garlic, softneck", "Silverskin (S & H)", 120, " Oct 1— Nov 30", " Sept 15— Nov 15", " Sept 1— Oct 31", 1—3, 3—6, 12—36
 "Kohlrabi", "Early Purple Vienna", 60, "Feb 1— March 15; July 15— Aug 15", " March 1— April 15; July 1— Aug 15", " April 1— June 30", 1/2, 3—6, 12—36
 "Kohlrabi", "Early White Vienna", 55, "Feb 1— March 15; July 15— Aug 15", " March 1— April 15; July 1— Aug 15", " April 1— June 30", 1/2, 3—6, 12—36
 "Kohlrabi", "Grand Duke", 45, "Feb 1— March 15; July 15— Aug 15", " March 1— April 15; July 1— Aug 15", " April 1— June 30", 1/2, 3—6, 12—36
@@ -123,7 +123,7 @@
 "Onions, fall-planted", "Granex Hybrid", 80, " Oct 1—15", " —", " —", 1/2, 2—4, 20—36
 "Onions, fall-planted", "Sierra Blanca", 109, " Oct 1—15", " —", " —", 1/2, 2—4, 20—36
 "Onions, spring-planted", "White, Yellow & Red Globe", 110, " Jan 15— Feb 15", " Feb 15— March 15", " March 15— April 3", 1/2, 2—4, 20—36
-"Onions, spring-planted", "White & Yellow Sweet Spanish", 80—100, " Jan 15— Feb 15", " Feb 15— March 15", " March 15— April 3", 1/2, 2—4, 20—36
+"Onions, spring-planted", "White & Yellow Sweet Spanish", 100, " Jan 15— Feb 15", " Feb 15— March 15", " March 15— April 3", 1/2, 2—4, 20—36
 "Parsnips", "All American", 100, "Jan 15— March 1", "Feb 15— April 15", "April 1— May 15", 1/2, 2—4, 20—36
 "Parsnips", "Hollow Crown", 110, "Jan 15— March 1", "Feb 15— April 15", "April 1— May 15", 1/2, 2—4, 20—36
 "Peas, snap", "Sugar Daddy", 62, " Jan 15— Feb 15", " Feb 15— April 15", " March 15— June 15", 1, 1—3, 24—36

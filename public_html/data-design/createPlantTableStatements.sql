@@ -1,38 +1,11 @@
 
-
 -- drop table if exists statements
 DROP TABLE IF EXISTS companionPlant;
 DROP TABLE IF EXISTS combativePlant;
 DROP TABLE IF EXISTS garden;
 DROP TABLE IF EXISTS plantArea;
-DROP TABLE IF EXISTS profile;
-DROP TABLE IF EXISTS zipCode;
+
 DROP TABLE IF EXISTS plant;
-
-
-
-
-
-CREATE TABLE zipCode(
-	zipCodeCode VARCHAR(5)NOT NULL, -- made a varchar for easier validation but can change to unsigned int
-	zipCodeZone VARCHAR(2) NOT NULL,
-	-- foreign key and indexing
-	INDEX(zipCodeZone),
-	PRIMARY KEY(zipCodeCode)
-);
-
-CREATE TABLE profile(
-	profileId INT UNSIGNED AUTO_INCREMENT, -- PRIMARY KEY
-	profileZipCode CHAR(5) NOT NULL, -- FOREIGN KEY
-	profileHash CHAR(128) NOT NULL,
-	profileActivation CHAR(16) NOT NULL,
-	profileSalt CHAR(64) NOT NULL,
-	profileUserName VARCHAR(24) UNIQUE NOT NULL,
-	profileEmail VARCHAR(160) NOT NULL,
-	-- PRIMARY KEY AND FOREIGN KEY
-	PRIMARY KEY (profileId),
-	FOREIGN KEY (profileZipCode) REFERENCES zipCode(zipCodeCode)
-);
 
 
 CREATE TABLE plant(
