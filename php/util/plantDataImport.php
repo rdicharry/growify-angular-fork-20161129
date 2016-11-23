@@ -58,7 +58,7 @@ require_once(dirname(__DIR__) . "/classes/autoload.php");
 $pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/growify.ini");
 
 // works best if you insert plants for afuture first.
-function insertPlantData($pdo){
+function insertPlantData(\PDO $pdo){
 	//insertPlantsForAFuture($pdo);
 	insertNMSUPlantData($pdo);
 }
@@ -66,7 +66,7 @@ function insertPlantData($pdo){
 // iterate over PlantsForAFuture data and add to Plant table.
 function insertPlantsForAFuture(\PDO $pdo){
 
-	global $usdaHardinessZones;
+	global $usdaHardinessZones; // access global data
 
 // get line-by-line with pdo object.
 	$query = "SELECT `Latin name`, `Common name`, `Habit`, `Height`, `Width`, `Hardyness`, `FrostTender`, `Moisture`, `Edible uses`, `Uses notes`, `Cultivation details`, `Propagation 1`, `Author`, `Botanical references` FROM PlantsForAFuture ";
@@ -145,17 +145,23 @@ function insertPlantsForAFuture(\PDO $pdo){
 // iterate over NMSU Vegetable Data and add to Plant table (remember to check if an entry already exists for a given Plant Name.
 function insertNMSUPlantData(\PDO $pdo){
 
+
+	// keep a list of the plants for a future entries that we have visited so we can delete any duplicates.
+	var $pfafPlantsUpdated = [];
+
 	// get a row from CSV
 
-	if (($handle = fopen("NMSUVegetableDataCSV.csv", "r")) !== FALSE) {
-		while (($dataCSV = fgetcsv($handle, 0, ",", "\"")) !== FALSE) { // set length to zero for unlimited line length php > 5.1
+	if(($handle = fopen("NMSUVegetableDataCSV.csv", "r")) !== FALSE) {
+		while(($dataCSV = fgetcsv($handle, 0, ",", "\"")) !== FALSE) { // set length to zero for unlimited line length php > 5.1
 
 			$plantName = $dataCSV[0];
+			$plantNameLike = "%$plantName%";
+			echo $plantName . "<br>";
 			//  first step - see if this plant already has an entry
 			// query on plantName
-			$query = "SELECT plantName, plantLatinName, plantDescription, plantSpread, plantHeight, plantMinTemp, plantSoilMoisture FROM plant WHERE plantName = :plantName";
+			$query = "SELECT plantId, plantName, plantLatinName, plantDescription, plantSpread, plantHeight, plantMinTemp, plantSoilMoisture FROM plant WHERE plantName LIKE :plantName";
 			$statement = $pdo->prepare($query);
-			$parameters = ["plantName" => $plantName];
+			$parameters = ["plantName" => $plantNameLike];
 			$statement->execute($parameters);
 
 			// get data from PDO object
@@ -164,22 +170,28 @@ function insertNMSUPlantData(\PDO $pdo){
 				$rowFromPlantPDO = $statement->fetch();
 
 				// if the entry is there, update it
-				if($rowFromPlantPDO !== false) {
+				if($rowFromPlantPDO !== false) { // found an entry
+					// find the entry, get data from it, insert a NEW entry
+					// (will delete old plants for a future entry later.)
+					// store plant ID of pfaf entry to delete
+					array_push($pfafPlantsUpdated, $rowFromPlantPDO["plantId"]);
+
 
 					$plantType = "Vegetable";
-					if(floatval($rowFromPlantPDO["plantMinTemp"]) < 32.0){
+					if(floatval($rowFromPlantPDO["plantMinTemp"]) < 32.0) {
 						$plantMinTemp = $rowFromPlantPDO["plantMinTemp"];
 					} else {
 						$plantMinTemp = 32.0;
 					}
 
-					if(floatval($rowFromPlantPDO["plantSpread"]!== null)){
+					if(floatval($rowFromPlantPDO["plantSpread"] !== null)) {
 						$plantSpread = $rowFromPlantPDO["plantSpread"];
 					} else {
 						$size = explode("-", $dataCSV[7]); // get larger size
-						$plantSpread = floatval($size[1])/12.0 ; // convert to feet
+						$plantSpread = floatval($size[1]) / 12.0; // convert to feet
 					}
-					$query = "UPDATE plant SET plantVariety = :plantVariety, plantType = :plantType, plantDaysToHarvest = :plantDaysToHarvest, plantMinTemp = :plantMinTemp, plantSpread = :plantSpread WHERE plantName = :plantName";
+
+					$query = "INSERT INTO plant SET plantName = :plantName, plantVariety = :plantVariety, plantType = :plantType, plantDaysToHarvest = :plantDaysToHarvest, plantMinTemp = :plantMinTemp, plantSpread = :plantSpread  ";
 					$statement = $pdo->prepare($query);
 
 					$parameters = ["plantName" => $plantName,
@@ -191,8 +203,6 @@ function insertNMSUPlantData(\PDO $pdo){
 					$statement->execute($parameters);
 
 
-
-
 				} else {
 
 					// if the entry is not already there, insert it.
@@ -201,8 +211,13 @@ function insertNMSUPlantData(\PDO $pdo){
 					$plantType = "Vegetable";
 					$plantDescription = null;
 					// convert from inches to feet, and parse out from string "24 - 36"
-					$size = explode("-", $dataCSV[7]); // get larger size
-					$plantSpread = floatval($size[1])/12.0 ; // convert to feet
+					$size = explode("—", $dataCSV[7]); // get larger size
+
+					for($i = 0; $i < count($size); $i++) {
+						echo($size[$i]);
+					}
+
+					$plantSpread = floatval($size[1]) / 12.0; // convert to feet
 					$plantHeight = null;
 					$plantDaysToHarvest = $dataCSV[2];
 					$plantMinTemp = 32.0;
@@ -214,14 +229,25 @@ function insertNMSUPlantData(\PDO $pdo){
 
 				}
 
-			} catch(\Exception $e){
-				throw(new \PDOException($e->getMessage(), 0, $e ));
+			} catch(\Exception $e) {
+				throw(new \PDOException($e->getMessage(), 0, $e));
 			}
 
-		}
+		} // end while
 		fclose($handle);
+	}// endif
+
+
+	// loop through all of the plants that we took update data from
+	// delete the old entries (since the new ones actually have more information)
+	for($i=0;$i < count($pfafPlantsUpdated); $i++){
+		echo "Deleting Plant Id: ".$pfafPlantsUpdated[$i]."<br/>";
+		$query = "DELETE FROM plant WHERE plantId = :plantId";
+		$statement = $pdo->prepare($query);
+		$parameters = ["plantId"];
+		$statement->execute($parameters);
 	}
-}
+}// close function
 
 // Add herb data?
 
