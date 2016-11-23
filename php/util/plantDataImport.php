@@ -166,7 +166,20 @@ function insertNMSUPlantData(\PDO $pdo){
 				// if the entry is there, update it
 				if($rowFromPlantPDO !== false) {
 
-				$query = "UPDATE plant SET plantType = "Vegetable", plantDaysToHarvest = :plantDaysToHarvest, plantMinTemp???"
+					$plantType = "Vegetable";
+					if(floatval($rowFromPlantPDO["plantMinTemp"]) < 32.0){
+						$plantMinTemp = $rowFromPlantPDO["plantMinTemp"];
+					} else {
+						$plantMinTemp = 32.0;
+					}
+
+					if(floatval($rowFromPlantPDO["plantSpread"]!== null)){
+						$plantSpread = $rowFromPlantPDO["plantSpread"];
+					} else {
+						$size = explode("_", $dataCSV[7]);
+						$plantSpread = floatval($size[1])/12.0 ; // convert to feet
+					}
+					$query = "UPDATE plant SET plantType = :plantType, plantDaysToHarvest = :plantDaysToHarvest, plantMinTemp = :plantMinTemp"
 
 
 
