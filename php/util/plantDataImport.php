@@ -59,7 +59,7 @@ $pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/growify.ini");
 
 // works best if you insert plants for afuture first.
 function insertPlantData(\PDO $pdo){
-	//insertPlantsForAFuture($pdo);
+	insertPlantsForAFuture($pdo);
 	insertNMSUPlantData($pdo);
 }
 
@@ -155,13 +155,13 @@ function insertNMSUPlantData(\PDO $pdo){
 		while(($dataCSV = fgetcsv($handle, 0, ",", "\"")) !== FALSE) { // set length to zero for unlimited line length php > 5.1
 
 			$plantName = $dataCSV[0];
-			$plantNameLike = "%$plantName%";
+			//$plantNameLike = "%$plantName%";
 			echo $plantName . "<br/>";
 			//  first step - see if this plant already has an entry
 			// query on plantName
-			$query = "SELECT plantId, plantName, plantLatinName, plantDescription, plantSpread, plantHeight, plantMinTemp, plantSoilMoisture FROM plant WHERE plantName LIKE :plantName";
+			$query = "SELECT plantId, plantName, plantLatinName, plantDescription, plantSpread, plantHeight, plantMinTemp, plantSoilMoisture FROM plant WHERE plantName = :plantName";
 			$statement = $pdo->prepare($query);
-			$parameters = ["plantName" => $plantNameLike];
+			$parameters = ["plantName" => $plantName];
 			$statement->execute($parameters);
 
 			// get data from PDO object
@@ -251,13 +251,13 @@ function insertNMSUPlantData(\PDO $pdo){
 
 	// loop through all of the plants that we took update data from
 	// delete the old entries (since the new ones actually have more information)
-	for($i=0;$i < count($pfafPlantsUpdated); $i++){
+	/*for($i=0;$i < count($pfafPlantsUpdated); $i++){
 		echo "Deleting Plant Id: ".$pfafPlantsUpdated[$i]."<br/>";
 		$query = "DELETE FROM plant WHERE plantId = :plantId";
 		$statement = $pdo->prepare($query);
-		$parameters = ["plantId"];
+		$parameters = ["plantId" => $pfafPlantsUpdated[$i]];
 		$statement->execute($parameters);
-	}
+	}*/
 }// close function
 
 // Add herb data?
