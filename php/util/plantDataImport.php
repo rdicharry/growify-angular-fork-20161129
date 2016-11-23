@@ -143,16 +143,56 @@ function insertPlantsForAFuture(\PDO $pdo){
 }
 
 // iterate over NMSU Vegetable Data and add to Plant table (remember to check if an entry already exists for a given Plant Name.
-function insertNMSUPlantData(){
+function insertNMSUPlantData(\PDO $pdo){
 
 	// get a row from CSV
 
-	// first step - see if this plant already has an entry
-	// query on plantName
+	if (($handle = fopen("NMSUVegetableDataCSV.csv", "r")) !== FALSE) {
+		while (($dataCSV = fgetcsv($handle, 0, ",", "\"")) !== FALSE) { // set length to zero for unlimited line length php > 5.1
 
-	// if the entry is there, update it
+			$plantName = $dataCSV[0];
+			// TODO first step - see if this plant already has an entry
+			// query on plantName
+			$query = "SELECT plantName, plantLatinName, plantDescription, plantSpread, plantHeight, plantMinTemp, plantSoilMoisture FROM plant WHERE plantName = :plantName";
+			$statement = $pdo->prepare($query);
+			$parameters = ["plantName" => $plantName];
+			$statement->execute($parameters);
 
-	// if the entry is not there, insert it.
+			// get data from PDO object
+			try {
+				$statement->setFetchMode(\PDO::FETCH_ASSOC);
+				$rowFromPlantPDO = $statement->fetch();
+
+				// if the entry is there, update it
+
+				// if the entry is not there, insert it.
+
+				// TODO query and don't overwrite if it exists
+				$plantLatinName = null;
+				$plantVariety = $dataCSV[1];
+				$plantType = "Vegetable";
+				$plantDescription = null;
+				//TODO query if plant spread is null first, don't overwrite if it exists
+				$plantSpread = $dataCSV[7]; // TODO convert from inches to feet, and parse out from string "24 - 36"
+				$plantHeight = null;
+				$plantDaysToHarvest = $dataCSV[2];
+				// query entry & see if more specific hardiness data available, otherwise assume "frost tender" to 32F
+				$plantMinTemp = 32.0; //
+				$plantMaxTemp = null;
+				// query and don't overwrite if it exists (moisture)
+				$plantSoilMoisture = null;
+
+
+			} catch(\Exception $e){
+				throw(new \PDOException($e->getMessage(), 0, $e ));
+			}
+
+		}
+		fclose($handle);
+	}
+
+
+
 
 }
 
