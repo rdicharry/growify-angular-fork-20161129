@@ -39,7 +39,7 @@ CREATE TABLE plant(
 
 	plantId SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT, -- PRIMARY KEY
 	plantName VARCHAR(32) ,
-	plantLatinName VARCHAR (72) UNIQUE,
+	plantLatinName VARCHAR (72) ,
 	plantVariety VARCHAR(64) ,
 	plantType VARCHAR(32)  ,
 	plantDescription TEXT,
