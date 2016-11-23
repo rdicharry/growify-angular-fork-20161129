@@ -1,4 +1,5 @@
-<body>
+
+
 	<section class="login">
 		<div class="container">
 			<div class="jumbotron text-center">
@@ -8,4 +9,3 @@
 			</div>
 		</div>
 	</section>
-</body>

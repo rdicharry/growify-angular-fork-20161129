@@ -1,5 +1,5 @@
 <body>
-		<main>
+	<main>
 		<!-- Insert Bootstrap navbar, with Angular-friendly links -->
 		<nav class="navbar navbar-default">
 			<div class="container">
@@ -11,6 +11,9 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<!--<span class="icon-bar"></span>-->
 					</button>
 					<a class="navbar-brand" routerLink="">Growify</a>
 				</div>
@@ -22,6 +25,9 @@
 						<li><a routerLink="/login">Login</a></li>
 						<li><a routerLink="/signup">Sign Up</a></li>
 						<li><a routerLink="/garden">Garden</a></li>
+						<li><a routerLink="/plants">Plants</a></li>
+						<li><a routerLink="/signout">Sign Out</a></li>
+						<!--<li><a routerLink="/garden">Garden</a></li>-->
 
 					</ul>
 				</div><!-- /.navbar-collapse -->
@@ -29,7 +35,10 @@
 		</nav>
 		<router-outlet></router-outlet>
 	</main>
+
 </body>
+
+
 
 
 

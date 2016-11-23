@@ -8,7 +8,7 @@ import {SettingsComponent} from "./components/settings-component";
 import {SignoutComponent} from "./components/signout-component";
 
 
-export const allAppComponents = [ HomeComponent, LoginComponent, SignupComponent];
+export const allAppComponents = [ HomeComponent, LoginComponent, SignupComponent, GardenComponent, PlantsComponent, SettingsComponent, SignoutComponent];
 
 export const routes: Routes = [
 	// note: the order the components are listed in matters!
@@ -20,7 +20,6 @@ export const routes: Routes = [
 	{path: "plants", component: PlantsComponent},
 	{path: "settings", component: SettingsComponent},
 	{path: "signout", component: SignoutComponent},
-
 
 ];
 
