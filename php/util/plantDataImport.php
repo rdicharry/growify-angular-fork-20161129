@@ -218,13 +218,17 @@ function insertNMSUPlantData(\PDO $pdo){
 					$plantType = "Vegetable";
 					$plantDescription = null;
 					// convert from inches to feet, and parse out from string "24 - 36"
-					$size = explode("—", $dataCSV[7]); // get larger size
-
+					$dashPosition = strpos($dataCSV[7],"—" );
+					if($dashPosition === false){ // no dash, single size value in plant spread
+						$size = floatval($dataCSV[7]);
+					} else {
+						$size = explode("—", $dataCSV[7])[1]; // get larger size
+					}
 					//for($i = 0; $i < count($size); $i++) {
 					//	echo($size[$i]);
 					//}
 
-					$plantSpread = floatval($size[1]) / 12.0; // convert to feet
+					$plantSpread = $size / 12.0; // convert to feet
 					$plantHeight = null;
 					$plantDaysToHarvest = $dataCSV[2];
 					$plantMinTemp = 32.0;

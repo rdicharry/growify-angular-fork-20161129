@@ -178,7 +178,7 @@ class Plant implements \JsonSerializable{
 		//if(empty($newPlantName)) {
 		//	throw (new \InvalidArgumentException("name is empty or has invalid contents"));
 		//}
-		if(strlen($newPlantName) > 32) {
+		if(strlen($newPlantName) > 64) {
 			throw(new \RangeException("name is too large"));
 		}
 		$this->plantName = $newPlantName;
