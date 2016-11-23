@@ -24,43 +24,51 @@ class Plant implements \JsonSerializable{
 	 **/
 	private $plantName;
 	/**
+	 * latin name of this plant
+	 * @var string $plantLatinName
+	 **/
+	private $plantLatinName;
+	/**
 	 * variety of this plant
 	 * @var string $plantVariety
 	 **/
 	private $plantVariety;
+	/**
+	 * type of plant
+	 * @var string $plantType
+	 **/
+
+	private $plantType;
 	/**
 	 * description of this plant
 	 * @var string $plantDescription
 	 **/
 	private $plantDescription;
 	/**
-	 * type of plant
-	 * @var string $plantType
-	 **/
-	private $plantType;
-	/**
 	 * planting distance between this plant and others (in feet)
-	 * @var float $plantSpread
+	 * @var float $plantSpread in FEET
 	 **/
 	private $plantSpread;
+	/**
+	 * average mature height for this plant
+	 * @var float plantHeight in FEET
+	 **/
+	private $plantHeight;
+
 	/**
 	 * amount of days before this plant should be harvested
 	 * @var int plantDaysToHarvest
 	 **/
 	private $plantDaysToHarvest;
-	/**
-	 * average mature height for this plant
-	 * @var float plantHeight
-	 **/
-	private $plantHeight;
+
 	/**
 	 * minimum growing temperature for this plant
-	 * @var int plantMinTemp
+	 * @var int plantMinTemp in degrees F
 	 **/
 	private $plantMinTemp;
 	/**
 	 * maximum growing temperature for this plant
-	 * @var int plantMaxTemp
+	 * @var int plantMaxTemp in degrees F
 	 **/
 	private $plantMaxTemp;
 	/**
@@ -72,12 +80,13 @@ class Plant implements \JsonSerializable{
 	/**
 	 * @param int|null $newPlantId
 	 * @param string $newPlantName
+	 * @param string $newPlantLatinName
 	 * @param string $newPlantVariety
-	 * @param string $newPlantDescription
 	 * @param string $newPlantType
+	 * @param string $newPlantDescription
 	 * @param float $newPlantSpread
-	 * @param int $newPlantDaysToHarvest
 	 * @param float $newPlantHeight
+	 * @param int $newPlantDaysToHarvest	 *
 	 * @param int $newPlantMinTemp
 	 * @param int $newPlantMaxTemp
 	 * @param string $newPlantSoilMoisture
@@ -86,10 +95,22 @@ class Plant implements \JsonSerializable{
 	 * @throws \TypeError if data types violate type
 	 * @throws \Exception for other exceptions
 	 **/
-	public function __construct($newPlantId, $newPlantName, $newPlantVariety, $newPlantDescription, $newPlantType, $newPlantSpread, $newPlantDaysToHarvest, $newPlantHeight, $newPlantMinTemp, $newPlantMaxTemp, $newPlantSoilMoisture) {
+	public function __construct($newPlantId,
+										 $newPlantName,
+										 $newPlantLatinName,
+										 $newPlantVariety,
+										 $newPlantType,
+										 $newPlantDescription,
+										 $newPlantSpread,
+										 $newPlantHeight,
+										 $newPlantDaysToHarvest,
+										 $newPlantMinTemp,
+										 $newPlantMaxTemp,
+										 $newPlantSoilMoisture) {
 		try {
 			$this->setPlantId($newPlantId);
 			$this->setPlantName($newPlantName);
+			$this->setPlantLatinName($newPlantLatinName);
 			$this->setPlantVariety($newPlantVariety);
 			$this->setPlantDescription($newPlantDescription);
 			$this->setPlantType($newPlantType);
@@ -154,13 +175,37 @@ class Plant implements \JsonSerializable{
 	public function setPlantName(string $newPlantName) {
 		$newPlantName = trim($newPlantName);
 		$newPlantName = filter_var($newPlantName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newPlantName)) {
-			throw (new \InvalidArgumentException("name is empty or has invalid contents"));
-		}
-		if(strlen($newPlantName) > 26) {
+		//if(empty($newPlantName)) {
+		//	throw (new \InvalidArgumentException("name is empty or has invalid contents"));
+		//}
+		if(strlen($newPlantName) > 32) {
 			throw(new \RangeException("name is too large"));
 		}
 		$this->plantName = $newPlantName;
+	}
+
+	/**
+	 * accessor method for plantLatinName
+	 * @return string the latin name for this plant
+	 **/
+	public function getPlantLatinName(){
+		return $this->plantLatinName;
+	}
+
+	/**
+	 * mutator method for plantLatinName
+	 * @param string $newPlantLatinName new value of plant latin name
+	 * @throws \InvalidArgumentException if $newPlantLatinName has invalid contents or is empty
+	 * @throws \RangeException if $newPlantLatinName is too long
+	 **/
+	public function setPlantLatinName($newPlantLatinName){
+		$newPlantLatinName = trim($newPlantLatinName);
+		$newPlantLatinName = filter_var($newPlantLatinName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+
+		if(strlen($newPlantLatinName)>72) {
+			throw(new \RangeException("latin name is too large"));
+		}
+		$this->plantLatinName = $newPlantLatinName;
 	}
 
 	/**
@@ -178,12 +223,17 @@ class Plant implements \JsonSerializable{
 	 * @throws \RangeException if $newPlantVariety is too long
 	 **/
 	public function setPlantVariety($newPlantVariety) {
+
+		if($newPlantVariety === null){
+			$this->plantVariety = null;
+			return;
+		}
 		$newPlantVariety = trim($newPlantVariety);
 		$newPlantVariety = filter_var($newPlantVariety, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newPlantVariety)) {
-			throw (new \InvalidArgumentException("variety is empty or has invalid contents"));
-		}
-		if(strlen($newPlantVariety) > 26) {
+		//if(empty($newPlantVariety)) {
+		//	throw (new \InvalidArgumentException("variety is empty or has invalid contents"));
+		//}
+		if(strlen($newPlantVariety) > 64) {
 			throw(new \RangeException("variety is too large"));
 		}
 		$this->plantVariety = $newPlantVariety;
@@ -204,12 +254,17 @@ class Plant implements \JsonSerializable{
 	 * @throws \RangeException if $newPlantDescription is too long
 	 **/
 	public function setPlantDescription($newPlantDescription) {
+
+		if($newPlantDescription === null){
+			$this->plantDescription = null;
+		}
+
 		$newPlantDescription = trim($newPlantDescription);
 		$newPlantDescription = filter_var($newPlantDescription, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newPlantDescription)) {
-			throw (new \InvalidArgumentException("description is empty or has invalid contents"));
-		}
-		if(strlen($newPlantDescription) > 512) {
+		//if(empty($newPlantDescription)) {
+		//	throw (new \InvalidArgumentException("description is empty or has invalid contents"));
+		//}
+		if(strlen($newPlantDescription) > 65535) {
 			throw(new \RangeException("description is too large"));
 		}
 		$this->plantDescription = $newPlantDescription;
@@ -230,12 +285,17 @@ class Plant implements \JsonSerializable{
 	 * @throws \RangeException if $newPlantType is too long
 	 **/
 	public function setPlantType($newPlantType) {
+		 if($newPlantType === null){
+			 $this->plantType = null;
+			 return;
+		 }
+
 		$newPlantType = trim($newPlantType);
 		$newPlantType = filter_var($newPlantType, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-		if(empty($newPlantType)) {
-			throw (new \InvalidArgumentException("type is empty or has invalid contents"));
-		}
-		if(strlen($newPlantType) > 9) {
+		//if(empty($newPlantType)) {
+		//	throw (new \InvalidArgumentException("type is empty or has invalid contents"));
+		//}
+		if(strlen($newPlantType) > 32) {
 			throw(new \RangeException("type is too large"));
 		}
 		$this->plantType = $newPlantType;
@@ -256,6 +316,12 @@ class Plant implements \JsonSerializable{
 	 * @throws \RangeException if $newPlantSpread is negative
 	 **/
 	public function setPlantSpread($newPlantSpread) {
+
+		if($newPlantSpread === null){
+			$this->plantSpread = null;
+			return;
+		}
+
 		$newPlantSpread = filter_var($newPlantSpread, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 		if($newPlantSpread === false) {
 			throw (new \UnexpectedValueException("spread is not a valid float"));
@@ -281,6 +347,12 @@ class Plant implements \JsonSerializable{
 	 * @throws \RangeException if $newPlantDaysToHarvest is negative
 	 **/
 	public function setPlantDaysToHarvest($newPlantDaysToHarvest) {
+
+		if($newPlantDaysToHarvest === null){
+			$this->plantDaysToHarvest = null;
+			return;
+		}
+
 		$newPlantDaysToHarvest = filter_var($newPlantDaysToHarvest, FILTER_VALIDATE_INT);
 		if($newPlantDaysToHarvest === false) {
 			throw (new \UnexpectedValueException("days to harvest is not a valid int"));
@@ -306,11 +378,17 @@ class Plant implements \JsonSerializable{
 	 * @throws \RangeException if $newPlantHeight is negative
 	 **/
 	public function setPlantHeight($newPlantHeight) {
+
+		if($newPlantHeight === null){
+			$this->plantHeight = null;
+			return;
+		}
+
 		$newPlantHeight = filter_var($newPlantHeight, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 		if($newPlantHeight === false) {
 			throw (new \UnexpectedValueException("height is not a valid float"));
 		}
-		if($newPlantHeight <= 0) {
+		if($newPlantHeight < 0) { // some plants have height zero! lol
 			throw (new \RangeException("height is not positive"));
 		}
 		$this->plantHeight = $newPlantHeight;
@@ -351,6 +429,11 @@ class Plant implements \JsonSerializable{
 	 * @throws \UnexpectedValueException if $newPlantMaxTemp is not a int
 	 **/
 	public function setPlantMaxTemp($newPlantMaxTemp) {
+
+		if($newPlantMaxTemp === null){
+			$this->plantMaxTemp = null;
+			return;
+		}
 		$newPlantMaxTemp = filter_var($newPlantMaxTemp, FILTER_VALIDATE_INT);
 		if($newPlantMaxTemp === false) {
 			throw (new \UnexpectedValueException("max temp is not a valid int"));
@@ -373,12 +456,17 @@ class Plant implements \JsonSerializable{
 	 * @throws \RangeException if $newPlantSoilMoisture is too long
 	 **/
 	public function setPlantSoilMoisture($newPlantSoilMoisture) {
+		if($newPlantSoilMoisture === null){
+			$this->plantSoilMoisture = null;
+			return;
+		}
+
 		$newPlantSoilMoisture = trim($newPlantSoilMoisture);
 		$newPlantSoilMoisture = filter_var($newPlantSoilMoisture, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($newPlantSoilMoisture)) {
 			throw (new \InvalidArgumentException("soil moisture is empty or has invalid contents"));
 		}
-		if(strlen($newPlantSoilMoisture) > 6) {
+		if(strlen($newPlantSoilMoisture) > 32) {
 			throw(new \RangeException("soil moisture is too large"));
 		}
 		$this->plantSoilMoisture = $newPlantSoilMoisture;
@@ -397,11 +485,42 @@ class Plant implements \JsonSerializable{
 		}
 
 		//create query template
-		$query = "INSERT INTO plant( plantName, plantVariety, plantDescription, plantType, plantSpread, plantDaysToHarvest, plantHeight, plantMinTemp, plantMaxTemp, plantSoilMoisture) VALUES (:plantName, :plantVariety, :plantDescription, :plantType, :plantSpread, :plantDaysToHarvest, :plantHeight,:plantMinTemp,:plantMaxTemp, :plantSoilMoisture)";
+		$query = "INSERT INTO plant( plantName, 
+						plantLatinName, 
+						plantVariety, 
+						plantType, 
+						plantDescription,  
+						plantSpread, 
+						plantHeight, 
+						plantDaysToHarvest, 
+						plantMinTemp, 
+						plantMaxTemp, 
+						plantSoilMoisture) 
+						VALUES (:plantName, 
+						:plantLatinName,
+						:plantVariety, 
+						:plantType, 
+						:plantDescription,
+						:plantSpread, 
+						:plantHeight,
+						:plantDaysToHarvest, 
+						:plantMinTemp,
+						:plantMaxTemp, 
+						:plantSoilMoisture)";
 		$statement = $pdo->prepare($query);
 
 		// bind member variables to placeholders in the template
-		$parameters = ["plantName" => $this->plantName, "plantVariety" => $this->plantVariety, "plantDescription" => $this->plantDescription, "plantType" => $this->plantType, "plantSpread" => $this->plantSpread, "plantDaysToHarvest" => $this->plantDaysToHarvest, "plantHeight" => $this->plantHeight, "plantMinTemp" => $this->plantMinTemp, "plantMaxTemp" => $this->plantMaxTemp, "plantSoilMoisture" => $this->plantSoilMoisture];
+		$parameters = ["plantName" => $this->plantName,
+			"plantLatinName" => $this->plantLatinName,
+			"plantVariety" => $this->plantVariety,
+			"plantType" => $this->plantType,
+			"plantDescription" => $this->plantDescription,
+			"plantSpread" => $this->plantSpread,
+			"plantHeight" => $this->plantHeight,
+			"plantDaysToHarvest" => $this->plantDaysToHarvest,
+			"plantMinTemp" => $this->plantMinTemp,
+			"plantMaxTemp" => $this->plantMaxTemp,
+			"plantSoilMoisture" => $this->plantSoilMoisture];
 		$statement->execute($parameters);
 
 		// get auto-assigned plant id from mysql
@@ -433,11 +552,33 @@ class Plant implements \JsonSerializable{
 	 **/
 	public function update(\PDO $pdo) {
 		//create query template
-		$query = "UPDATE plant SET plantName = :plantName, plantVariety = :plantVariety, plantDescription = :plantDescription, plantType = :plantType, plantSpread = :plantSpread, plantDaysToHarvest = :plantDaysToHarvest, plantHeight = :plantHeight, plantMinTemp = :plantMinTemp, plantMaxTemp = :plantMaxTemp, plantSoilMoisture = :plantSoilMoisture WHERE plantId = :plantId";
+		$query = "UPDATE plant SET plantName = :plantName, 
+						plantLatinName = :plantLatinName,
+						plantVariety = :plantVariety, 
+						plantType = :plantType, 
+						plantDescription = :plantDescription, 						
+						plantSpread = :plantSpread, 
+						plantHeight = :plantHeight,
+						plantDaysToHarvest = :plantDaysToHarvest, 						 
+						plantMinTemp = :plantMinTemp, 
+						plantMaxTemp = :plantMaxTemp, 
+						plantSoilMoisture = :plantSoilMoisture 
+						WHERE plantId = :plantId";
 		$statement = $pdo->prepare($query);
 
 		// bind member variables to placeholders
-		$parameters = ["plantId" => $this->plantId, "plantName" => $this->plantName, "plantVariety" => $this->plantVariety, "plantDescription" => $this->plantDescription, "plantType" => $this->plantType, "plantSpread" => $this->plantSpread, "plantDaysToHarvest" => $this->plantDaysToHarvest, "plantHeight" => $this->plantHeight, "plantMinTemp" => $this->plantMinTemp, "plantMaxTemp" => $this->plantMaxTemp, "plantSoilMoisture" => $this->plantSoilMoisture];
+		$parameters = ["plantId" => $this->plantId,
+			"plantName" => $this->plantName,
+			"plantLatinName" => $this->plantLatinName,
+			"plantVariety" => $this->plantVariety,
+			"plantType" => $this->plantType,
+			"plantDescription" => $this->plantDescription,
+			"plantSpread" => $this->plantSpread,
+			"plantHeight" => $this->plantHeight,
+			"plantDaysToHarvest" => $this->plantDaysToHarvest,
+			"plantMinTemp" => $this->plantMinTemp,
+			"plantMaxTemp" => $this->plantMaxTemp,
+			"plantSoilMoisture" => $this->plantSoilMoisture];
 		$statement->execute($parameters);
 	}
 
@@ -454,7 +595,7 @@ class Plant implements \JsonSerializable{
 			throw(new \RangeException("Plant id must be positive."));
 		}
 		// create query template
-		$query = "SELECT plantId, plantName, plantVariety, plantDescription, plantType, plantSpread, plantDaysToHarvest, plantHeight, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantId= :plantId";
+		$query = "SELECT plantId, plantLatinName, plantName, plantVariety, plantType, plantDescription,  plantSpread, plantHeight, plantDaysToHarvest, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantId= :plantId";
 		$statement = $pdo->prepare($query);
 
 		// bind the plant id to the place holder in the template
@@ -467,7 +608,7 @@ class Plant implements \JsonSerializable{
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
-				$plant = new Plant($row["plantId"], $row["plantName"], $row["plantVariety"], $row["plantDescription"], $row["plantType"], $row["plantSpread"], $row["plantDaysToHarvest"], $row["plantHeight"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
+				$plant = new Plant($row["plantId"],  $row["plantName"], $row["plantLatinName"], $row["plantVariety"], $row["plantType"], $row["plantDescription"],  $row["plantSpread"], $row["plantHeight"], $row["plantDaysToHarvest"],  $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
 			}
 		} catch(\Exception $exception) {
 			// if the row couldn't be converted, rethrow it
@@ -491,10 +632,11 @@ class Plant implements \JsonSerializable{
 			throw (new \InvalidArgumentException("plant name is invalid"));
 		}
 		// create query template
-		$query = "SELECT plantId, plantName, plantVariety, plantDescription, plantType, plantSpread, plantDaysToHarvest, plantHeight, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantName LIKE :plantName";
+		$query = "SELECT plantId, plantName, plantLatinName, plantVariety, plantType, plantDescription,  plantSpread, plantHeight, plantDaysToHarvest,  plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantName LIKE :plantName";
 		$statement = $pdo->prepare($query);
 
 		// bind the plant name to the place holder in the template
+		$plantName = "%$plantName%";
 		$parameters = ["plantName" => $plantName];
 		$statement->execute($parameters);
 
@@ -503,7 +645,39 @@ class Plant implements \JsonSerializable{
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false){
 			try {
-					$plant = new Plant($row["plantId"], $row["plantName"], $row["plantVariety"], $row["plantDescription"], $row["plantType"], $row["plantSpread"], $row["plantDaysToHarvest"], $row["plantHeight"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
+					$plant = new Plant($row["plantId"], $row["plantName"], $row["plantLatinName"], $row["plantVariety"], $row["plantType"], $row["plantDescription"],  $row["plantSpread"], $row["plantHeight"], $row["plantDaysToHarvest"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
+				$plants[$plants->key()] = $plant;
+				$plants->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($plants);
+	}
+
+	public static function getPlantByPlantLatinName(\PDO $pdo, string $plantLatinName){
+
+		$plantLatinName = trim($plantLatinName);
+		$plantLatinName = filter_var($plantLatinName, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($plantLatinName)) {
+			throw (new \InvalidArgumentException("plant name is invalid"));
+		}
+		// create query template
+		$query = "SELECT plantId, plantName, plantLatinName, plantVariety, plantType, plantDescription,  plantSpread, plantHeight, plantDaysToHarvest,  plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantLatinName LIKE :plantLatinName";
+		$statement = $pdo->prepare($query);
+
+		// bind the plant name to the place holder in the template
+		$plantLatinName = "%$plantLatinName%";
+		$parameters = ["plantLatinName" => $plantLatinName];
+		$statement->execute($parameters);
+
+		// build an array of plants
+		$plants = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false){
+			try {
+				$plant = new Plant($row["plantId"], $row["plantName"], $row["plantLatinName"], $row["plantVariety"], $row["plantType"], $row["plantDescription"],  $row["plantSpread"], $row["plantHeight"], $row["plantDaysToHarvest"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
 				$plants[$plants->key()] = $plant;
 				$plants->next();
 			} catch(\Exception $exception) {
@@ -529,10 +703,12 @@ class Plant implements \JsonSerializable{
 			throw (new \InvalidArgumentException("plant type is invalid"));
 		}
 		// create query template
-		$query = "SELECT plantId, plantName, plantVariety, plantDescription, plantType, plantSpread, plantDaysToHarvest, plantHeight, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantType LIKE :plantType";
+
+		$query = "SELECT plantId, plantName, plantLatinName, plantVariety, plantType, plantDescription,  plantSpread, plantHeight, plantDaysToHarvest,  plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantType LIKE :plantType";
 		$statement = $pdo->prepare($query);
 
 		// bind the plant type to the place holder in the template
+		$plantType = "%$plantType%";
 		$parameters = ["plantType" => $plantType];
 		$statement->execute($parameters);
 
@@ -541,7 +717,7 @@ class Plant implements \JsonSerializable{
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false){
 			try {
-				$plant = new Plant($row["plantId"], $row["plantName"], $row["plantVariety"], $row["plantDescription"], $row["plantType"], $row["plantSpread"], $row["plantDaysToHarvest"], $row["plantHeight"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
+				$plant = new Plant($row["plantId"], $row["plantName"], $row["plantLatinName"], $row["plantVariety"], $row["plantType"], $row["plantDescription"],  $row["plantSpread"], $row["plantHeight"], $row["plantDaysToHarvest"],  $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
 				$plants[$plants->key()] = $plant;
 				$plants->next();
 			} catch(\Exception $exception) {
@@ -561,7 +737,7 @@ class Plant implements \JsonSerializable{
 	 **/
 	public static function getAllPlants(\PDO $pdo){
 		//create query template
-		$query = "SELECT plantId, plantName, plantVariety, plantDescription, plantType, plantSpread, plantDaysToHarvest, plantHeight, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant";
+		$query = "SELECT plantId, plantName, plantLatinName, plantVariety, plantType, plantDescription,  plantSpread, plantHeight, plantDaysToHarvest,  plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant";
 		$statement = $pdo->prepare($query);
 		$statement->execute();
 
@@ -570,7 +746,7 @@ class Plant implements \JsonSerializable{
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row=$statement->fetch())!== false){
 			try {
-				$plant = new Plant($row["plantId"], $row["plantName"], $row["plantVariety"], $row["plantDescription"], $row["plantType"], $row["plantSpread"], $row["plantDaysToHarvest"], $row["plantHeight"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
+				$plant = new Plant($row["plantId"], $row["plantName"], $row["plantLatinName"], $row["plantVariety"], $row["plantType"], $row["plantDescription"], $row["plantSpread"], $row["plantHeight"], $row["plantDaysToHarvest"],  $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
 				$plants[$plants->key()] = $plant;
 				$plants->next();
 			} catch(\Exception $exception) {

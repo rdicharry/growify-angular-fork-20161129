@@ -34,20 +34,21 @@ CREATE TABLE profile(
 	FOREIGN KEY (profileZipCode) REFERENCES zipCode(zipCodeCode)
 );
 
+
 CREATE TABLE plant(
 
 	plantId SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT, -- PRIMARY KEY
-	plantSoilMoisture VARCHAR(3) NOT NULL,
-	plantDescription VARCHAR(512),
-	plantSpread FLOAT UNSIGNED NOT NULL,
-	plantHeight FLOAT UNSIGNED NOT NULL,
-	plantType VARCHAR(9) NOT NULL ,
-	plantDaysToHarvest SMALLINT UNSIGNED NOT NULL,
-	plantVariety VARCHAR(64) NOT NULL,
-	plantName VARCHAR(26) UNIQUE NOT NULL,
-	plantMaxTemp TINYINT UNSIGNED NOT NULL,
+	plantName VARCHAR(32) ,
+	plantLatinName VARCHAR (72) UNIQUE,
+	plantVariety VARCHAR(64) ,
+	plantType VARCHAR(32)  ,
+	plantDescription TEXT,
+	plantSpread FLOAT UNSIGNED ,
+	plantHeight FLOAT UNSIGNED ,
+	plantDaysToHarvest SMALLINT UNSIGNED ,
 	plantMinTemp TINYINT SIGNED NOT NULL,
-
+	plantMaxTemp TINYINT SIGNED ,
+	plantSoilMoisture VARCHAR(32) ,
 	PRIMARY KEY (plantId) -- ,
 	-- FOREIGN KEY (plantId) REFERENCES garden(gardenPlantId),
 	-- FOREIGN KEY (plantId) REFERENCES plantArea(plantAreaPlantId)
