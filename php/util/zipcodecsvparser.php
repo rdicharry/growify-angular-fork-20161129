@@ -13,7 +13,10 @@ use Edu\Cnm\Growify\ZipCode;
 require_once(dirname(__DIR__) . "/classes/autoload.php");
 require_once("Setup.php");
 
+
+
 function csvParse() {
+	$zipCode = array();
 	$file = file_get_contents('zip_code_database.csv');
 	$zonesFile = file_get_contents('zones-and-towns-utf8.csv');
 
@@ -38,10 +41,10 @@ function csvParse() {
 		}
 	}
 //MATCH ZIPCODES TO AREAS AND INITIALIZE TO ZIPCODE
-	$zipCode = array();
+	$tempArray = array();
 	for($x = 0; $x < count($zipCodeAreaArray); $x++) {
 		for($y = 0; $y < count($townZoneArray); $y++) {
-			if(trim(filter_var($townZoneArray[$y][0], FILTER_SANITIZE_STRING)) === trim(filter_var($zipCodeAreaArray[$x][1], FILTER_SANITIZE_STRING))) {
+			if(trim(filter_var($townZoneArray[$y][0], FILTER_SANITIZE_STRING)) === trim(filter_var($zipCodeAreaArray[$x][1], FILTER_SANITIZE_STRING))&& !parser($zipCodeAreaArray[$x][0], $zipCode)) {
 				$zipCode[] = [$zipCodeAreaArray[$x][0], $townZoneArray[$y][1]];
 				break;
 			}else{
@@ -51,9 +54,8 @@ function csvParse() {
 					//echo   "AREA:".$areas[$z]." TOWNZONE" .$townZoneArray[$y][0]. "<br>";
 
 					if(filter_var(trim($areas[$z]), FILTER_SANITIZE_STRING) === filter_var(trim($townZoneArray[$y][0]),FILTER_SANITIZE_STRING)){
-						if(!($zipCodeAreaArray[$x][0] === $zipCodeAreaArray[$x-1][0])){
-							$zipCode[] = [$zipCodeAreaArray[$x][0],$areas[$z]];
-							echo "match: " ."  AREA  ".$areas[$z]." TOWNZONE  " .$townZoneArray[$y][0]. ' ZIPCODE: ' .$zipCodeAreaArray[$x][0] ." MAINAREA ". $zipCodeAreaArray[$x][1] ."<br>";
+						if(!($zipCodeAreaArray[$x][0] === $zipCodeAreaArray[$x-1][0]) && !parser($zipCodeAreaArray[$x][0], $zipCode)){
+							$zipCode[] = [$zipCodeAreaArray[$x][0], $townZoneArray[$y][1]];
 						}
 					}
 
@@ -61,15 +63,27 @@ function csvParse() {
 			}
 		}
 	}
-	//$pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/growify.ini");
+
+	echo count($tempArray);
+	print_r(var_dump($zipCode));
+	$pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/growify.ini");
 	for($x = 0; $x < count($zipCode); $x++) {
-		//$zipCodeObject
-				//$zipCodeObject->insert($pdo);
+				$zipCodeObject = new ZipCode(filter_var(trim($zipCode[$x][0]),FILTER_SANITIZE_STRING),filter_var(trim($zipCode[$x][1])),FILTER_SANITIZE_STRING);
+				$zipCodeObject->insert($pdo);
 	}
 	echo count($townZoneArray)."<br>";
 	echo count($zipCodeAreaArray). "<br>";
 	echo count($zipCode);
 }
 csvParse();
+
+function parser(string $search, $searchArray){
+	for($x = 0; $x < count($searchArray); $x++){
+		if(filter_var(trim($searchArray[$x][0]),FILTER_SANITIZE_STRING) === filter_var(trim($search),FILTER_SANITIZE_STRING)){
+			return true;
+		}
+	}
+	return false;
+}
 
 
