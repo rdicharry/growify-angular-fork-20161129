@@ -4,8 +4,8 @@ use Edu\Cnm\Growify\Plant;
 
 // minimum temp (degrees F) for USDA plant hardiness zones in NM
 // source: http://planthardiness.ars.usda.gov/
- $usdaHardinessZones = [
- 	"1a" => -60.0,
+$usdaHardinessZones = [
+	"1a" => -60.0,
 	"1b" => -55.0,
 	"2a" => -50.0,
 	"2b" => -45.0,
@@ -36,7 +36,7 @@ use Edu\Cnm\Growify\Plant;
 // cross-reference USDA plant hardiness (min winter temp) to NMSU planting areas
 // source http://aces.nmsu.edu/pubs/_circulars/CR457B.pdf
 
- $usdaHardinessToNMSUAreas = [
+$usdaHardinessToNMSUAreas = [
 	"4a" => 3,
 	"4b" => 3,
 	"5a" => 3,
@@ -121,18 +121,18 @@ function insertPlantsForAFuture(\PDO $pdo){
 			}
 		}
 
-			/*echo $plant->getPlantId()."<br>";
-			echo $plant->getPlantName()."<br>";
-			echo $plant->getPlantLatinName()."<br>";
-			echo $plant->getPlantVariety()."<br>";
-			echo $plant->getPlantType()."<br>";
-			echo $plant->getPlantDescription()."<br>";
-			echo $plant->getPlantSpread()."<br>";
-			echo $plant->getPlantHeight()."<br>";
-			echo $plant->getPlantDaysToHarvest()."<br>";
-			echo $plant->getPlantMinTemp()."<br>";
-			echo $plant->getPlantMaxTemp()."<br>";
-			echo $plant->getPlantSoilMoisture()."<br>";*/
+		/*echo $plant->getPlantId()."<br>";
+		echo $plant->getPlantName()."<br>";
+		echo $plant->getPlantLatinName()."<br>";
+		echo $plant->getPlantVariety()."<br>";
+		echo $plant->getPlantType()."<br>";
+		echo $plant->getPlantDescription()."<br>";
+		echo $plant->getPlantSpread()."<br>";
+		echo $plant->getPlantHeight()."<br>";
+		echo $plant->getPlantDaysToHarvest()."<br>";
+		echo $plant->getPlantMinTemp()."<br>";
+		echo $plant->getPlantMaxTemp()."<br>";
+		echo $plant->getPlantSoilMoisture()."<br>";*/
 
 
 
@@ -183,11 +183,11 @@ function insertNMSUPlantData(\PDO $pdo){
 					$statement = $pdo->prepare($query);
 
 					$parameters = ["plantName" => $plantName,
-					"plantVariety" => $dataCSV[1],
-					"plantType" => $plantType,
-					"plantDaysToHarvest" => $dataCSV[2],
-					"plantMinTemp" => $plantMinTemp,
-					"plantSpread" => $plantSpread];
+						"plantVariety" => $dataCSV[1],
+						"plantType" => $plantType,
+						"plantDaysToHarvest" => $dataCSV[2],
+						"plantMinTemp" => $plantMinTemp,
+						"plantSpread" => $plantSpread];
 					$statement->execute($parameters);
 
 
@@ -195,26 +195,24 @@ function insertNMSUPlantData(\PDO $pdo){
 
 				} else {
 
+					// if the entry is not already there, insert it.
+					$plantLatinName = null;
+					$plantVariety = $dataCSV[1];
+					$plantType = "Vegetable";
+					$plantDescription = null;
+					// convert from inches to feet, and parse out from string "24 - 36"
+					$size = explode("-", $dataCSV[7]); // get larger size
+					$plantSpread = floatval($size[1])/12.0 ; // convert to feet
+					$plantHeight = null;
+					$plantDaysToHarvest = $dataCSV[2];
+					$plantMinTemp = 32.0;
+					$plantMaxTemp = null;
+					$plantSoilMoisture = null;
 
-				// if the entry is not already there, insert it.
+					$plant = new Plant(null, $plantName, $plantLatinName, $plantVariety, $plantType, $plantDescription, $plantSpread, $plantHeight, $plantDaysToHarvest, $plantMinTemp, $plantMaxTemp, $plantSoilMoisture);
+					$plant->insert($pdo);
 
-
-				// TODO query and don't overwrite if it exists
-				$plantLatinName = null;
-				$plantVariety = $dataCSV[1];
-				$plantType = "Vegetable";
-				$plantDescription = null;
-				//TODO query if plant spread is null first, don't overwrite if it exists
-				$plantSpread = $dataCSV[7]; // TODO convert from inches to feet, and parse out from string "24 - 36"
-				$plantHeight = null;
-				$plantDaysToHarvest = $dataCSV[2];
-				// query entry & see if more specific hardiness data available, otherwise assume "frost tender" to 32F
-				$plantMinTemp = 32.0; //
-				$plantMaxTemp = null;
-				// query and don't overwrite if it exists (moisture)
-				$plantSoilMoisture = null;
-
-			}
+				}
 
 			} catch(\Exception $e){
 				throw(new \PDOException($e->getMessage(), 0, $e ));
@@ -223,10 +221,6 @@ function insertNMSUPlantData(\PDO $pdo){
 		}
 		fclose($handle);
 	}
-
-
-
-
 }
 
 // Add herb data?
