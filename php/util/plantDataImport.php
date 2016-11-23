@@ -151,7 +151,7 @@ function insertNMSUPlantData(\PDO $pdo){
 		while (($dataCSV = fgetcsv($handle, 0, ",", "\"")) !== FALSE) { // set length to zero for unlimited line length php > 5.1
 
 			$plantName = $dataCSV[0];
-			// TODO first step - see if this plant already has an entry
+			//  first step - see if this plant already has an entry
 			// query on plantName
 			$query = "SELECT plantName, plantLatinName, plantDescription, plantSpread, plantHeight, plantMinTemp, plantSoilMoisture FROM plant WHERE plantName = :plantName";
 			$statement = $pdo->prepare($query);
@@ -176,10 +176,19 @@ function insertNMSUPlantData(\PDO $pdo){
 					if(floatval($rowFromPlantPDO["plantSpread"]!== null)){
 						$plantSpread = $rowFromPlantPDO["plantSpread"];
 					} else {
-						$size = explode("_", $dataCSV[7]);
+						$size = explode("-", $dataCSV[7]); // get larger size
 						$plantSpread = floatval($size[1])/12.0 ; // convert to feet
 					}
-					$query = "UPDATE plant SET plantType = :plantType, plantDaysToHarvest = :plantDaysToHarvest, plantMinTemp = :plantMinTemp"
+					$query = "UPDATE plant SET plantVariety = :plantVariety, plantType = :plantType, plantDaysToHarvest = :plantDaysToHarvest, plantMinTemp = :plantMinTemp, plantSpread = :plantSpread WHERE plantName = :plantName";
+					$statement = $pdo->prepare($query);
+
+					$parameters = ["plantName" => $plantName,
+					"plantVariety" => $dataCSV[1],
+					"plantType" => $plantType,
+					"plantDaysToHarvest" => $dataCSV[2],
+					"plantMinTemp" => $plantMinTemp,
+					"plantSpread" => $plantSpread];
+					$statement->execute($parameters);
 
 
 
@@ -187,7 +196,7 @@ function insertNMSUPlantData(\PDO $pdo){
 				} else {
 
 
-				// if the entry is not there, insert it.
+				// if the entry is not already there, insert it.
 
 
 				// TODO query and don't overwrite if it exists
