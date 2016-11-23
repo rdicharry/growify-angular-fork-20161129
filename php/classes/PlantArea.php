@@ -32,28 +32,28 @@ class PlantArea implements \JsonSerializable {
 	private $plantAreaPlantId;
 
 	/**
-	 * start date for this PlantArea
-	 * @var int $plantAreaStartDate
+	 * start day for this PlantArea
+	 * @var int $plantAreaStartDay
 	 **/
 	private $plantAreaStartDay;
 
 	/**
-	 * start date for this PlantArea
-	 * @var int $plantAreaStartDate
+	 * end day for this PlantArea
+	 * @var int $plantAreaEndDay
 	 **/
 	private $plantAreaEndDay;
 
 
 	/**
-	 * start date for this PlantArea
-	 * @var int $plantAreaStartDate
+	 * start month for this PlantArea
+	 * @var int $plantAreaStartMonth
 	 **/
 	private $plantAreaStartMonth;
 
 
 	/**
-	 * end date for this PlantArea
-	 * @var int $plantAreaEndDate
+	 * end month for this PlantArea
+	 * @var int $plantAreaEndMonth
 	 *
 	 **/
 	private $plantAreaEndMonth;
@@ -85,10 +85,10 @@ class PlantArea implements \JsonSerializable {
 	 *
 	 * @param int $newPlantAreaId
 	 * @param int $newPlantAreaPlantId
-	 * @param string $newPlantAreaStartDay
-	 * @param string $newPlantAreaEndDay
-	 * @param string $newPlantAreaStartMonth
-	 * @param string $newPlantAreaEndMonth
+	 * @param int $newPlantAreaStartDay
+	 * @param int $newPlantAreaEndDay
+	 * @param int $newPlantAreaStartMonth
+	 * @param int $newPlantAreaEndMonth
 	 * @param string $newPlantAreaNumber
 	 * @throws Exception if some other exception occurs
 	 * @throws TypeError if data types violate type hints
@@ -173,7 +173,7 @@ class PlantArea implements \JsonSerializable {
 	/**
 	 * accessor method for plant area start day
 	 *
-	 * $return int of plant area start day
+	 * $return int value of plant area start day
 	 **/
 	public function getPlantAreaStartDay() {
 		return ($this->plantAreaStartDay);
@@ -184,7 +184,7 @@ class PlantArea implements \JsonSerializable {
 	/**
 	 * accessor method for plant area end day
 	 *
-	 * $return \DateTime value of plant area end day
+	 * $return int value of plant area end day
 	 **/
 	public function getPlantAreaEndDay() {
 		return ($this->plantAreaEndDay);
@@ -219,7 +219,7 @@ class PlantArea implements \JsonSerializable {
 	/**
 	 * accessor method for plant area start month
 	 *
-	 * $return int of plant area start date
+	 * $return int value of plant area start date
 	 **/
 	public function getPlantAreaStartMonth() {
 		return ($this->plantAreaStartMonth);
@@ -252,7 +252,7 @@ class PlantArea implements \JsonSerializable {
 	/**
 	 * accessor method for plant area end month
 	 *
-	 * $return \DateTime value of plant area end month
+	 * $return int value of plant area end month
 	 **/
 	public function getPlantAreaEndMonth() {
 		return ($this->plantAreaEndMonth);
