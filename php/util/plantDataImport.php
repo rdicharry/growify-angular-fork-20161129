@@ -88,8 +88,8 @@ function insertPlantsForAFuture(\PDO $pdo){
 
 				// plant description - take from plant uses, uses notes, cultivation details, propagation, author, references
 				$plantDescription = $row["Edible uses"] . $row["Uses notes"] . $row["Cultivation details"] . $row["Propagation 1"] . $row["Author"] . $row["Botanical references"];
-				$plantSpread = $row["Width"]; // meters - convert to feet
-				$plantHeight = $row["Height"]; // meters - convert to feet
+				$plantSpread = $row["Width"]; // TODO meters - convert to feet
+				$plantHeight = $row["Height"]; // TODO meters - convert to feet
 				$plantDaysToHarvest = null; // not provided in this table
 
 				// get min temps -
@@ -121,10 +121,10 @@ function insertPlantsForAFuture(\PDO $pdo){
 			}
 		}
 
-		/*echo $plant->getPlantId()."<br>";
-		echo $plant->getPlantName()."<br>";
-		echo $plant->getPlantLatinName()."<br>";
-		echo $plant->getPlantVariety()."<br>";
+		echo $plant->getPlantId()."<br>";
+		/*echo $plant->getPlantName()."<br>";*/
+		echo "adding plant: ".$plant->getPlantLatinName()."<br>";
+		/*echo $plant->getPlantVariety()."<br>";
 		echo $plant->getPlantType()."<br>";
 		echo $plant->getPlantDescription()."<br>";
 		echo $plant->getPlantSpread()."<br>";
@@ -147,7 +147,7 @@ function insertNMSUPlantData(\PDO $pdo){
 
 
 	// keep a list of the plants for a future entries that we have visited so we can delete any duplicates.
-	var $pfafPlantsUpdated = [];
+	$pfafPlantsUpdated = [];
 
 	// get a row from CSV
 
@@ -156,7 +156,7 @@ function insertNMSUPlantData(\PDO $pdo){
 
 			$plantName = $dataCSV[0];
 			$plantNameLike = "%$plantName%";
-			echo $plantName . "<br>";
+			echo $plantName . "<br/>";
 			//  first step - see if this plant already has an entry
 			// query on plantName
 			$query = "SELECT plantId, plantName, plantLatinName, plantDescription, plantSpread, plantHeight, plantMinTemp, plantSoilMoisture FROM plant WHERE plantName LIKE :plantName";
@@ -174,8 +174,11 @@ function insertNMSUPlantData(\PDO $pdo){
 					// find the entry, get data from it, insert a NEW entry
 					// (will delete old plants for a future entry later.)
 					// store plant ID of pfaf entry to delete
-					array_push($pfafPlantsUpdated, $rowFromPlantPDO["plantId"]);
 
+					array_push($pfafPlantsUpdated, $rowFromPlantPDO["plantId"]);
+					echo "Found pfaf entry: ".$plantName.", ".$rowFromPlantPDO["plantId"]."<br/>";
+
+					$plantLatinName = $rowFromPlantPDO["plantLatinName"];
 
 					$plantType = "Vegetable";
 					if(floatval($rowFromPlantPDO["plantMinTemp"]) < 32.0) {
@@ -184,6 +187,8 @@ function insertNMSUPlantData(\PDO $pdo){
 						$plantMinTemp = 32.0;
 					}
 
+					$plantDescription = $rowFromPlantPDO["plantDescription"];
+
 					if(floatval($rowFromPlantPDO["plantSpread"] !== null)) {
 						$plantSpread = $rowFromPlantPDO["plantSpread"];
 					} else {
@@ -191,12 +196,14 @@ function insertNMSUPlantData(\PDO $pdo){
 						$plantSpread = floatval($size[1]) / 12.0; // convert to feet
 					}
 
-					$query = "INSERT INTO plant SET plantName = :plantName, plantVariety = :plantVariety, plantType = :plantType, plantDaysToHarvest = :plantDaysToHarvest, plantMinTemp = :plantMinTemp, plantSpread = :plantSpread  ";
+					$query = "INSERT INTO plant SET plantName = :plantName, plantLatinName = :plantLatinName, plantVariety = :plantVariety, plantType = :plantType, plantDescription = :plantDescription, plantDaysToHarvest = :plantDaysToHarvest, plantMinTemp = :plantMinTemp, plantSpread = :plantSpread  ";
 					$statement = $pdo->prepare($query);
 
 					$parameters = ["plantName" => $plantName,
+						"plantLatinName" => $plantLatinName,
 						"plantVariety" => $dataCSV[1],
 						"plantType" => $plantType,
+						"plantDescription" => $plantDescription,
 						"plantDaysToHarvest" => $dataCSV[2],
 						"plantMinTemp" => $plantMinTemp,
 						"plantSpread" => $plantSpread];
@@ -213,9 +220,9 @@ function insertNMSUPlantData(\PDO $pdo){
 					// convert from inches to feet, and parse out from string "24 - 36"
 					$size = explode("—", $dataCSV[7]); // get larger size
 
-					for($i = 0; $i < count($size); $i++) {
-						echo($size[$i]);
-					}
+					//for($i = 0; $i < count($size); $i++) {
+					//	echo($size[$i]);
+					//}
 
 					$plantSpread = floatval($size[1]) / 12.0; // convert to feet
 					$plantHeight = null;
