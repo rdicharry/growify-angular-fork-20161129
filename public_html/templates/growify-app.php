@@ -1,4 +1,4 @@
-<body>
+
 	<main>
 		<!-- Insert Bootstrap navbar, with Angular-friendly links -->
 		<nav class="navbar navbar-default">
@@ -36,7 +36,7 @@
 		<router-outlet></router-outlet>
 	</main>
 
-</body>
+
 
 
 

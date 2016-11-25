@@ -1,5 +1,19 @@
 body {
-	background: url("/public_html/img/vegetable-basket.jpg") no-repeat center fixed;
+	background: url("../app/img/vegetable-basket.jpg") no-repeat center fixed;
 	background-size: cover;
+}
+
+.jumbotron {
+	align-self: flex-end;
+	background: transparent;
+	color: #fff;
+}
+
+.jumbotron > h1 {
+	text-shadow: 2px 1px 0 #000;
+}
+
+.jumbotron > .lead {
+	text-shadow: 2px 1px 0 #000;
 }
 
