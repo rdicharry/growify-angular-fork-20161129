@@ -16,6 +16,20 @@ $nmsuArea1ToUSDAHardiness = ["7b", "8a", "8b", "9a", "9b" ];
 $nmsuArea2ToUSDAHardiness = ["6b", "7a"];
 $nmsuArea3ToUSDAHardiness = ["4a", "4b", "5a", "5b", "6a"];
 
+$months = [
+	"JAN" => 1,
+	"FEB" => 2,
+	"MARCH" => 3,
+	"APRIL" => 4,
+	"MAY" => 5,
+	"JUNE" => 6,
+	"JULY" => 7,
+	"AUG" => 8,
+	"SEPT" => 9,
+	"OCT" => 10,
+	"NOV" => 11,
+	"DEC" => 12
+];
 
 require_once "/etc/apache2/capstone-mysql/encrypted-config.php";
 require_once(dirname(__DIR__) . "/classes/autoload.php");
@@ -27,6 +41,7 @@ function importPlantingDates(\PDO $pdo){
 	global $nmsuArea1ToUSDAHardiness;
 	global $nmsuArea2ToUSDAHardiness;
 	global $nmsuArea3ToUSDAHardiness;
+	global $months;
 
 
 	// for each plant table entry (plant variety) there are three growing zones
@@ -53,24 +68,62 @@ function importPlantingDates(\PDO $pdo){
 			$plantId = $row["plantId"];
 
 
-			// parse and unwrap planting dates ToDO
-			$plantArea1Dates = $dataCSV[3]; // TODO strip whitespace at beg & end (trim?)
-			$plantArea1Dates = $dataCSV[4]; // TODO
-			$plantArea1Dates = $dataCSV[5];
+			// parse and unwrap planting dates
+			$plantArea1Dates = parseAndUnwrapDates($dataCSV[3]);
+			$plantArea2Dates = parseAndUnwrapDates($dataCSV[4]);
+			$plantArea3Dates = parseAndUnwrapDates($dataCSV[5]);
 
 			for($i=0; $i<count($nmsuArea1ToUSDAHardiness); $i++){
 				$usdaArea = $nmsuArea1ToUSDAHardiness[$i];
-				$plantArea = new PlantArea(); // TODO insert
+				$plantArea = new PlantArea(null, $plantId, $plantArea1Dates["startDate"], $plantArea1Dates["endDate"], $plantArea1Dates["startMonth"], $plantArea1Dates["endMonth"], $usdaArea);
+				$plantArea->insert($pdo);
 			}
 			for($i=0; $i<count($nmsuArea2ToUSDAHardiness); $i++){
 				$usdaArea = $nmsuArea2ToUSDAHardiness[$i];
-				$plantArea = new PlantArea(); // TODO insert
+				$plantArea = new PlantArea(null, $plantId, $plantArea2Dates["startDate"], $plantArea2Dates["endDate"], $plantArea2Dates["startMonth"], $plantArea2Dates["endMonth"], $usdaArea);
+				$plantArea->insert($pdo);
+
 			}
 			for($i=0; $i<count($nmsuArea3ToUSDAHardiness); $i++){
 				$usdaArea = $nmsuArea3ToUSDAHardiness[$i];
-				$plantArea = new PlantArea(); // TODO insert
+				$plantArea = new PlantArea(null, $plantId, $plantArea3Dates["startDate"], $plantArea3Dates["endDate"], $plantArea3Dates["startMonth"], $plantArea3Dates["endMonth"], $usdaArea);
+				$plantArea->insert($pdo);
+
 			}
 
 		} // end while data CSV
 	}// end if handle
+}// end function
+
+/**
+ * Take a string representing a date range separated by a hyphen
+ * and return an array of the start and end months and days
+ * @param string $dateRange
+ * @return array and associative array containing ["startDate", "startMonth", "endDate", "endMonth"]
+ */
+function parseAndUnwrapDates(string $dateRange){
+
+	//$dateRange = trim($dateRange);
+	$dateStrings = explode("—", $dateRange);
+	$startString = $dateStrings[0];
+	$endString = $dateStrings[1];
+	$startString = trim($startString);
+	$endString = trim($endString);
+	$startMonthDay = explode(" ", $startString);
+	$endMonthDay = explode(" ", $endString);
+
+	$startMonth = $months[strtoupper($startMonthDay[0])];
+	//$startDay = $startMonthDay[1];
+
+	$endMonth = $months[strtoupper($endMonthDay[0])];
+	//$endDay = $endMonthDay[0];
+
+
+	$dates = ["startDate"=> $startMonthDay[1],
+	"startMonth"=> $startMonth,
+	"endDate"=> $endMonthDay[1],
+	"endMonth"=> $endMonth];
+
+	return $dates;
+
 }
