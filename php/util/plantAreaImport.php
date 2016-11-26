@@ -41,8 +41,6 @@ function importPlantingDates(\PDO $pdo){
 	global $nmsuArea1ToUSDAHardiness;
 	global $nmsuArea2ToUSDAHardiness;
 	global $nmsuArea3ToUSDAHardiness;
-	global $months;
-
 
 	// for each plant table entry (plant variety) there are three growing zones
 	// for each growing zone there are several USDA Hardiness zones - need to create a table entry for each one
@@ -52,6 +50,7 @@ function importPlantingDates(\PDO $pdo){
 		while(($dataCSV = fgetcsv($handle, 0, ",", "\"")) !== FALSE) { // set length to zero for unlimited line length php > 5.1
 
 			$plantName = $dataCSV[0];
+
 			$plantVariety = $dataCSV[1];
 
 			// get plant ID from Plant table via PDO
@@ -66,30 +65,42 @@ function importPlantingDates(\PDO $pdo){
 				throw(new \PDOException("did not find Plant entry for plantName: ".$plantName." and plantVariety: ".$plantVariety));
 			}
 			$plantId = $row["plantId"];
-
+			echo $plantName."<br/>";
 
 			// parse and unwrap planting dates
 			$plantArea1Dates = parseAndUnwrapDates($dataCSV[3]);
 			$plantArea2Dates = parseAndUnwrapDates($dataCSV[4]);
 			$plantArea3Dates = parseAndUnwrapDates($dataCSV[5]);
+			echo $dataCSV[3]." ".$plantArea1Dates[0]." ".$plantArea1Dates[1]." ".$plantArea1Dates[2]." ".$plantArea1Dates[3]."<br/>";
+			echo $dataCSV[4]." ".$plantArea2Dates[0]." ".$plantArea2Dates[1]." ".$plantArea2Dates[2]." ".$plantArea2Dates[3]."<br/>";
+			echo $dataCSV[5]." ".$plantArea3Dates[0]." ".$plantArea3Dates[1]." ".$plantArea3Dates[2]." ".$plantArea3Dates[3]."<br/>";
+
 
 			for($i=0; $i<count($nmsuArea1ToUSDAHardiness); $i++){
 				$usdaArea = $nmsuArea1ToUSDAHardiness[$i];
+				echo $usdaArea." ";
 				$plantArea = new PlantArea(null, $plantId, $plantArea1Dates["startDate"], $plantArea1Dates["endDate"], $plantArea1Dates["startMonth"], $plantArea1Dates["endMonth"], $usdaArea);
 				$plantArea->insert($pdo);
 			}
+			echo "<br/>";
 			for($i=0; $i<count($nmsuArea2ToUSDAHardiness); $i++){
+				echo $usdaArea." ";
 				$usdaArea = $nmsuArea2ToUSDAHardiness[$i];
 				$plantArea = new PlantArea(null, $plantId, $plantArea2Dates["startDate"], $plantArea2Dates["endDate"], $plantArea2Dates["startMonth"], $plantArea2Dates["endMonth"], $usdaArea);
 				$plantArea->insert($pdo);
 
 			}
+			echo "<br/>";
+
 			for($i=0; $i<count($nmsuArea3ToUSDAHardiness); $i++){
+				echo $usdaArea." ";
 				$usdaArea = $nmsuArea3ToUSDAHardiness[$i];
 				$plantArea = new PlantArea(null, $plantId, $plantArea3Dates["startDate"], $plantArea3Dates["endDate"], $plantArea3Dates["startMonth"], $plantArea3Dates["endMonth"], $usdaArea);
 				$plantArea->insert($pdo);
 
 			}
+			echo "<br/>";
+
 
 		} // end while data CSV
 	}// end if handle
@@ -103,6 +114,7 @@ function importPlantingDates(\PDO $pdo){
  */
 function parseAndUnwrapDates(string $dateRange){
 
+	global $months;
 	//$dateRange = trim($dateRange);
 	$dateStrings = explode("—", $dateRange);
 	$startString = $dateStrings[0];
