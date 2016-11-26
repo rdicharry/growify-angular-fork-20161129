@@ -87,9 +87,9 @@ function insertPlantsForAFuture(\PDO $pdo){
 				$plantType = $row["Habit"];
 
 				// plant description - take from plant uses, uses notes, cultivation details, propagation, author, references
-				$plantDescription = $row["Edible uses"] . $row["Uses notes"] . $row["Cultivation details"] . $row["Propagation 1"] . $row["Author"] . $row["Botanical references"];
-				$plantSpread = $row["Width"]; // TODO meters - convert to feet
-				$plantHeight = $row["Height"]; // TODO meters - convert to feet
+				$plantDescription = $row["Edible uses"] ." ". $row["Uses notes"] ." ". $row["Cultivation details"] ." ". $row["Propagation 1"] ." ". $row["Author"] ." ". $row["Botanical references"];
+				$plantSpread = floatval($row["Width"])*3.2808; //  meters - convert to feet
+				$plantHeight = floatval($row["Height"])*3.2808; //  meters - convert to feet
 				$plantDaysToHarvest = null; // not provided in this table
 
 				// get min temps -
