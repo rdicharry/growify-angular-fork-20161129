@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * Import plant information into Plant table. from
+ * plants for a future and NMSU vegetable tables.
+ * run this before running plantAreaImport.php
+ * but NOTE: if this script is re-run, the plantAreaImport.php script
+ * should also be re-run in order to ensure the plantIds are correctly
+ * cross-referenced.
+ *
+ * source: http://pfaf.org/
+ * source: http://aces.nmsu.edu/pubs/_circulars/CR457B.pdf
+
+ */
+
 use Edu\Cnm\Growify\Plant;
 
 // minimum temp (degrees F) for USDA plant hardiness zones in NM
