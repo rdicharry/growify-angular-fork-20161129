@@ -46,10 +46,10 @@
 "Cantaloupe (muskmelon)", "Delicious 51", 84, " April 1—15", " April 15—30", " May 1—15", 1/2—3/4, 12, 60—84
 "Cantaloupe (muskmelon)", "Hales Best", 88, " April 1—15", " April 15—30", " May 1—15", 1/2—3/4, 12, 60—84
 "Cantaloupe (muskmelon)", "Ambrosia Hybrid", 86, " April 1—15", " April 15—30", " May 1—15", 1/2—3/4, 12, 60—84
-"Carrots", "Imperator", 75, " Jan  15— March 1; Aug 1—15", " Feb 15— April 1; July 1— Aug 1", " May 1— June 30", 1/4, 1—3, 16—36
-"Carrots", "Red Core Chantenay", 70, " Jan  15— March 1; Aug 1—15", " Feb 15— April 1; July 1— Aug 1", " May 1— June 30", 1/4, 1—3, 16—36
-"Carrots", "Danvers Half Long", 75, " Jan  15— March 1; Aug 1—15", " Feb 15— April 1; July 1— Aug 1", " May 1— June 30", 1/4, 1—3, 16—36
-"Carrots", "Nantes Coreless", 68, " Jan  15— March 1; Aug 1—15", " Feb 15— April 1; July 1— Aug 1", " May 1— June 30", 1/4, 1—3, 16—36
+"Carrots", "Imperator", 75, " Jan 15— March 1; Aug 1—15", " Feb 15— April 1; July 1— Aug 1", " May 1— June 30", 1/4, 1—3, 16—36
+"Carrots", "Red Core Chantenay", 70, " Jan 15— March 1; Aug 1—15", " Feb 15— April 1; July 1— Aug 1", " May 1— June 30", 1/4, 1—3, 16—36
+"Carrots", "Danvers Half Long", 75, " Jan 15— March 1; Aug 1—15", " Feb 15— April 1; July 1— Aug 1", " May 1— June 30", 1/4, 1—3, 16—36
+"Carrots", "Nantes Coreless", 68, " Jan 15— March 1; Aug 1—15", " Feb 15— April 1; July 1— Aug 1", " May 1— June 30", 1/4, 1—3, 16—36
 "Cauliflower", "Snowball (types)", 65, "Feb 15— March 1; June 25— July 5", "March 15—31; July 1— Aug 1", " May 1—30", 1/2, 18—24, 24—36
 "Cauliflower", "Snow Crown Hybrid", 53, "Feb 15— March 1; June 25— July 5", "March 15—31; July 1— Aug 1", " May 1—30", 1/2, 18—24, 24—36
 "Cauliflower", "Snowball Self-Blanching", 70, "Feb 15— March 1; June 25— July 5", "March 15—31; July 1—Aug 1", " May 1—30", 1/2, 18—24, 24—36
@@ -140,9 +140,9 @@
 "Peas, English", "Lincoln", 67, " Jan 15— Feb 15", " Feb 15— April 15", " March 15— June 15", 1, 1—3, 24—36
 "Peas, cowpeas", "California Black-Eye", 75, "April 14— May 1", " May 1—31", "May 1— July 15", 1/2—1, 5—8, 24—36
 "Peas, cowpeas", "Purple Hull", 78, "April 14— May 1", " May 1—31", "May 1— July 15", 1/2—1, 5—8, 24—36
-"Peppers, bell", "Bell Boy", 72, " April  1—30", " April 15— May 15", " May 15— June 15", 1/4, 12—24, 24—36
-"Peppers, bell", "Gypsy Hybrid", 65, " April  1—30", " April 15— May 15", " May 15— June 15", 1/4, 12—24, 24—36
-"Peppers, bell", "California Wonder", 75, " April  1—30", " April 15— May 15", " May 15— June 15", 1/4, 12—24, 24—36
+"Peppers, bell", "Bell Boy", 72, " April 1—30", " April 15— May 15", " May 15— June 15", 1/4, 12—24, 24—36
+"Peppers, bell", "Gypsy Hybrid", 65, " April 1—30", " April 15— May 15", " May 15— June 15", 1/4, 12—24, 24—36
+"Peppers, bell", "California Wonder", 75, " April 1—30", " April 15— May 15", " May 15— June 15", 1/4, 12—24, 24—36
 "Peppers, chile", "Española Improved (hot)", 70, " April 1—30", " April 15— May 15", " May 15— June 15", 1/4, 12—24, 24—36
 "Peppers, chile", "Hungarian Wax (hot)", 65, " April 1—30", " April 15— May 15", " May 15— June 15", 1/4, 12—24, 24—36
 "Peppers, chile", "Early Jalapeño (hot)", 80, " April 1—30", " April 15— May 15", " May 15— June 15", 1/4, 12—24, 24—36
@@ -246,11 +246,11 @@
 "Tomatoes, paste", "San Marzano", 80, " Feb 15— March 15", " April 15—30", " May 1—15", 1/2, 18—48, 36—60
 "Turnips", "Purple Top White Globe", 55, "Feb 1— March 15; July 20— Aug 20", "March 1— April 15; July 1— Aug 15", " April 1— June 30", 1/2, 2—6, 12—36
 "Turnips", "Hybrid Toyko Cross", 35, "Feb 1— March 15; July 20— Aug 20", "March 1— April 15; July 1— Aug 15", " April 1— June 30", 1/2, 2—6, 12—36
-"Watermelon", "Black Diamond", 90, " April 1—15", " Aprl 20— May 20", " May 1—15", 1, 24—36, 72—96
-"Watermelon", "Charleston Gray", 85, " April 1—15", " Aprl 20— May 20", " May 1—15", 1, 24—36, 72—96
-"Watermelon", "Crimson Sweet ", 80, " April 1—15", " Aprl 20— May 20", " May 1—15", 1, 24—36, 72—96
-"Watermelon", "Bush Sugar Baby", 75, " April 1—15", " Aprl 20— May 20", " May 1—15", 1, 24—36, 72—96
-"Watermelon", "Sweet Favorite", 80, " April 1—15", " Aprl 20— May 20", " May 1—15", 1, 24—36, 72—96
+"Watermelon", "Black Diamond", 90, " April 1—15", " April 20— May 20", " May 1—15", 1, 24—36, 72—96
+"Watermelon", "Charleston Gray", 85, " April 1—15", " April 20— May 20", " May 1—15", 1, 24—36, 72—96
+"Watermelon", "Crimson Sweet ", 80, " April 1—15", " April 20— May 20", " May 1—15", 1, 24—36, 72—96
+"Watermelon", "Bush Sugar Baby", 75, " April 1—15", " April 20— May 20", " May 1—15", 1, 24—36, 72—96
+"Watermelon", "Sweet Favorite", 80, " April 1—15", " April 20— May 20", " May 1—15", 1, 24—36, 72—96
 "Melons, Other", "Casaba, Golden Beauty", 120, " April 1—15", " April 20— May 20", " May 1—15", 1, 24—36, 72—96
 "Melons, Other", "Crenshaw, Early Hybrid", 90, " April 1—15", " April 20— May 20", " May 1—15", 1, 24—36, 72—96
 "Melons, Other", "Honeydew Type, Hybrid Earli-Dew", 80, " April 1—15", " April 20— May 20", " May 1—15", 1, 24—36, 72—96

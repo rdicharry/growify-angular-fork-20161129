@@ -306,7 +306,7 @@ class PlantArea implements \JsonSerializable {
 		//change: makes sure the $newPlantAreaNumber is a string
 		if(strlen($newPlantAreaNumber)!== 2){ //change: makes sure the string contains two characters
 			throw (new \OutOfBoundsException("This is not a valid New Mexico Plant Area Growing Zone"));
-		} elseif(intval(substr($newPlantAreaNumber,0,1)) > 8 || intval(substr($newPlantAreaNumber,0,1)) < 4){
+		} elseif(intval(substr($newPlantAreaNumber,0,1)) > 9 || intval(substr($newPlantAreaNumber,0,1)) < 4){
 			//change: Validates the $newPlantAreaNumber, making sure that it is an integer and between 4-8 in value (The 4 NM growing zones)
 			throw (new \InvalidArgumentException("The first place of this plant area is not in range" . $newPlantAreaNumber));
 		} elseif((substr($newPlantAreaNumber,1) !== 'a' && substr($newPlantAreaNumber,1) !== 'b')){

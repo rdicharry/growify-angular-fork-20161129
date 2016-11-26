@@ -1,6 +1,8 @@
 <?php
 
 use Edu\Cnm\Growify\Plant;
+use Edu\Cnm\Growify\PlantArea;
+
 
 /**
  * Import data from NMSU planting dates tables into plantArea mySQL table.
@@ -37,6 +39,8 @@ require_once(dirname(__DIR__) . "/classes/autoload.php");
 
 $pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/growify.ini");
 
+importPlantingDates($pdo);
+
 function importPlantingDates(\PDO $pdo){
 	global $nmsuArea1ToUSDAHardiness;
 	global $nmsuArea2ToUSDAHardiness;
@@ -68,36 +72,95 @@ function importPlantingDates(\PDO $pdo){
 			echo $plantName."<br/>";
 
 			// parse and unwrap planting dates
-			$plantArea1Dates = parseAndUnwrapDates($dataCSV[3]);
-			$plantArea2Dates = parseAndUnwrapDates($dataCSV[4]);
-			$plantArea3Dates = parseAndUnwrapDates($dataCSV[5]);
-			echo $dataCSV[3]." ".$plantArea1Dates[0]." ".$plantArea1Dates[1]." ".$plantArea1Dates[2]." ".$plantArea1Dates[3]."<br/>";
-			echo $dataCSV[4]." ".$plantArea2Dates[0]." ".$plantArea2Dates[1]." ".$plantArea2Dates[2]." ".$plantArea2Dates[3]."<br/>";
-			echo $dataCSV[5]." ".$plantArea3Dates[0]." ".$plantArea3Dates[1]." ".$plantArea3Dates[2]." ".$plantArea3Dates[3]."<br/>";
+
+			// arrays to store dates if multiple ranges exist
+			$plantArea1Dates = [];
+			$plantArea2Dates = [];
+			$plantArea3Dates = [];
+
+			echo $dataCSV[3] ."<br/>";
+			if($pos = strpos($dataCSV[3], ";")){
+				// if there is a semicolon, it indicates more than one date range
+				$plantArea1DateRange1 = substr($dataCSV[3],0,$pos);
+				$plantArea1DateRange2 = substr($dataCSV[3], $pos+1);
+				array_push($plantArea1Dates, parseAndUnwrapDates($plantArea1DateRange1));
+				array_push($plantArea1Dates, parseAndUnwrapDates($plantArea1DateRange2));
+			} else {
+				array_push($plantArea1Dates, parseAndUnwrapDates($dataCSV[3]));
+			}
 
 
-			for($i=0; $i<count($nmsuArea1ToUSDAHardiness); $i++){
+			echo $dataCSV[4] ."<br/>";
+			if($pos = strpos($dataCSV[4], ";")){
+				// if there is a semicolon, it indicates more than one date range
+				$plantArea2DateRange1 = substr($dataCSV[4],0,$pos);
+				$plantArea2DateRange2 = substr($dataCSV[4], $pos+1);
+				array_push($plantArea2Dates, parseAndUnwrapDates($plantArea2DateRange1));
+				array_push($plantArea2Dates, parseAndUnwrapDates($plantArea2DateRange2));
+			} else {
+				array_push($plantArea2Dates, parseAndUnwrapDates($dataCSV[4]));
+			}
+
+			echo $dataCSV[5] ."<br/>";
+			if($pos = strpos($dataCSV[5], ";")){
+				// if there is a semicolon, it indicates more than one date range
+				$plantArea3DateRange1 = substr($dataCSV[5],0,$pos);
+				$plantArea3DateRange2 = substr($dataCSV[5], $pos+1);
+				array_push($plantArea2Dates, parseAndUnwrapDates($plantArea3DateRange1));
+				array_push($plantArea2Dates, parseAndUnwrapDates($plantArea3DateRange2));
+			} else {
+				array_push($plantArea3Dates, parseAndUnwrapDates($dataCSV[5]));
+			}
+
+			for($i=0; $i<count($nmsuArea1ToUSDAHardiness); $i++) {
 				$usdaArea = $nmsuArea1ToUSDAHardiness[$i];
-				echo $usdaArea." ";
-				$plantArea = new PlantArea(null, $plantId, $plantArea1Dates["startDate"], $plantArea1Dates["endDate"], $plantArea1Dates["startMonth"], $plantArea1Dates["endMonth"], $usdaArea);
-				$plantArea->insert($pdo);
+				echo $usdaArea . " ";
+
+				if($plantArea1Dates[0]===null){
+					continue; // no date range given for this plant and area;
+				}
+
+				for($j = 0; $j < count($plantArea1Dates); $j++) {
+					echo $plantArea1Dates[$j]["startDate"]." ".$plantArea1Dates[$j]["startMonth"]." through ".$plantArea1Dates[$j]["endDate"]." ".$plantArea1Dates[$j]["endMonth"]."<br/>";
+
+					$plantArea = new PlantArea(null, $plantId, $plantArea1Dates[$j]["startDate"], $plantArea1Dates[$j]["endDate"], $plantArea1Dates[$j]["startMonth"], $plantArea1Dates[$j]["endMonth"], $usdaArea);
+					$plantArea->insert($pdo);
+				}
 			}
 			echo "<br/>";
 			for($i=0; $i<count($nmsuArea2ToUSDAHardiness); $i++){
-				echo $usdaArea." ";
-				$usdaArea = $nmsuArea2ToUSDAHardiness[$i];
-				$plantArea = new PlantArea(null, $plantId, $plantArea2Dates["startDate"], $plantArea2Dates["endDate"], $plantArea2Dates["startMonth"], $plantArea2Dates["endMonth"], $usdaArea);
-				$plantArea->insert($pdo);
 
+				$usdaArea = $nmsuArea2ToUSDAHardiness[$i];
+				echo $usdaArea." ";
+
+				if($plantArea2Dates[0]===null){
+					continue; // no date range given for this plant and area;
+				}
+
+				for($j = 0; $j < count($plantArea2Dates); $j++) {
+					echo $plantArea2Dates[$j]["startDate"]." ".$plantArea2Dates[$j]["startMonth"]." through ".$plantArea2Dates[$j]["endDate"]." ".$plantArea2Dates[$j]["endMonth"]."<br/>";
+
+					$plantArea = new PlantArea(null, $plantId, $plantArea2Dates[$j]["startDate"], $plantArea2Dates[$j]["endDate"], $plantArea2Dates[$j]["startMonth"], $plantArea2Dates[$j]["endMonth"], $usdaArea);
+					$plantArea->insert($pdo);
+				}
 			}
 			echo "<br/>";
 
 			for($i=0; $i<count($nmsuArea3ToUSDAHardiness); $i++){
-				echo $usdaArea." ";
-				$usdaArea = $nmsuArea3ToUSDAHardiness[$i];
-				$plantArea = new PlantArea(null, $plantId, $plantArea3Dates["startDate"], $plantArea3Dates["endDate"], $plantArea3Dates["startMonth"], $plantArea3Dates["endMonth"], $usdaArea);
-				$plantArea->insert($pdo);
 
+				$usdaArea = $nmsuArea3ToUSDAHardiness[$i];
+				echo $usdaArea." ";
+
+				if($plantArea3Dates[0]===null){
+					continue; // no date range given for this plant and area;
+				}
+
+				for($j = 0; $j < count($plantArea3Dates); $j++) {
+					echo $plantArea3Dates[$j]["startDate"]." ".$plantArea3Dates[$j]["startMonth"]." through ".$plantArea3Dates[$j]["endDate"]." ".$plantArea3Dates[$j]["endMonth"]."<br/>";
+
+					$plantArea = new PlantArea(null, $plantId, $plantArea3Dates[$j]["startDate"], $plantArea3Dates[$j]["endDate"], $plantArea3Dates[$j]["startMonth"], $plantArea3Dates[$j]["endMonth"], $usdaArea);
+					$plantArea->insert($pdo);
+				}
 			}
 			echo "<br/>";
 
@@ -110,7 +173,7 @@ function importPlantingDates(\PDO $pdo){
  * Take a string representing a date range separated by a hyphen
  * and return an array of the start and end months and days
  * @param string $dateRange
- * @return array and associative array containing ["startDate", "startMonth", "endDate", "endMonth"]
+ * @return array|null and associative array containing ["startDate", "startMonth", "endDate", "endMonth"] or null if the date range does not exist
  */
 function parseAndUnwrapDates(string $dateRange){
 
@@ -121,19 +184,31 @@ function parseAndUnwrapDates(string $dateRange){
 	$endString = $dateStrings[1];
 	$startString = trim($startString);
 	$endString = trim($endString);
+	if($startString === "" || $endString=== "" ){
+		// date range not fully specified, possibly no valid
+		// date range given for this planting area and plant
+		return null;
+	}
 	$startMonthDay = explode(" ", $startString);
 	$endMonthDay = explode(" ", $endString);
 
 	$startMonth = $months[strtoupper($startMonthDay[0])];
-	//$startDay = $startMonthDay[1];
 
-	$endMonth = $months[strtoupper($endMonthDay[0])];
-	//$endDay = $endMonthDay[0];
+	if(is_numeric($endMonthDay[0])){
+		// if start and end date fall in the same month,
+		// the name of the month is not lsited in the csv file,
+		// so grab the date and end month is same as start month.
+		$endDay = $endMonthDay[0];
+		$endMonth = $startMonth;
+	} else {
+		$endMonth = $months[strtoupper($endMonthDay[0])];
+		$endDay = $endMonthDay[1];
+	}
 
 
 	$dates = ["startDate"=> $startMonthDay[1],
 	"startMonth"=> $startMonth,
-	"endDate"=> $endMonthDay[1],
+	"endDate"=> $endDay,
 	"endMonth"=> $endMonth];
 
 	return $dates;
