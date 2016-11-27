@@ -36,7 +36,7 @@ try {
 	$reply->status = $e->getCode();
 	$reply->message = $e->getMessage();
 	throw new Exception($e->getMessage());
-} catch (TypeERror $te){
+} catch (TypeError $te){
 	$reply->status = $te->getCode();
 	$reply->message = $te->getMessage();
 }
