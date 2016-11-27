@@ -82,13 +82,13 @@ class Weather implements JsonSerializable {
 		$this->timestamp = $time;
 	}
 	/**
-	 * Get the current daily weather forecase for Albuquerque from darksky.net
+	 * Get the current daily weather forecast for Albuquerque from darksky.net
 	 * @return Weather a weather object with current conditions
 	 */
 	public static function getCurrentWeatherAlbuquerque(){
 		$config = readConfig("/etc/apache2/capstone-mysql/growify.ini");
 		$key = $config["darksky"];
-		$location = "35.0853,-106.6056"; //TODO pass in as parameter
+		$location = "35.0853,-106.6056";
 		$base_url = "https://api.darksky.net/forecast";
 		$client = new Client([
 			'base_uri'=>$base_url,
