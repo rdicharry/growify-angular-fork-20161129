@@ -632,11 +632,11 @@ class Plant implements \JsonSerializable{
 			throw (new \InvalidArgumentException("plant name is invalid"));
 		}
 		// create query template
-		$query = "SELECT plantId, plantName, plantLatinName, plantVariety, plantType, plantDescription,  plantSpread, plantHeight, plantDaysToHarvest,  plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantName LIKE :plantName";
+		$query = "SELECT plantId, plantName, plantLatinName, plantVariety, plantType, plantDescription,  plantSpread, plantHeight, plantDaysToHarvest,  plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantName = :plantName";
 		$statement = $pdo->prepare($query);
 
 		// bind the plant name to the place holder in the template
-		$plantName = "%$plantName%";
+		$plantName = "$plantName";
 		$parameters = ["plantName" => $plantName];
 		$statement->execute($parameters);
 
