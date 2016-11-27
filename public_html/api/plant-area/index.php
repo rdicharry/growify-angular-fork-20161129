@@ -4,10 +4,10 @@ require_once "autoloader.php";
 require_once "/lib/xsrf.php";
 require_once "/etc/apache2/capstone-mysql/encrypted-config.php";
 
-use Edu\Cnm\growify;
+use Edu\Cnm\growify\PlantArea;
 
 /**
- * api for plant area class
+ * API for PlantArea class
  *
  * @author Ana Vela avela7@cnm.edu>
  **/
@@ -22,10 +22,9 @@ $reply = new stdClass();
 $reply->status = 200;
 $reply->data = null;
 
-
-
-
 try {
+
+}
 	//grab the mySQL DataBase connection
 	$pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/growify.ini");
 
@@ -43,8 +42,9 @@ try {
 		$plantAreaPlantId = filter_input(INPUT_GET, "plantAreaPlantId", FILTER_VALIDATE_INT);
 		$areaNumber = filter_input(INPUT_GET, "plantAreaNumber", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
+		//handle GET request
 		if($method === "GET"){
-			// handle get request. if ID is present, get the plant area for that id
+
 
 			// if plant id and plant area number are present get the plant area for that combination
 
