@@ -8,10 +8,18 @@ DROP TABLE IF EXISTS plantArea;
 DROP TABLE IF EXISTS profile;
 DROP TABLE IF EXISTS zipCode;
 DROP TABLE IF EXISTS plant;
+DROP TABLE IF EXISTS location;
 
 
 
 
+CREATE TABLE location(
+	locationZipCode VARCHAR(5) NOT NULL,
+	locationLatitude FLOAT NOT NULL,
+	locationLongitude FLOAT NOT NULL,
+	INDEX(locationZipCode),
+	PRIMARY KEY(locationZipCode)
+);
 
 CREATE TABLE zipCode(
 	zipCodeCode VARCHAR(5)NOT NULL, -- made a varchar for easier validation but can change to unsigned int
