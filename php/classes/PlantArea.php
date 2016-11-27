@@ -298,22 +298,40 @@ class PlantArea implements \JsonSerializable {
 	 *
 	 * @param string $newPlantAreaNumber the new area that will be passed into this PlantArea's plantAreaNumber field
 	 * @throws TypeError if $newPlantAreaNumber is not a string
-	 * @throws \OutOfBoundsException if $newPlantAreaNumber is not 2 characters long
-	 * @throws \InvalidArgumentException if $newPlantAreaNumber does not begin with a number ranging from 4-8
-	 * @throws \InvalidArgumentException if $newPlantAreaNumber does not end with a character that is either 'a' or 'b'
+	 *
+	 * @throws \InvalidArgumentException if $newPlantAreaNumber does not contian an integer between 4 an nine, or
+	 * does not end with a character that is either 'a' or 'b'
 	 */
 	public function setPlantAreaNumber(string $newPlantAreaNumber) {
 		//change: makes sure the $newPlantAreaNumber is a string
-		if(strlen($newPlantAreaNumber)!== 2){ //change: makes sure the string contains two characters
-			throw (new \OutOfBoundsException("This is not a valid New Mexico Plant Area Growing Zone"));
-		} elseif(intval(substr($newPlantAreaNumber,0,1)) > 9 || intval(substr($newPlantAreaNumber,0,1)) < 4){
-			//change: Validates the $newPlantAreaNumber, making sure that it is an integer and between 4-8 in value (The 4 NM growing zones)
-			throw (new \InvalidArgumentException("The first place of this plant area is not in range" . $newPlantAreaNumber));
-		} elseif((substr($newPlantAreaNumber,1) !== 'a' && substr($newPlantAreaNumber,1) !== 'b')){
-			throw (new \InvalidArgumentException("The second place of this plant area is not in range")); //change: makes sure the last character of the Plant Area Area Number is either a or b (a valid new mexico growing zone consists of a number from 4-8 followed by a character that is either a or b
+		if(self::isValidPlantAreaNumber($newPlantAreaNumber)) {
+			// convert and store the plant area area number
+			$this->plantAreaNumber = $newPlantAreaNumber;
+		} else {
+			throw( new \InvalidArgumentException("This is not a valid New Mexico Plant Area Growing Zone"));
 		}
-		// convert and store the plant area area number
-		$this->plantAreaNumber = $newPlantAreaNumber;
+	}
+
+	/**
+	 * Check whether a string represents a valid New Mexico plant area number.
+	 * These are a combination of an integer 4 - 9 and a letter a or b
+	 * @param string $newPlantAreaNumber
+	 * @return bool true if the plant area number is valid, false otherwise.
+	 */
+	public static function isValidPlantAreaNumber(string $newPlantAreaNumber){
+		//change: makes sure the $newPlantAreaNumber is a string
+
+			if(strlen($newPlantAreaNumber) !== 2) { //change: makes sure the string contains two characters
+				return false;
+			} elseif(intval(substr($newPlantAreaNumber, 0, 1)) > 9 || intval(substr($newPlantAreaNumber, 0, 1)) < 4) {
+				//change: Validates the $newPlantAreaNumber, making sure that it is an integer and between 4-9 in value (The 4 NM growing zones)
+				return false;
+			} elseif((substr($newPlantAreaNumber, 1) !== 'a' && substr($newPlantAreaNumber, 1) !== 'b')) {
+				return false; //change: makes sure the last character of the Plant Area Area Number is either a or b (a valid new mexico growing zone consists of a number from 4-8 followed by a character that is either a or b
+			}
+
+		return true;
+
 	}
 
 	/**
@@ -446,7 +464,12 @@ class PlantArea implements \JsonSerializable {
 	 * @throws \PDOException if an error regarding the php data object occurs
 	 * @throws \TypeError when variables are not the correct data type
 	 **/
-	public static function getAllPlantAreasByPlantAreaPlantId(\PDO $pdo, $plantAreaPlantId) {
+	public static function getAllPlantAreasByPlantAreaPlantId(\PDO $pdo,int $plantAreaPlantId) {
+
+		if($plantAreaPlantId < 0){
+			throw(new \PDOException("plant Id is not valid"));
+		}
+
 		$query = "SELECT plantAreaId, plantAreaPlantId, plantAreaStartDay, plantAreaEndDay, plantAreaStartMonth, plantAreaEndDay, plantAreaNumber FROM plantArea WHERE plantAreaPlantId = :plantAreaPlantId";
 		$statement = $pdo->prepare($query);
 		$parameters = ["plantAreaPlantId"=> $plantAreaPlantId];
@@ -464,6 +487,47 @@ class PlantArea implements \JsonSerializable {
 		}
 		return ($plantAreas);
 	}
+
+	/**
+	 * Find a plant area with a given plantId and plant area number.
+	 * This is essential to provide the functionality of being able to find the
+	 * planting dates for a given plant knowing which area it will be grown in.
+	 * @param \PDO $pdo a PDO connection object
+	 * @param int $plantId a valid plant Id.
+	 * @param string $areaNumber a valid New Mexico plant area number.
+	 * @return PlantArea|null return the plant Area object found, or null if nothing found.
+	 * @throws \PDOException if the inputs are invalid or a mySQL connection-related exception occurs.
+	 */
+	public static function getPlantAreaByPlantIdAndArea(\PDO $pdo,int $plantId, string $areaNumber){
+
+		if(!self::isValidPlantAreaNumber($areaNumber)){
+			throw(new \PDOException("Area Number is invalid."));
+		}
+
+		if($plantId < 0){
+			throw(new \PDOException("plant Id is not valid."));
+		}
+
+		$query = "SELECT plantAreaId, plantAreaStartDay, plantAreaEndDay, plantAreaStartMonth, plantAreaEndDay FROM plantArea WHERE plantAreaPlantId = :plantId & plantAreaNumber = :areaNumber";
+		$statement = $pdo->prepare($query);
+		$parameters = ["plantId" => $plantId, "areaNumber"=>$areaNumber];
+		$statement->execute($parameters);
+
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		$plantArea = null;
+		try{
+		$row = $statement->fetch();
+
+			if($row !== false) {
+				$plantArea = new PlantArea($row["plantAreaId"], $plantId, $row["plantAreaStartDay"], $row["plantAreaEndDay"], $row["plantAreaStartMonth"], $row["plantAreaEndMonth"], $areaNumber);
+			}
+		} catch(\Exception $exception) {
+		// if the row couldn't be converted, rethrow it
+			throw(new \PDOException($exception->getMessage(), 0, $exception));
+		}
+		return($plantArea);
+	}
+
 	/**
 	 * format state variables for JSON serialization
 	 * @return array an array with serialized state variables
