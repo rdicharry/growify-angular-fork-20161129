@@ -41,5 +41,14 @@ try {
 //sanitize input
 		$plantAreaId = filter_input(INPUT_GET, "plantAreaId", FILTER_VALIDATE_INT);
 		$plantAreaPlantId = filter_input(INPUT_GET, "plantAreaPlantId", FILTER_VALIDATE_INT);
+		$areaNumber = filter_input(INPUT_GET, "plantAreaNumber", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+
+		if($method === "GET"){
+			// handle get request. if ID is present, get the plant area for that id
+
+			// if plant id and plant area number are present get the plant area for that combination
 
 
+
+
+		}
