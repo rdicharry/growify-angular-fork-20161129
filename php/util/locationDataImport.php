@@ -14,16 +14,17 @@ require_once(dirname(__DIR__) . "/classes/autoload.php");
 
 $pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/growify.ini");
 
-importlocationData($pdo);
+importLocationData($pdo);
 
 function importLocationData(\PDO  $pdo) {
 
 	if(($handle = fopen("NMzipcodearea-tolatlong", "r")) !== FALSE) {
 		while(($dataTSV = fgetcsv($handle, 0, "\t", "\"")) !== FALSE) { // set length to zero for unlimited line length php > 5.1
-			$zipCode = $dataTSV[0];
-			$latitude = $dataTSV[7];
-			$longitude = $dataTSV[8];
+			$zipCode = trim($dataTSV[0]);
+			$latitude = floatval(trim($dataTSV[7]));
+			$longitude = floatval(trim($dataTSV[8]));
 
+			echo $zipCode.", ".$latitude." ".$longitude."<br/>";
 			$location = new Location($zipCode, $latitude, $longitude);
 			$location->insert($pdo);
 

@@ -45,7 +45,7 @@ class Location implements \JsonSerializable{
 
 	public function setLocationZipCode(string $zipCode){
 		$zipCode = trim($zipCode);
-		if(strlen($zipCode !== 5)){
+		if(strlen($zipCode) !== 5){
 			throw(new \OutOfBoundsException("zip code must be exactly 5 characters"));
 		}
 		if(!is_numeric($zipCode)){
@@ -89,6 +89,7 @@ class Location implements \JsonSerializable{
 			$parameters = ["locationZipCode"=>$this->locationZipCode,
 			"locationLatitude"=>$this->locationLatitude,
 			"locationLongitude"=>$this->locationLongitude];
+			$statement->execute($parameters);
 
 		} catch(\PDOException $pe){
 			throw(new \PDOException($pe->getMessage(), 0, $pe));
