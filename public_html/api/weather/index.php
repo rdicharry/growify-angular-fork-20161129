@@ -13,13 +13,22 @@ $reply->data = null;
 try {
 // determines which HTTP method needs to be processed
 	$method = array_key_exists("HTTP_X_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_HTTP_METHOD"] : $_SERVER["REQUEST_METHOD"];
-// todo grab data from front end (location) for specific request
-// this comes from "get" request $location = filter_input(INPUT_GET, "location", FILTER_VALIDATE_STRING/FLOAT);
+
+//  grab data from front end (location - zip code) for specific request
+	$location = filter_input(INPUT_GET, "location", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	if(empty($location) === true ||!is_numeric($location)){
+		throw( new InvalidArgumentException("zip code location cannot be empty or non-numeric"));
+	}
+
+
+// this comes from "get" request
 	if($method === "GET"){
 		// set XSRF cookie
 		setXsrfCookie("/");
-		$currentWeather = Weather::getCurrentWeatherAlbuquerque();
-		$reply->data = $currentWeather;
+		$currentWeather = Weather::getCurrentWeather($location);
+		if($currentWeather !== null) {
+			$reply->data = $currentWeather;
+		}
 	} else {
 		throw (new InvalidArgumentException("Invalid HTTP method request"));
 	}
@@ -27,6 +36,9 @@ try {
 	$reply->status = $e->getCode();
 	$reply->message = $e->getMessage();
 	throw new Exception($e->getMessage());
+} catch (TypeERror $te){
+	$reply->status = $te->getCode();
+	$reply->message = $te->getMessage();
 }
 header("Access-Control-Allow-Origin: *");
 header("Content-type: application/json");
