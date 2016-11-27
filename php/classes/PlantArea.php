@@ -498,7 +498,7 @@ class PlantArea implements \JsonSerializable {
 	 * @return PlantArea|null return the plant Area object found, or null if nothing found.
 	 * @throws \PDOException if the inputs are invalid or a mySQL connection-related exception occurs.
 	 */
-	public static function getPlantAreaByPlantIdAndArea(\PDO $pdo,int $plantId, string $areaNumber){
+	public static function getPlantAreaByPlantIdAndAreaNumber(\PDO $pdo,int $plantId, string $areaNumber){
 
 		if(!self::isValidPlantAreaNumber($areaNumber)){
 			throw(new \PDOException("Area Number is invalid."));
