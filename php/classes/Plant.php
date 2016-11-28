@@ -488,8 +488,8 @@ class Plant implements \JsonSerializable{
 		$query = "INSERT INTO plant( plantName, 
 						plantLatinName, 
 						plantVariety, 
+						plantDescription, 
 						plantType, 
-						plantDescription,  
 						plantSpread, 
 						plantHeight, 
 						plantDaysToHarvest, 
@@ -499,8 +499,8 @@ class Plant implements \JsonSerializable{
 						VALUES (:plantName, 
 						:plantLatinName,
 						:plantVariety, 
-						:plantType, 
 						:plantDescription,
+						:plantType, 
 						:plantSpread, 
 						:plantHeight,
 						:plantDaysToHarvest, 
@@ -513,8 +513,8 @@ class Plant implements \JsonSerializable{
 		$parameters = ["plantName" => $this->plantName,
 			"plantLatinName" => $this->plantLatinName,
 			"plantVariety" => $this->plantVariety,
-			"plantType" => $this->plantType,
 			"plantDescription" => $this->plantDescription,
+			"plantType" => $this->plantType,
 			"plantSpread" => $this->plantSpread,
 			"plantHeight" => $this->plantHeight,
 			"plantDaysToHarvest" => $this->plantDaysToHarvest,
@@ -571,8 +571,8 @@ class Plant implements \JsonSerializable{
 			"plantName" => $this->plantName,
 			"plantLatinName" => $this->plantLatinName,
 			"plantVariety" => $this->plantVariety,
-			"plantType" => $this->plantType,
 			"plantDescription" => $this->plantDescription,
+			"plantType" => $this->plantType,
 			"plantSpread" => $this->plantSpread,
 			"plantHeight" => $this->plantHeight,
 			"plantDaysToHarvest" => $this->plantDaysToHarvest,
@@ -595,7 +595,7 @@ class Plant implements \JsonSerializable{
 			throw(new \RangeException("Plant id must be positive."));
 		}
 		// create query template
-		$query = "SELECT plantId, plantLatinName, plantName, plantVariety, plantType, plantDescription,  plantSpread, plantHeight, plantDaysToHarvest, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantId= :plantId";
+		$query = "SELECT plantId, plantLatinName, plantName, plantVariety, plantDescription, plantType, plantSpread, plantHeight, plantDaysToHarvest, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantId= :plantId";
 		$statement = $pdo->prepare($query);
 
 		// bind the plant id to the place holder in the template
@@ -608,7 +608,7 @@ class Plant implements \JsonSerializable{
 			$statement->setFetchMode(\PDO::FETCH_ASSOC);
 			$row = $statement->fetch();
 			if($row !== false) {
-				$plant = new Plant($row["plantId"],  $row["plantName"], $row["plantLatinName"], $row["plantVariety"], $row["plantType"], $row["plantDescription"],  $row["plantSpread"], $row["plantHeight"], $row["plantDaysToHarvest"],  $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
+				$plant = new Plant($row["plantId"],  $row["plantName"], $row["plantLatinName"], $row["plantVariety"],  $row["plantDescription"], $row["plantType"], $row["plantSpread"], $row["plantHeight"], $row["plantDaysToHarvest"],  $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
 			}
 		} catch(\Exception $exception) {
 			// if the row couldn't be converted, rethrow it
@@ -632,7 +632,7 @@ class Plant implements \JsonSerializable{
 			throw (new \InvalidArgumentException("plant name is invalid"));
 		}
 		// create query template
-		$query = "SELECT plantId, plantName, plantLatinName, plantVariety, plantType, plantDescription,  plantSpread, plantHeight, plantDaysToHarvest,  plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantName = :plantName";
+		$query = "SELECT plantId, plantLatinName, plantName, plantVariety, plantDescription, plantType, plantSpread, plantHeight, plantDaysToHarvest, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantName = :plantName";
 		$statement = $pdo->prepare($query);
 
 		// bind the plant name to the place holder in the template
@@ -645,7 +645,7 @@ class Plant implements \JsonSerializable{
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false){
 			try {
-					$plant = new Plant($row["plantId"], $row["plantName"], $row["plantLatinName"], $row["plantVariety"], $row["plantType"], $row["plantDescription"],  $row["plantSpread"], $row["plantHeight"], $row["plantDaysToHarvest"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
+					$plant = new Plant($row["plantId"],  $row["plantName"], $row["plantLatinName"], $row["plantVariety"],  $row["plantDescription"], $row["plantType"], $row["plantSpread"], $row["plantHeight"], $row["plantDaysToHarvest"],  $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
 				$plants[$plants->key()] = $plant;
 				$plants->next();
 			} catch(\Exception $exception) {
@@ -664,7 +664,7 @@ class Plant implements \JsonSerializable{
 			throw (new \InvalidArgumentException("plant name is invalid"));
 		}
 		// create query template
-		$query = "SELECT plantId, plantName, plantLatinName, plantVariety, plantType, plantDescription,  plantSpread, plantHeight, plantDaysToHarvest,  plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantLatinName LIKE :plantLatinName";
+		$query = "SELECT plantId, plantLatinName, plantName, plantVariety, plantDescription, plantType, plantSpread, plantHeight, plantDaysToHarvest, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantLatinName LIKE :plantLatinName";
 		$statement = $pdo->prepare($query);
 
 		// bind the plant name to the place holder in the template
@@ -677,7 +677,7 @@ class Plant implements \JsonSerializable{
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false){
 			try {
-				$plant = new Plant($row["plantId"], $row["plantName"], $row["plantLatinName"], $row["plantVariety"], $row["plantType"], $row["plantDescription"],  $row["plantSpread"], $row["plantHeight"], $row["plantDaysToHarvest"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
+				$plant = new Plant($row["plantId"], $row["plantName"], $row["plantLatinName"], $row["plantVariety"],  $row["plantDescription"], $row["plantType"], $row["plantSpread"], $row["plantHeight"], $row["plantDaysToHarvest"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
 				$plants[$plants->key()] = $plant;
 				$plants->next();
 			} catch(\Exception $exception) {
@@ -704,7 +704,7 @@ class Plant implements \JsonSerializable{
 		}
 		// create query template
 
-		$query = "SELECT plantId, plantName, plantLatinName, plantVariety, plantType, plantDescription,  plantSpread, plantHeight, plantDaysToHarvest,  plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantType LIKE :plantType";
+		$query = "SELECT plantId, plantLatinName, plantName, plantVariety, plantDescription, plantType, plantSpread, plantHeight, plantDaysToHarvest, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant WHERE plantType LIKE :plantType";
 		$statement = $pdo->prepare($query);
 
 		// bind the plant type to the place holder in the template
@@ -717,7 +717,7 @@ class Plant implements \JsonSerializable{
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row = $statement->fetch()) !== false){
 			try {
-				$plant = new Plant($row["plantId"], $row["plantName"], $row["plantLatinName"], $row["plantVariety"], $row["plantType"], $row["plantDescription"],  $row["plantSpread"], $row["plantHeight"], $row["plantDaysToHarvest"],  $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
+				$plant = new Plant($row["plantId"], $row["plantName"], $row["plantLatinName"], $row["plantVariety"], $row["plantDescription"], $row["plantType"], $row["plantSpread"], $row["plantHeight"], $row["plantDaysToHarvest"],  $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
 				$plants[$plants->key()] = $plant;
 				$plants->next();
 			} catch(\Exception $exception) {
@@ -737,7 +737,7 @@ class Plant implements \JsonSerializable{
 	 **/
 	public static function getAllPlants(\PDO $pdo){
 		//create query template
-		$query = "SELECT plantId, plantName, plantLatinName, plantVariety, plantType, plantDescription,  plantSpread, plantHeight, plantDaysToHarvest,  plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant";
+		$query = "SELECT plantId, plantLatinName, plantName, plantVariety, plantDescription, plantType, plantSpread, plantHeight, plantDaysToHarvest, plantMinTemp, plantMaxTemp, plantSoilMoisture FROM plant";
 		$statement = $pdo->prepare($query);
 		$statement->execute();
 
@@ -746,7 +746,7 @@ class Plant implements \JsonSerializable{
 		$statement->setFetchMode(\PDO::FETCH_ASSOC);
 		while(($row=$statement->fetch())!== false){
 			try {
-				$plant = new Plant($row["plantId"], $row["plantName"], $row["plantLatinName"], $row["plantVariety"], $row["plantType"], $row["plantDescription"], $row["plantSpread"], $row["plantHeight"], $row["plantDaysToHarvest"],  $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
+				$plant = new Plant($row["plantId"], $row["plantName"], $row["plantLatinName"], $row["plantVariety"], $row["plantDescription"], $row["plantType"], $row["plantSpread"], $row["plantHeight"], $row["plantDaysToHarvest"], $row["plantMinTemp"], $row["plantMaxTemp"], $row["plantSoilMoisture"]);
 				$plants[$plants->key()] = $plant;
 				$plants->next();
 			} catch(\Exception $exception) {

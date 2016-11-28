@@ -39,12 +39,13 @@ class CompanionPlantTest extends GrowifyTest {
 		//run default setUp() method
 		parent::setUp();
 
-		// create and insert a Plant1
-		$this->companionPlant1 = new Plant(null, "wildcarrot", "orangelike", "what bunnies eat", "longish", 7, 200, 55, 38, 89, "c");
+		// create and insert a Plant to go into the gardent
+		$this->companionPlant1 = new Plant(null, "truffula tree", "this is a latin name", "green", "Primary food source for Brown Barbaloots", "tree", 5, 100, 5, 32, 99, "d" );
 		$this->companionPlant1->insert($this->getPDO());
 
-		// create and insert a Plant2
-		$this->companionPlant2 = new Plant(null, "minitomato", "smallest", "round and shiny", "fruity", 8, 10, 44, 45, 71, "t");
+		// create and insert a second Plant to go into the garden
+		// for tests that need two plants
+		$this->companionPlant2 = new Plant(null, "Audrey", "this is a latin name too", "custom", "companion", "vine",  1000, 100, 10, 32, 99, "h");
 		$this->companionPlant2->insert($this->getPDO());
 	}
 
