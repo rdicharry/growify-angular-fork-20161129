@@ -78,7 +78,7 @@ class GardenTest extends GrowifyTest {
 		$this->profile->insert($this->getPDO());
 
 		// create and insert a Plant to go into the gardent
-		$this->plant1 = new Plant(null, "truffula tree", "green", "Primary food source for Brown Barbaloots", "tree", 5, 100, 5, 32, 99, "d" );
+		$this->plant1 = new Plant(null, "truffula tree", "test latin name", "green", "Primary food source for Brown Barbaloots", "tree", 5, 100, 5, 32, 99, "d" );
 		$this->plant1->insert($this->getPDO());
 
 		// create and insert a second Plant to go into the garden
