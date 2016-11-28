@@ -6,11 +6,11 @@ import {Status} from "../classes/status";
 
 @Component({
 	templateUrl: "./templates/weather.php",
-	selector: "current-weather"
+	selector: "weather-component"
 })
 
 export class WeatherComponent implements OnInit {
-
+ // need @ViewChild ??
 	deleted: boolean = false;
 	currentWeather: Weather = new Weather(0, 0, 0, 0, 0, 0, 0, "");
 	dailyWeather: Weather[] = [];
