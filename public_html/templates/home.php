@@ -7,3 +7,8 @@
 		</div>
 	</div>
 </section>
+
+<section class="centered">
+	<button type="button" class="btn btn-primary">Login</button>
+	<button type="button" class="btn btn-primary">Sign Up</button>
+</section>

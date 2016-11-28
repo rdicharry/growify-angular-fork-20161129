@@ -129,7 +129,7 @@ function insertPlantsForAFuture(\PDO $pdo){
 
 				$plantSoilMoisture = $row["Moisture"];
 
-				$plant = new Plant(null, $plantName, $latinName, $plantVariety, $plantType, $plantDescription, $plantSpread, $plantHeight, $plantDaysToHarvest, $plantMinTemp, $plantMaxTemp, $plantSoilMoisture);
+				$plant = new Plant(null, $plantName, $latinName, $plantVariety, $plantDescription, $plantType, $plantSpread, $plantHeight, $plantDaysToHarvest, $plantMinTemp, $plantMaxTemp, $plantSoilMoisture);
 				$plant->insert($pdo);
 			}
 		}
@@ -164,17 +164,18 @@ function insertNMSUPlantData(\PDO $pdo){
 
 	// get a row from CSV
 
-	if(($handle = fopen("NMSUVegetableDataCSV.csv", "r")) !== FALSE) {
+	if(($handle = fopen("NMSUVegetablesWithLatinNames.csv", "r")) !== FALSE) {
 		while(($dataCSV = fgetcsv($handle, 0, ",", "\"")) !== FALSE) { // set length to zero for unlimited line length php > 5.1
 
 			$plantName = $dataCSV[0];
+			$plantLatinName = $dataCSV[9];
 			//$plantNameLike = "%$plantName%";
 			echo $plantName . "<br/>";
 			//  first step - see if this plant already has an entry
-			// query on plantName
-			$query = "SELECT plantId, plantName, plantLatinName, plantDescription, plantSpread, plantHeight, plantMinTemp, plantSoilMoisture FROM plant WHERE plantName = :plantName";
+			// query on plantLatinName
+			$query = "SELECT plantId, plantName, plantLatinName, plantDescription, plantSpread, plantHeight, plantMinTemp, plantSoilMoisture FROM plant WHERE plantLatinName = :plantLatinName";
 			$statement = $pdo->prepare($query);
-			$parameters = ["plantName" => $plantName];
+			$parameters = ["plantLatinName" => $plantLatinName];
 			$statement->execute($parameters);
 
 			// get data from PDO object
@@ -191,7 +192,7 @@ function insertNMSUPlantData(\PDO $pdo){
 					array_push($pfafPlantsUpdated, $rowFromPlantPDO["plantId"]);
 					echo "Found pfaf entry: ".$plantName.", ".$rowFromPlantPDO["plantId"]."<br/>";
 
-					$plantLatinName = $rowFromPlantPDO["plantLatinName"];
+					//$plantLatinName = $rowFromPlantPDO["plantLatinName"];
 
 					$plantType = "Vegetable";
 					if(floatval($rowFromPlantPDO["plantMinTemp"]) < 32.0) {
@@ -226,7 +227,7 @@ function insertNMSUPlantData(\PDO $pdo){
 				} else {
 
 					// if the entry is not already there, insert it.
-					$plantLatinName = null;
+					//$plantLatinName = null;
 					$plantVariety = $dataCSV[1];
 					$plantType = "Vegetable";
 					$plantDescription = null;
@@ -248,7 +249,7 @@ function insertNMSUPlantData(\PDO $pdo){
 					$plantMaxTemp = null;
 					$plantSoilMoisture = null;
 
-					$plant = new Plant(null, $plantName, $plantLatinName, $plantVariety, $plantType, $plantDescription, $plantSpread, $plantHeight, $plantDaysToHarvest, $plantMinTemp, $plantMaxTemp, $plantSoilMoisture);
+					$plant = new Plant(null, $plantName, $plantLatinName, $plantVariety, $plantDescription, $plantType, $plantSpread, $plantHeight, $plantDaysToHarvest, $plantMinTemp, $plantMaxTemp, $plantSoilMoisture);
 					$plant->insert($pdo);
 
 				}

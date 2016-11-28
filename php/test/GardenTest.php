@@ -61,7 +61,7 @@ class GardenTest extends GrowifyTest {
 		// run the default setUp() method first
 		parent::setUp();
 
-		$this->zipCode = new ZipCode("87120", "5b");
+		$this->zipCode = new ZipCode("87000", "5b");
 		$this->zipCode->insert($this->getPDO());
 
 		//generate *test* hash & salt for profile

@@ -14,21 +14,30 @@ try {
 // determines which HTTP method needs to be processed
 	$method = array_key_exists("HTTP_X_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_HTTP_METHOD"] : $_SERVER["REQUEST_METHOD"];
 
-	//TODO need to fix this - we are likely sending either a zip code or location (latitude/longitude) via http request
+	//we are likely sending either a zip code via http request
 //  grab data from front end (location - zip code) for specific request
-	$location = filter_input(INPUT_GET, "location", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-	if(empty($location) === true ||!is_numeric($location)){
+	$zipcode = filter_input(INPUT_GET, "zipcode", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	$current = filter_input(INPUT_GET, "current", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+	if(empty($zipcode) === true ||!is_numeric($zipcode)){
 		throw( new InvalidArgumentException("zip code location cannot be empty or non-numeric"));
 	}
+
 
 
 // this comes from "get" request
 	if($method === "GET"){
 		// set XSRF cookie
 		setXsrfCookie("/");
-		$currentWeather = Weather::getCurrentWeather($location);
-		if($currentWeather !== null) {
-			$reply->data = $currentWeather;
+		if($current === true) {
+			$weather = Weather::getCurrentWeather($zipcode);
+			if($weather !== null) {
+				$reply->data = $weather;
+			}
+		} else {
+			$weather = Weather::getWeekForecastWeatherByZipcode($zipcode);
+			if($weather !== null){
+				$reply->data = $weather;
+			}
 		}
 	} else {
 		throw (new InvalidArgumentException("Invalid HTTP method request"));
