@@ -14,6 +14,7 @@ try {
 // determines which HTTP method needs to be processed
 	$method = array_key_exists("HTTP_X_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_HTTP_METHOD"] : $_SERVER["REQUEST_METHOD"];
 
+	//TODO need to fix this - we are likely sending either a zip code or location (latitude/longitude) via http request
 //  grab data from front end (location - zip code) for specific request
 	$location = filter_input(INPUT_GET, "location", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	if(empty($location) === true ||!is_numeric($location)){
