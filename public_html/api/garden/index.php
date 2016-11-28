@@ -7,8 +7,8 @@
  */
 
 
-require_once "autoloader.php";
-require_once "/lib/xsrf.php";
+require_once dirname(__DIR__,3)."/php/classes/autoload.php";
+require_once dirname(__DIR__,3)."/php/lib/xsrf.php";
 require_once "/etc/apache2/capstone-mysql/encrypted-config.php";
 
 use Edu\Cnm\Growify\Garden;
@@ -54,7 +54,7 @@ try {
 		if(empty($gardenProfileId) === false) {
 			$garden = Garden::getGardensByGardenProfileId($pdo, $gardenProfileId);
 			if($garden !== null) {
-				$reply->data = $tweet;
+				$reply->data = $garden;
 			}
 		}else{
 			$gardens = Garden::getAllGardens($pdo);
@@ -68,7 +68,7 @@ try {
 		$requestContent = file_get_contents("php://input");
 		$requestObject = json_decode($requestContent);
 
-		//make sure tweet content is available (required field)
+		//make sure garden content is available (required field)
 		if(empty($requestObject->gardenProfileId) === true) {
 			throw(new \InvalidArgumentException ("No Garden Profile Id", 405));
 		}
@@ -89,19 +89,18 @@ try {
 			//TO DO: FINISH SOLUTION TO PUT*******************************************
 
 			// retrieve the tweet to update
-			$garden = Garden::getGardensByGardenProfileId($pdo, $gardenProfileId);
-			if($garden === null) {
+			$gardens = Garden::getGardensByGardenProfileId($pdo, $gardenProfileId);
+			if($gardens === null) {
 				throw(new RuntimeException("Garden(s) does not exist", 404));
 			}
 
-			/* update all attributes
-			$tweet->setTweetDate($requestObject->tweetDate);
-			$tweet->setTweetContent($requestObject->tweetContent);
-			$tweet->update($pdo);
+			$gardens->setGardenProfileId($requestObject->gardenProfileId);
+			$gardens->setGardenDatePlanted($requestObject->gardenDatePlanted);
+			$gardens->setGardenPlantId($requestObject->gardenPlantId);
+			$gardens->update($pdo);
 
 			// update reply
 			$reply->message = "Tweet updated OK";
-			*/
 		} else if($method === "POST") {
 
 			// create new tweet and insert into the database
@@ -114,8 +113,6 @@ try {
 
 	} else if($method === "DELETE") {
 		verifyXsrf();
-		//FINISH THIS ***********************************************************
-		/**
 		$gardens = Garden::getGardensByGardenProfileId($pdo, $gardenProfileId);
 		if($gardens === null) {
 			throw(new RuntimeException("Garden does not exist", 404));
@@ -128,7 +125,6 @@ try {
 		$reply->message = "Garden(s) deleted OK";
 	} else {
 		throw (new InvalidArgumentException("Invalid HTTP method request"));
-	*/
 	}
 
 	// update reply with exception information
