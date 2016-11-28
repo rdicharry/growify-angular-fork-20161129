@@ -23,20 +23,20 @@ class GardenTest extends GrowifyTest {
 
 	/**
 	 * The profile that created the garden; this for the foreign key relation.
-	 * @var \Profile profile
+	 * @var Profile profile
 	 */
 	protected $profile = null;
 
 	/**
 	 * The plant that is in the garden entry -
 	 * this is to obtain a foreign key relation.
-	 * @var \Plant plant2;
+	 * @var Plant plant2;
 	 */
 	protected $plant1 = null;
 
 	/**
 	 * For tests that need a second valid plant.
-	 * @var \Plant plant2;
+	 * @var Plant plant2;
 	 */
 	protected $plant2 = null;
 
@@ -53,7 +53,7 @@ class GardenTest extends GrowifyTest {
 	protected $validPlantingDate2;
 
 	/**
-	 * @var \ZipCode zipCode
+	 * @var ZipCode zipCode
 	 */
 	protected $zipCode;
 

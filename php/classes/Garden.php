@@ -132,6 +132,9 @@ class Garden implements \JsonSerializable {
 	 */
 	public function insert(\PDO $pdo){
 
+		if(Garden::existsGardenEntry($pdo, $this->gardenProfileId, $this->gardenDatePlanted, $this->gardenPlantId)){
+			throw(new \PDOException("cannot add new garden entry - this entry already exists"));
+		}
 		//create query template
 		$query = "INSERT INTO garden(gardenProfileId, gardenDatePlanted, gardenPlantId) VALUES (:gardenProfileId, :gardenDatePlanted, :gardenPlantId)";
 		$statement = $pdo->prepare($query);
@@ -154,6 +157,9 @@ class Garden implements \JsonSerializable {
 	 */
 	public function delete(\PDO $pdo){
 
+		if(Garden::existsGardenEntry($pdo, $this->gardenProfileId, $this->gardenDatePlanted, $this->gardenPlantId ) === false){
+			throw(new \PDOException("cannot delete a garden entry that does not exist"));
+		}
 		// create query template
 		$query = "DELETE FROM garden WHERE gardenProfileId = :gardenProfileId AND gardenPlantId = :gardenPlantId";
 		$statement = $pdo->prepare($query);
@@ -179,7 +185,26 @@ class Garden implements \JsonSerializable {
 		$parameters = ["gardenDatePlanted"=>$formattedDate, "gardenProfileId"=>$this->gardenProfileId, "gardenPlantId"=>$this->gardenPlantId];
 		$statement->execute($parameters);
 	}
-
+	/**
+	 * Check whether a garden entry has already been added to mySQL.
+	 * @param \PDO $pdo a PDO connection object
+	 * @param int $gardenProfileId the profile ID of the user who owns this garden
+	 * @param int $gardenPlantId the plant id for the garden entry that we are interested in
+	 * @return bool true if the garden entry already exists, false if it doesn't.
+	 */
+	public static function existsGardenEntry(\PDO $pdo, int $gardenProfileId,\DateTime $gardenDatePlanted, int $gardenPlantId){
+		// create query template
+		$query = "SELECT gardenProfileId, gardenDatePlanted, gardenPlantId FROM garden WHERE (gardenProfileId = :gardenProfileId) AND (gardenDatePlanted = :gardenDatePlanted) AND (gardenPlantId = :gardenPlantId)";
+		$statement = $pdo->prepare($query);
+		// bind parameters
+		$formattedDate = $gardenDatePlanted->format("Y-m-d");
+		$parameters = ["gardenProfileId"=>$gardenProfileId, "gardenDatePlanted"=>$formattedDate, "gardenPlantId"=>$gardenPlantId];
+		$statement->execute($parameters);
+		if($statement->rowCount() > 0){
+			return true;
+		}
+		return false;
+	}
 	/**
 	 * Get all garden entries associated with the specified profile Id.
 	 * @param \PDO $pdo a PDO connection object
