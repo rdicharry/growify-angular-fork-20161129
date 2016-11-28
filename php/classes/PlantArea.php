@@ -508,7 +508,7 @@ class PlantArea implements \JsonSerializable {
 			throw(new \PDOException("plant Id is not valid."));
 		}
 
-		$query = "SELECT plantAreaId, plantAreaStartDay, plantAreaEndDay, plantAreaStartMonth, plantAreaEndDay FROM plantArea WHERE plantAreaPlantId = :plantId & plantAreaNumber = :areaNumber";
+		$query = "SELECT plantAreaId, plantAreaStartDay, plantAreaEndDay, plantAreaStartMonth, plantAreaEndMonth FROM plantArea WHERE plantAreaPlantId = :plantId AND plantAreaNumber = :areaNumber";
 		$statement = $pdo->prepare($query);
 		$parameters = ["plantId" => $plantId, "areaNumber"=>$areaNumber];
 		$statement->execute($parameters);
