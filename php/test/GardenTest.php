@@ -193,7 +193,7 @@ class GardenTest extends GrowifyTest {
 	 */
 	public function testUpdateInvalidGarden(){
 
-		$garden = new Garden($this->profile->getProfileUserId(), $this->validPlantingDate, $this->plant1->getPlantId());
+		$garden = new Garden($this->profile->getProfileId(), $this->validPlantingDate, $this->plant1->getPlantId());
 		$garden->update($this->getPDO());
 
 	}
@@ -225,7 +225,7 @@ class GardenTest extends GrowifyTest {
 	 */
 	public function testDeleteInvalidGarden() {
 		// create a Garden and try to delete it without actually inserting it
-		$garden = new Garden($this->profile->getProfileUserId(), $this->validPlantingDate, $this->plant1->getPlantId());
+		$garden = new Garden($this->profile->getProfileId(), $this->validPlantingDate, $this->plant1->getPlantId());
 		$garden->delete($this->getPDO());
 	}
 
