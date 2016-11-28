@@ -8,12 +8,6 @@ class Garden implements \JsonSerializable {
 
 	/**
 	 * the id of the User who "Owns" this garden
-	 * @var int $gardenId
-	 */
-	private $gardenId;
-	
-	/**
-	 * the id of the User who "Owns" this garden
 	 * @var int $gardenProfileId
 	 */
 	private $gardenProfileId;
@@ -40,10 +34,9 @@ class Garden implements \JsonSerializable {
 	 * @throws \TypeError if the data types violate type hints
 	 * @throws \Exception if some other exception occurs.
 	 */
-	public function __construct(int $newGardenId, int $newGardenProfileId, \DateTime $newGardenDatePlanted, int $newGardenPlantId){
+	public function __construct(int $newGardenProfileId, \DateTime $newGardenDatePlanted, int $newGardenPlantId){
 
 		try{
-			$this->SetGardenId($newGardenId);
 			$this->setGardenProfileId($newGardenProfileId);
 			$this->setGardenDatePlanted($newGardenDatePlanted);
 			$this->setGardenPlantId($newGardenPlantId);
@@ -59,29 +52,6 @@ class Garden implements \JsonSerializable {
 
 	}
 
-	/**
-	 * Accessor method for gardenId.
-	 * @return int profileId of user who owns this garden.
-	 */
-	public function getGardenId(){
-		return($this->gardenId);
-	}
-	
-	/**
-	 * Mutator method for gardenId.
-	 * @param int $newGardenId
-	 * @throws \RangeException if the $newGardenId is not positive.
-	 * @throws \TypeError if $newGardenId does not represent an int.
-	 */
-	public function setGardenId(int $newGardenId){
-		// verify the profile id is positive
-		if($newGardenId <= 0){
-			throw(new \RangeException("Garden id must be positive."));
-		}
-
-		//convert and store the profile id
-		$this->gardenId = $newGardenId;
-	}
 	/**
 	 * Accessor method for gardenProfileId.
 	 * @return int profileId of user who owns this garden.
@@ -162,11 +132,6 @@ class Garden implements \JsonSerializable {
 	 */
 	public function insert(\PDO $pdo){
 
-		/*
-		 * if(Garden::existsGardenEntry($pdo, $this->gardenProfileId, $this->gardenDatePlanted, $this->gardenPlantId)){
-		 * throw(new \PDOException("cannot add new garden entry - this entry already exists"));
-		}*/
-
 		//create query template
 		$query = "INSERT INTO garden(gardenProfileId, gardenDatePlanted, gardenPlantId) VALUES (:gardenProfileId, :gardenDatePlanted, :gardenPlantId)";
 		$statement = $pdo->prepare($query);
@@ -177,8 +142,6 @@ class Garden implements \JsonSerializable {
 		$parameters = ["gardenProfileId"=>$this->gardenProfileId, "gardenDatePlanted"=>$formattedDate, "gardenPlantId"=>$this->gardenPlantId];
 		$statement->execute($parameters);
 
-		// get auto-assigned garden id from mysql
-		$this->gardenId = intval($pdo->lastInsertId());
 	}
 
 	/**
@@ -191,17 +154,12 @@ class Garden implements \JsonSerializable {
 	 */
 	public function delete(\PDO $pdo){
 
-
-		/*if(Garden::existsGardenEntry($pdo, $this->gardenProfileId, $this->gardenDatePlanted, $this->gardenPlantId ) === false){
-			throw(new \PDOException("cannot delete a garden entry that does not exist"));
-		}*/
-
 		// create query template
-		$query = "DELETE FROM garden WHERE gardenId = :gardenId";
+		$query = "DELETE FROM garden WHERE gardenProfileId = :gardenProfileId AND gardenPlantId = :gardenPlantId";
 		$statement = $pdo->prepare($query);
 
 		// bind member variables to placeholder in template
-		$parameters = ["gardenId"=>$this->gardenId];
+		$parameters = ["gardenProfileId"=>$this->gardenProfileId, "gardenPlantId"=>$this->gardenPlantId];
 		$statement->execute($parameters);
 	}
 
@@ -211,92 +169,17 @@ class Garden implements \JsonSerializable {
 	 * @throws \PDOException when mySQL related errors occur
 	 * @throws \TypeError if $pdo is not a PDO connection object.
 	 */
-	public function updateGardenDatePlanted(\PDO $pdo){
-
-		// check if the garden has an entry in mySQL before entering
-		$query = "SELECT * FROM garden WHERE gardenId = :gardenId";
-		$statement = $pdo->prepare($query);
-
-		$parameters = ["gardenId"=>$this->gardenId];
-		$statement->execute($parameters);
-
-		// if we get no rows returned, there are no entries to update
-		if($statement->rowCount()===0){
-			throw(new \PDOException("cannot update a garden entry that does not exist"));
-		}
-
-		// otherwise, the entry does exist, so it can be updated.
+	public function update(\PDO $pdo){
 		//create query template
-		$query = "UPDATE garden SET gardenDatePlanted = :gardenDatePlanted WHERE gardenId = :gardenId";
+		$query = "UPDATE garden SET gardenDatePlanted = :gardenDatePlanted WHERE gardenProfileId = :gardenProfileId AND gardenPlantId = :gardenPlantId";
 		$statement = $pdo->prepare($query);
 
 		// bind member variables to placeholders
 		$formattedDate = $this->gardenDatePlanted->format("Y-m-d");
-		$parameters = ["gardenDatePlanted"=>$formattedDate, "gardenId"=>$this->gardenId];
+		$parameters = ["gardenDatePlanted"=>$formattedDate, "gardenProfileId"=>$this->gardenProfileId, "gardenPlantId"=>$this->gardenPlantId];
 		$statement->execute($parameters);
 	}
 
-	/**
-	 * Check whether a garden entry has already been added to mySQL.
-	 * @param \PDO $pdo a PDO connection object
-	 * @param int $gardenProfileId the profile ID of the user who owns this garden
-	 * @param int $gardenPlantId the plant id for the garden entry that we are interested in
-	 * @return bool true if the garden entry already exists, false if it doesn't.
-	 */
-	public static function existsGardenEntry(\PDO $pdo, int $gardenProfileId,\DateTime $gardenDatePlanted, int $gardenPlantId){
-
-		// create query template
-		$query = "SELECT * FROM garden WHERE (gardenProfileId = :gardenProfileId) AND (gardenDatePlanted = :gardenDatePlanted) AND (gardenPlantId = :gardenPlantId)";
-		$statement = $pdo->prepare($query);
-
-		// bind parameters
-		$formattedDate = $gardenDatePlanted->format("Y-m-d");
-		$parameters = ["gardenProfileId"=>$gardenProfileId, "gardenDatePlanted"=>$formattedDate, "gardenPlantId"=>$gardenPlantId];
-
-		$statement->execute($parameters);
-
-		if($statement->rowCount() > 0){
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Get all garden entries associated with the specified profile Id.
-	 * @param \PDO $pdo a PDO connection object
-	 * @param int $gardenId a valid garden Id
-	 * @return \SplFixedArray SplFixedArray of all garden entries associated with the given profile Id, or null if no entries found.
-	 * @throws \PDOException when mySQL related errors occur
-	 * @throws \TypeError when parameters are not the correct data type.
-	 */
-	public static function getGardenByGardenId(\PDO $pdo, int $gardenId){
-		// could return many values (an array of garden entries
-		// sanitize the profile id before searching
-		if($gardenId <=0){
-			throw(new RangeExceptin("Garden id must be positive."));
-		}
-
-		// create query template
-		$query = "SELECT gardenId, gardenProfileId, gardenDatePlanted, gardenPlantId FROM garden WHERE gardenId = :gardenId";
-		$statement = $pdo->prepare($query);
-
-		// bind the garden profile id to place holder in the template
-		$parameters = ["gardenId" => $gardenId];
-		$statement->execute($parameters);
-
-		try {
-			$garden = null;
-			$statement->setFetchMode(\PDO::FETCH_ASSOC);
-			$row = $statement->fetch();
-			if($row !== false) {
-				$garden = new Garden($row["gardenId"], $row["gardenProfileId"], $row["gardenDatePlanted"], $row["gardenPlantId"]);
-			}
-		} catch(\Exception $exception) {
-			// if the row couldn't be converted, rethrow it
-			throw(new \PDOException($exception->getMessage(), 0, $exception));
-		}
-		return($garden);
-	}
 	/**
 	 * Get all garden entries associated with the specified profile Id.
 	 * @param \PDO $pdo a PDO connection object
@@ -313,7 +196,7 @@ class Garden implements \JsonSerializable {
 		}
 
 		// create query template
-		$query = "SELECT gardenId, gardenDatePlanted, gardenPlantId FROM garden WHERE gardenProfileId = :gardenProfileId";
+		$query = "SELECT gardenDatePlanted, gardenPlantId FROM garden WHERE gardenProfileId = :gardenProfileId";
 		$statement = $pdo->prepare($query);
 
 		// bind the garden profile id to place holder in the template
@@ -346,7 +229,7 @@ class Garden implements \JsonSerializable {
 	 */
 	public static function getAllGardens(\PDO $pdo){
 		//create query template
-		$query = "SELECT gardenId, gardenProfileId, gardenDatePlanted, gardenPlantId FROM garden ";
+		$query = "SELECT gardenProfileId, gardenDatePlanted, gardenPlantId FROM garden ";
 		$statement = $pdo->prepare($query);
 		$statement->execute();
 

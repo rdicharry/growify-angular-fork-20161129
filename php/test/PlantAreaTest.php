@@ -70,9 +70,9 @@ class PlantAreaTest extends GrowifyTest {
 	public final function setUp() {
 		// run the default setUp() method first
 		parent::setUp();
-		$this->plant = new Plant(null, "minitomato","smallest", "round and shiny", "fruity", 8, 10, 44, 45, 71, "t");
+		// create and insert a Plant
+		$this->plant = new Plant(null, "truffula tree", "this is a latin name", "green", "Primary food source for Brown Barbaloots", "tree", 5, 100, 5, 32, 99, "d" );
 		$this->plant->insert($this->getPDO());
-
 }
 
 	/**
