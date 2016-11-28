@@ -213,13 +213,12 @@ class PlantAreaTest extends GrowifyTest {
 
 	public function testGetPlantAreaByPlantIdAndArea(){
 
-		$numRows = $this->getConnection()->getRowCount("plantArea");
-
 		// create a new PlantArea and insert into mySQL
 		$plantArea = new PlantArea(null, $this->plant->getPlantId(), $this->VALID_PLANTAREASTARTDAY, $this->VALID_PLANTAREAENDDAY, $this->VALID_PLANTAREASTARTMONTH, $this->VALID_PLANTAREAENDMONTH, $this->VALID_PLANTAREANUMBER);
 		$plantArea->insert($this->getPDO());
 		$plantAreaId = $plantArea->getPlantAreaId();
 
+		$numRows = $this->getConnection()->getRowCount("plantArea");
 		// grab the data from mySQL and enforce the fields match our expectations
 		$pdoPlantArea = PlantArea::getPlantAreaByPlantIdAndAreaNumber($this->getPDO(), $this->plant->getPlantId(), $this->VALID_PLANTAREANUMBER);
 		$this->assertEquals($numRows + 1, $this->getConnection()->getRowCount("plantArea"));
