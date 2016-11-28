@@ -89,7 +89,7 @@ class PlantTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("plant");
 
 		// create a new Plant and insert to into mySQL
-		$plant = new Plant(null, $this->VALID_PLANTNAME, $this->VALID_LATINNAME, $this->VALID_PLANTVARIETY,$this->VALID_PLANTTYPE, $this->VALID_PLANTDESCRIPTION,  $this->VALID_PLANTSPREAD, $this->VALID_PLANTHEIGHT, $this->VALID_PLANTDAYSTOHARVEST,  $this->VALID_PLANTMINTEMP, $this->VALID_PLANTMAXTEMP, $this->VALID_PLANTSOILMOISTURE);
+		$plant = new Plant(null, $this->VALID_PLANTNAME, $this->VALID_LATINNAME, $this->VALID_PLANTVARIETY, $this->VALID_PLANTDESCRIPTION, $this->VALID_PLANTTYPE, $this->VALID_PLANTSPREAD, $this->VALID_PLANTHEIGHT, $this->VALID_PLANTDAYSTOHARVEST,  $this->VALID_PLANTMINTEMP, $this->VALID_PLANTMAXTEMP, $this->VALID_PLANTSOILMOISTURE);
 		$plant->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -197,7 +197,7 @@ class PlantTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("plant");
 
 		// create a new Plant and insert to into mySQL
-		$plant = new Plant(null, $this->VALID_PLANTNAME, $this->VALID_LATINNAME, $this->VALID_PLANTVARIETY, $this->VALID_PLANTTYPE, $this->VALID_PLANTDESCRIPTION,  $this->VALID_PLANTSPREAD, $this->VALID_PLANTHEIGHT, $this->VALID_PLANTDAYSTOHARVEST,  $this->VALID_PLANTMINTEMP, $this->VALID_PLANTMAXTEMP, $this->VALID_PLANTSOILMOISTURE);
+		$plant = new Plant(null, $this->VALID_PLANTNAME, $this->VALID_LATINNAME, $this->VALID_PLANTVARIETY, $this->VALID_PLANTDESCRIPTION, $this->VALID_PLANTTYPE, $this->VALID_PLANTSPREAD, $this->VALID_PLANTHEIGHT, $this->VALID_PLANTDAYSTOHARVEST,  $this->VALID_PLANTMINTEMP, $this->VALID_PLANTMAXTEMP, $this->VALID_PLANTSOILMOISTURE);
 		$plant->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -230,7 +230,7 @@ class PlantTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("plant");
 
 		// create a new Plant and insert to into mySQL
-		$plant = new Plant(null, $this->VALID_PLANTNAME, $this->VALID_LATINNAME, $this->VALID_PLANTVARIETY, $this->VALID_PLANTTYPE, $this->VALID_PLANTDESCRIPTION,  $this->VALID_PLANTSPREAD, $this->VALID_PLANTHEIGHT, $this->VALID_PLANTDAYSTOHARVEST,  $this->VALID_PLANTMINTEMP, $this->VALID_PLANTMAXTEMP, $this->VALID_PLANTSOILMOISTURE);
+		$plant = new Plant(null, $this->VALID_PLANTNAME, $this->VALID_LATINNAME, $this->VALID_PLANTVARIETY, $this->VALID_PLANTDESCRIPTION, $this->VALID_PLANTTYPE, $this->VALID_PLANTSPREAD, $this->VALID_PLANTHEIGHT, $this->VALID_PLANTDAYSTOHARVEST,  $this->VALID_PLANTMINTEMP, $this->VALID_PLANTMAXTEMP, $this->VALID_PLANTSOILMOISTURE);
 		$plant->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -271,7 +271,7 @@ class PlantTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("plant");
 
 		// create a new Plant and insert to into mySQL
-		$plant = new Plant(null, $this->VALID_PLANTNAME, $this->VALID_LATINNAME, $this->VALID_PLANTVARIETY, $this->VALID_PLANTTYPE, $this->VALID_PLANTDESCRIPTION,  $this->VALID_PLANTSPREAD, $this->VALID_PLANTHEIGHT, $this->VALID_PLANTDAYSTOHARVEST,  $this->VALID_PLANTMINTEMP, $this->VALID_PLANTMAXTEMP, $this->VALID_PLANTSOILMOISTURE);
+		$plant = new Plant(null, $this->VALID_PLANTNAME, $this->VALID_LATINNAME, $this->VALID_PLANTVARIETY, $this->VALID_PLANTDESCRIPTION, $this->VALID_PLANTTYPE, $this->VALID_PLANTSPREAD, $this->VALID_PLANTHEIGHT, $this->VALID_PLANTDAYSTOHARVEST,  $this->VALID_PLANTMINTEMP, $this->VALID_PLANTMAXTEMP, $this->VALID_PLANTSOILMOISTURE);
 		$plant->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
@@ -311,7 +311,7 @@ class PlantTest extends GrowifyTest {
 		$numRows = $this->getConnection()->getRowCount("plant");
 
 		// create a new Plant and insert to into mySQL
-		$plant = new Plant(null, $this->VALID_PLANTNAME, $this->VALID_LATINNAME, $this->VALID_PLANTVARIETY, $this->VALID_PLANTTYPE, $this->VALID_PLANTDESCRIPTION,  $this->VALID_PLANTSPREAD, $this->VALID_PLANTHEIGHT, $this->VALID_PLANTDAYSTOHARVEST,  $this->VALID_PLANTMINTEMP, $this->VALID_PLANTMAXTEMP, $this->VALID_PLANTSOILMOISTURE);
+		$plant = new Plant(null, $this->VALID_PLANTNAME, $this->VALID_LATINNAME, $this->VALID_PLANTVARIETY, $this->VALID_PLANTDESCRIPTION, $this->VALID_PLANTTYPE, $this->VALID_PLANTSPREAD, $this->VALID_PLANTHEIGHT, $this->VALID_PLANTDAYSTOHARVEST,  $this->VALID_PLANTMINTEMP, $this->VALID_PLANTMAXTEMP, $this->VALID_PLANTSOILMOISTURE);
 		$plant->insert($this->getPDO());
 
 		// grab the data from mySQL and enforce the fields match our expectations
