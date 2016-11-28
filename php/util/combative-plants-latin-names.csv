@@ -1,50 +1,50 @@
-Beans,Garlic,phaseolus vulgaris
-Beans,Onions,phaseolus vulgaris
-Beans,Peppers,phaseolus vulgaris
-Beans,Sunflowers,phaseolus vulgaris
-Beets,Mustard,beta vulgaris subsp. vulgaris
-Beets,Pole Beans,beta vulgaris subsp. vulgaris
-Broccoli,Cabbage,brassica oleracea
-Broccoli,Cauliflower,brassica oleracea
-Broccoli,Lettuce,brassica oleracea
-Broccoli,Pole Beans,brassica oleracea
-Broccoli,Tomatoes,brassica oleracea
-Brussel Sprout,Tomatoes,brassica oleracea
-Cabbage,Broccoli,brassica oleracea
-Cabbage,Cauliflower,brassica oleracea
-Cabbage,Strawberries,brassica oleracea
-Cabbage,Tomatoes,brassica oleracea
-Carrots,Dill,daucus carota
-Carrots,Parsley,daucus carota
-Cauliflower,Broccoli,brassica oleracea
-Cauliflower,Cabbage,brassica oleracea
-Cauliflower,Strawberries,brassica oleracea
-Cauliflower,Tomatoes,brassica oleracea
-Corn,Tomatoes,zea mays
-Cucumbers,Herbs,cucumis sativus
-Cucumbers,Melons,cucumis sativus
-Cucumbers,Potatoes,cucumis sativus
-Kale,Strawberries,brassica oleracea
-Kale,Tomatoes,brassica oleracea
-Lettuce,Broccoli,lactuca sativa
-Melons,Cucumbers,Cucumis melo
-Melons,Potatoes,Cucumis melo
-Onions,Beans,allium cepa
-Onions,Peas,allium cepa
-Onions,Sage,allium cepa
-Peas,Garlic,pisum sativum
-Peas,Onions,pisum sativum
-Peppers,Beans,capsicum annuum
-Potatoes,Cucumbers,solanum tuberosum
-Potatoes,Melons,solanum tuberosum
-Potatoes,Squash,solanum tuberosum
-Potatoes,Sunflowers,solanum tuberosum
-Potatoes,Tomatoes,solanum tuberosum
-Potatoes,Turnips,solanum tuberosum
-Tomatoes,Broccoli,lycopersicon esculentum
-Tomatoes,Brussels,lycopersicon esculentum
-Tomatoes,Cabbage,lycopersicon esculentum
-Tomatoes,Cauliflower,lycopersicon esculentum
-Tomatoes,Corn,lycopersicon esculentum
-Tomatoes,Kale,lycopersicon esculentum
-Tomatoes,Potatoes,lycopersicon esculentum
+Beans,Garlic,phaseolus vulgaris,
+Beans,Onions,phaseolus vulgaris,allium cepa
+Beans,Peppers,phaseolus vulgaris,capsicum annuum
+Beans,Sunflowers,phaseolus vulgaris,
+Beets,Mustard,beta vulgaris subsp. vulgaris,
+Beets,Pole Beans,beta vulgaris subsp. vulgaris,
+Broccoli,Cabbage,brassica oleracea var. italica,brassica oleracea var. capitata
+Broccoli,Cauliflower,brassica oleracea var. italica,brassica oleracea var. botrytis
+Broccoli,Lettuce,brassica oleracea var. italica,lactuca sativa
+Broccoli,Pole Beans,brassica oleracea var. italica,
+Broccoli,Tomatoes,brassica oleracea var. italica,lycopersicon esculentum
+Brussel Sprout,Tomatoes,brassica oleracea var. gemmifera,lycopersicon esculentum
+Cabbage,Broccoli,brassica oleracea var. capitata,brassica oleracea var. italica
+Cabbage,Cauliflower,brassica oleracea var. capitata,brassica oleracea var. botrytis
+Cabbage,Strawberries,brassica oleracea var. capitata,
+Cabbage,Tomatoes,brassica oleracea var. capitata,lycopersicon esculentum
+Carrots,Dill,daucus carota,
+Carrots,Parsley,daucus carota,
+Cauliflower,Broccoli,brassica oleracea var. botrytis,brassica oleracea var. italica
+Cauliflower,Cabbage,brassica oleracea var. botrytis,brassica oleracea var. capitata
+Cauliflower,Strawberries,brassica oleracea var. botrytis,
+Cauliflower,Tomatoes,brassica oleracea var. botrytis,lycopersicon esculentum
+Corn,Tomatoes,zea mays,lycopersicon esculentum
+Cucumbers,Herbs,cucumis sativus,
+Cucumbers,Melons,cucumis sativus,Cucumis melo
+Cucumbers,Potatoes,cucumis sativus,solanum tuberosum
+Kale,Strawberries,brassica oleracea var. sabellica,
+Kale,Tomatoes,brassica oleracea var. sabellica,lycopersicon esculentum
+Lettuce,Broccoli,lactuca sativa,brassica oleracea var. italica
+Melons,Cucumbers,Cucumis melo,cucumis sativus
+Melons,Potatoes,Cucumis melo,solanum tuberosum
+Onions,Beans,allium cepa,phaseolus vulgaris
+Onions,Peas,allium cepa,pisum sativum
+Onions,Sage,allium cepa,
+Peas,Garlic,pisum sativum,
+Peas,Onions,pisum sativum,allium cepa
+Peppers,Beans,capsicum annuum,phaseolus vulgaris
+Potatoes,Cucumbers,solanum tuberosum,cucumis sativus
+Potatoes,Melons,solanum tuberosum,Cucumis melo
+Potatoes,Squash,solanum tuberosum,
+Potatoes,Sunflowers,solanum tuberosum,
+Potatoes,Tomatoes,solanum tuberosum,lycopersicon esculentum
+Potatoes,Turnips,solanum tuberosum,
+Tomatoes,Broccoli,lycopersicon esculentum,brassica oleracea var. italica
+Tomatoes,Brussels,lycopersicon esculentum,brassica oleracea var. gemmifera
+Tomatoes,Cabbage,lycopersicon esculentum,brassica oleracea var. capitata
+Tomatoes,Cauliflower,lycopersicon esculentum,brassica oleracea var. botrytis
+Tomatoes,Corn,lycopersicon esculentum,zea mays
+Tomatoes,Kale,lycopersicon esculentum,brassica oleracea var. sabellica
+Tomatoes,Potatoes,lycopersicon esculentum,solanum tuberosum
