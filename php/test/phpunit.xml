@@ -2,7 +2,7 @@
 	<testsuites>
 		<testsuite name="Growify Unit Tests">
 
-			<file>ZipCodeTest.php</file>
+			<file>GardenTest.php</file>
 		</testsuite>
 	</testsuites>
 	<filter>
