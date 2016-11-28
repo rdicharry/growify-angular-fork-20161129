@@ -83,10 +83,12 @@ CREATE TABLE combativePlant(
 );
 
 CREATE TABLE garden (
+	gardenId SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT, -- PRIMARY KEY
 	gardenProfileId INT UNSIGNED,
 	gardenPlantId SMALLINT UNSIGNED,
 	gardenDatePlanted DATE,
-	-- index and create foreign keys
+	-- index and create keys
+	PRIMARY KEY (gardenId),
 	FOREIGN KEY(gardenProfileId) REFERENCES profile(profileId),
 	FOREIGN KEY(gardenPlantId) REFERENCES plant(plantId),
 	INDEX(gardenProfileId),
