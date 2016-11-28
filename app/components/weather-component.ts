@@ -12,7 +12,8 @@ import {Status} from "../classes/status";
 export class WeatherComponent implements OnInit {
 
 	deleted: boolean = false;
-	weather: Weather = new Weather(0, 0, 0, 0);
+	currentWeather: Weather = new Weather(0, 0, 0, 0, 0, 0, 0, "");
+	dailyWeather: Weather[] = [];
 	status: Status = null;
 
 	constructor(private weatherService: WeatherService, private route: ActivatedRoute){}
@@ -22,7 +23,21 @@ export class WeatherComponent implements OnInit {
 		// this returns an observable, which we subscribe to
 		// in the subscribe method, we pass a function(lambda) to be executed
 		// when the data is available
-		this.weatherService.getCurrentWeatherAlbuquerque().subscribe(weather=>this.weather = weather);
+
+		this.route.params.forEach((params: Params)=> {
+
+			let zipcode = params["zipcode"];
+
+			// get current and daily weather
+
+			this.weatherService.getCurrentWeatherByZipcode(zipcode).subscribe(weather=>this.currentWeather = weather);
+
+			this.weatherService.getWeekForecastWeatherByZipcode(zipcode).subscribe(weather=>this.dailyWeather.push(weather));
+
+		});
+
 	}
+
+
 
 }
