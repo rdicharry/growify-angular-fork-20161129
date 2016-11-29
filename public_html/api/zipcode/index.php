@@ -7,7 +7,7 @@
  */
 //namespace Edu\Cnm\Growify;
 require_once dirname(__DIR__,3)."/php/classes/autoload.php";
-require_once (dirname(__DIR__,3)."/php/lib/xsrf.php");
+require_once dirname(__DIR__,3)."/php/lib/xsrf.php";
 require_once "/etc/apache2/capstone-mysql/encrypted-config.php";
 use Edu\Cnm\Growify\ZipCode;
 
@@ -29,9 +29,9 @@ try {
 
 
 	//determines which HTTP Method needs to be processed and stores the result in $method.
-	$method = array_key_exists("HTTP_x_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_HTTP_METHOD"] : $_SERVER["REQUEST_METHOD"];
+	$method = array_key_exists("HTTP_X_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_HTTP_METHOD"] : $_SERVER["REQUEST_METHOD"];
 	//stores the Primary Key for the GET, DELETE, and PUT methods in $id. This key will come in the URL sent by the front end. If no key is present, $id will remain empty. Note that the input is filtered.
-	$id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
+	$id = filter_input(INPUT_GET, "id");
 
 
 	//Here we check and make sure that we have the Primary Key for the DELETE and PUT requests. If the request is a PUT or DELETE and no key is present in $id, An Exception is thrown.
@@ -43,18 +43,17 @@ try {
 // Here, we determine if the reques received is a GET request
 	if($method === "GET") {
 		//set XSRF cookie
-		//setXsrfCookie();
+		setXsrfCookie();
 		// handle GET requests - if id is present, that tweet is present, that tweet is returned, otherwise all tweets are returned
 		// Here, we determine if a Key was sent in the URL by checking $id. If so, we pull the requested Tweet by Tweet ID from the DataBase and store it in $tweet.
 		if(empty($id) === false) {
 			$zipCode = ZipCode::getZipCodeByZipCodeCode($pdo, $id);
-			echo "we are here 1";
+			echo "ZipCodeCode: ".$zipCode->getZipCodeCode();
 			if($zipCode !== null) {
-				$reply->data = $zipCode;
+				$reply->data = $zipCode->getZipCodeArea();
 				// Here, we store the retreived Tweet in the $reply->data state variable.
 			}
 		}else {
-			echo "ZipCodeCode: ".$id;
 			throw new \InvalidArgumentException("ZipCode Cannot Be Empty",405);
 		}
 	}
@@ -69,11 +68,12 @@ try {
 	}
 
 header("Content-type: application/json");
-// sets up the response header.
+ //sets up the response header.
+/*
 if($reply->data === null) {
 	unset($reply->data);
 }
-
+*/
 
 echo json_encode($reply);
 // finally - JSON encodes the $reply object and sends it back to the front end.

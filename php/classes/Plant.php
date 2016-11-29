@@ -296,7 +296,7 @@ class Plant implements \JsonSerializable{
 		//	throw (new \InvalidArgumentException("type is empty or has invalid contents"));
 		//}
 		if(strlen($newPlantType) > 32) {
-			throw(new \RangeException("type is too large"));
+			throw(new \RangeException("type is too large ". $newPlantType));
 		}
 		$this->plantType = $newPlantType;
 	}
