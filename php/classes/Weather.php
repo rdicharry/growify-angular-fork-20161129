@@ -3,6 +3,9 @@ require_once(dirname(__DIR__,2)."/vendor/autoload.php");
 require_once("/etc/apache2/capstone-mysql/encrypted-config.php");
 use GuzzleHttp\Client;
 use Edu\Cnm\Growify\Location;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7;
+use GuzzleHttp\Psr7\Response;
 require_once("autoload.php");
 
 /**
@@ -257,7 +260,13 @@ class Weather implements JsonSerializable {
 		// send a request to darksky via https
 		// I think this blocks on response?
 		// add exclude=["minutely", "hourly"]
-		$response = $client->request('GET', "forecast/" . $key . "/" . $location->getLocationLatitude() . ", " . $location->getLocationLongitude()) . "?" . $exclude;
+		try {
+			$response = $client->request('GET', "forecast/" . $key . "/" . $location->getLocationLatitude() . ", " . $location->getLocationLongitude() . "?" . $exclude);
+		} catch (RequestException $e){
+			echo "exception caught<br/>";
+			echo Psr7\str($e->getRequest());
+			echo $e->getResponse();
+		}
 		$result = json_decode($response->getBody(), true);
 		$dailyForecast = $result["daily"];
 		$data = $dailyForecast["data"];
