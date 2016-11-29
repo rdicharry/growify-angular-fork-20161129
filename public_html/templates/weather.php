@@ -3,10 +3,10 @@
 		<div class="row">
 			<div class="col-md-4">
 				<ul>
-					<li>Min Temp: {{dailyWeather.temperatureMin}} degF</li>
-					<li>Max Temp: {{dailyWeather.temperatureMax}} degF</li>
-					<li>Wind Speed: {{dailyWeather.windSpeed}} mph</li>
-					<li>Timestamp: {{dailyWeather.timestamp}} s</li>
+					<li>Min Temp: {{currentWeather.temperatureMin}} degF</li>
+					<li>Max Temp: {{currentWeather.temperatureMax}} degF</li>
+					<li>Wind Speed: {{currentWeather.windSpeed}} mph</li>
+					<li>Timestamp: {{currentWeather.timestamp}} s</li>
 				</ul>
 			</div>
 		</div>

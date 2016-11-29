@@ -25,6 +25,7 @@
 						<li><a routerLink="/login">Login</a></li>
 						<li><a routerLink="/signup">Sign Up</a></li>
 						<li><a routerLink="/garden">Garden</a></li>
+						<li><a routerLink="/weather">Weather</a></li>
 						<li><a routerLink="/plants">Plants</a></li>
 						<li><a routerLink="/signout">Sign Out</a></li>
 						<!--<li><a routerLink="/garden">Garden</a></li>-->

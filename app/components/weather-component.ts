@@ -6,7 +6,7 @@ import {Status} from "../classes/status";
 
 @Component({
 	templateUrl: "./templates/weather.php",
-	selector: "weather-component"
+	//selector: "weather-component"
 })
 
 export class WeatherComponent implements OnInit {
@@ -32,7 +32,7 @@ export class WeatherComponent implements OnInit {
 
 			this.weatherService.getCurrentWeatherByZipcode(zipcode).subscribe(weather=>this.currentWeather = weather);
 
-			this.weatherService.getWeekForecastWeatherByZipcode(zipcode).subscribe(weather=>this.dailyWeather.push(weather));
+			//this.weatherService.getWeekForecastWeatherByZipcode(zipcode).subscribe(weather=>this.dailyWeather.push(weather));
 
 		});
 

@@ -100,6 +100,7 @@ class Location implements \JsonSerializable{
 
 		// input sanitization
 		$zipCode = trim($zipCode);
+		echo $zipCode;
 		$zipCode = filter_var($zipCode, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 		if(empty($zipCode)){
 			throw(new \InvalidArgumentException("invalid zip code"));

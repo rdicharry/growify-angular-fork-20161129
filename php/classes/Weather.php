@@ -3,6 +3,8 @@ require_once(dirname(__DIR__,2)."/vendor/autoload.php");
 require_once("/etc/apache2/capstone-mysql/encrypted-config.php");
 use GuzzleHttp\Client;
 use Edu\Cnm\Growify\Location;
+require_once("autoload.php");
+
 /**
  * Class Weather
  *

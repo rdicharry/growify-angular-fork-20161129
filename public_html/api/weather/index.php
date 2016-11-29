@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__DIR__, 3)."/php/classes/weather.php");
+require_once(dirname(__DIR__, 3)."/php/classes/Weather.php");
 require_once(dirname(__DIR__, 3)."/php/lib/xsrf.php");
 require_once("/etc/apache2/capstone-mysql/encrypted-config.php");
 // start the session and create a xsrf token
@@ -11,6 +11,9 @@ $reply = new stdClass();
 $reply->status = 200;
 $reply->data = null;
 try {
+
+	//grab the mySQL connection
+	$pdo = connectToEncryptedMySQL("/etc/apache2/capstone-mysql/growify.ini");
 // determines which HTTP method needs to be processed
 	$method = array_key_exists("HTTP_X_HTTP_METHOD", $_SERVER) ? $_SERVER["HTTP_X_HTTP_METHOD"] : $_SERVER["REQUEST_METHOD"];
 
@@ -18,7 +21,7 @@ try {
 //  grab data from front end (location - zip code) for specific request
 	$zipcode = filter_input(INPUT_GET, "zipcode", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 	$current = filter_input(INPUT_GET, "current", FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
-	if(empty($zipcode) === true ||!is_numeric($zipcode)){
+	if(empty($zipcode) === true ){
 		throw( new InvalidArgumentException("zip code location cannot be empty or non-numeric"));
 	}
 
@@ -29,12 +32,12 @@ try {
 		// set XSRF cookie
 		setXsrfCookie("/");
 		if($current === true) {
-			$weather = Weather::getCurrentWeather($zipcode);
+			$weather = Weather::getCurrentWeather($pdo, $zipcode);
 			if($weather !== null) {
 				$reply->data = $weather;
 			}
 		} else {
-			$weather = Weather::getWeekForecastWeatherByZipcode($zipcode);
+			$weather = Weather::getWeekForecastWeatherByZipcode($pdo, $zipcode);
 			if($weather !== null){
 				$reply->data = $weather;
 			}
