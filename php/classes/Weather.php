@@ -217,7 +217,7 @@ class Weather implements JsonSerializable {
 		// send a request to darksky via https
 		// I think this blocks on response?
 		// add exclude=["minutely", "hourly"]
-		$response = $client->request('GET', "forecast/".$key."/".$location->getLocationLatitude().", ".$location->getLocationLongitude())."?".$exclude;
+		$response = $client->request('GET', "forecast/".$key."/".$location->getLocationLatitude().", ".$location->getLocationLongitude()."?".$exclude);
 		$result = json_decode($response->getBody(), true);
 		$data = $result["currently"];
 

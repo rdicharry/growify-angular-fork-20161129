@@ -31,8 +31,8 @@ try {
 	if($method === "GET"){
 		// set XSRF cookie
 		setXsrfCookie("/");
-		if($current === true) {
-			$weather = Weather::getCurrentWeather($pdo, $zipcode);
+		if($current === "true") {
+			$weather = Weather::getCurrentWeatherByZipcode($pdo, $zipcode);
 			if($weather !== null) {
 				$reply->data = $weather;
 			}
