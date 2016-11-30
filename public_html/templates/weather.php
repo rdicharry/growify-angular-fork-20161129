@@ -2,7 +2,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-4">
-				<h1>Current Weather</h1>
+				<h1>Current Weather Albuquerque</h1>
 				<ul>
 					<li>Min Temp: {{albuquerqueWeather.temperatureMin}} degF</li>
 					<li>Max Temp: {{albuquerqueWeather.temperatureMax}} degF</li>

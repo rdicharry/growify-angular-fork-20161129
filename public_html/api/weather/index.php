@@ -32,11 +32,13 @@ try {
 		// set XSRF cookie
 		setXsrfCookie("/");
 		if($current === "true") {
+			// get a single Weather object
 			$weather = Weather::getCurrentWeatherByZipcode($pdo, $zipcode);
 			if($weather !== null) {
 				$reply->data = $weather;
 			}
 		} else {
+			// get an array of Weather for the week
 			$weather = Weather::getWeekForecastWeatherByZipcode($pdo, $zipcode);
 			if($weather !== null){
 				$reply->data = $weather;
@@ -45,7 +47,7 @@ try {
 	} else {
 		throw (new InvalidArgumentException("Invalid HTTP method request"));
 	}
-} catch (\Exception $e) {
+} catch (Exception $e) {
 	$reply->status = $e->getCode();
 	$reply->message = $e->getMessage();
 	throw new Exception($e->getMessage());
@@ -53,7 +55,7 @@ try {
 	$reply->status = $te->getCode();
 	$reply->message = $te->getMessage();
 }
-header("Access-Control-Allow-Origin: *");
+//header("Access-Control-Allow-Origin: *");
 header("Content-type: application/json");
 if($reply->data === null){
 	unset($reply->data);

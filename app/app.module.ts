@@ -4,7 +4,7 @@ import {FormsModule} from "@angular/forms";
 import {HttpModule} from "@angular/http";
 import {AppComponent} from "./app.component";
 import {allAppComponents, appRoutingProviders, routing} from "./app.routes";
-//import {WeatherService} from "./services/weather-service";
+import {WeatherService} from "./services/weather-service";
 
 const moduleDeclarations = [AppComponent];
 
@@ -12,6 +12,6 @@ const moduleDeclarations = [AppComponent];
 	imports:      [BrowserModule, FormsModule, HttpModule, routing],
 	declarations: [...moduleDeclarations, ...allAppComponents],
 	bootstrap:    [AppComponent],
-	providers:    [appRoutingProviders]
+	providers:    [appRoutingProviders, WeatherService]
 })
 export class AppModule {}

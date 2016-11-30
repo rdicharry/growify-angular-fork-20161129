@@ -17,7 +17,7 @@ export const routes: Routes = [
 	{path: "", component: HomeComponent},
 	{path: "login", component: LoginComponent},
 	{path: "signup", component: SignupComponent},
-
+	{path: "weather", component: WeatherComponent},
 	{path: "garden", component: GardenComponent},
 	{path: "plants", component: PlantsComponent},
 	{path: "settings", component: SettingsComponent},

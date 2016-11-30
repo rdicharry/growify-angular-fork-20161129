@@ -18,17 +18,17 @@ export class WeatherComponent /*implements OnInit */{
 	dailyWeather: Weather[] = [];
 	status: Status = null;
 
-	constructor(private weatherService: WeatherService /*, private route: ActivatedRoute*/){}
+	constructor(private weatherService: WeatherService , private route: ActivatedRoute){}
 
-	//ngOnInit() : void {
-		// call getCurrentWeatherAlbuquerque() method of the weather service.
+	ngOnInit() : void {
+		//ccall getCurrentWeatherAlbuquerque() method of the weather service.
 		// this returns an observable, which we subscribe to
 		// in the subscribe method, we pass a function(lambda) to be executed
 		// when the data is available
-		/*this.weatherService.getCurrentWeatherAlbuquerque().subscribe(weather=>this.albuquerqueWeather=weather);*/
+		this.weatherService.getCurrentWeatherAlbuquerque().subscribe(weather=>this.albuquerqueWeather=weather);
 
 
-	/*	this.route.params.forEach((params: Params)=> {
+	/*this.route.params.forEach((params: Params)=> {
 
 			let zipcode = params["zipcode"];
 
@@ -40,7 +40,7 @@ export class WeatherComponent /*implements OnInit */{
 
 		});*/
 
-	//}
+	}
 
 
 
