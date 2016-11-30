@@ -7,39 +7,40 @@ import {Status} from "../classes/status";
 
 @Component({
 	templateUrl: "./templates/weather.php",
-	//selector: "weather-component"
+	selector: "weather-component"
 })
 
-export class WeatherComponent /* implements OnInit */{
+export class WeatherComponent /*implements OnInit */{
  // need @ViewChild ??
-	/*deleted: boolean = false;
+	//deleted: boolean = false;
 	currentWeather: Weather = new Weather(0, 0, 0, 0, 0, 0, 0, "");
 	albuquerqueWeather: Weather = new Weather(0, 0, 0, 0, 0, 0, 0, "");
 	dailyWeather: Weather[] = [];
 	status: Status = null;
 
-	constructor(private weatherService: WeatherService, private route: ActivatedRoute){}
+	constructor(private weatherService: WeatherService /*, private route: ActivatedRoute*/){}
 
-	ngOnInit() : void {
+	//ngOnInit() : void {
 		// call getCurrentWeatherAlbuquerque() method of the weather service.
 		// this returns an observable, which we subscribe to
 		// in the subscribe method, we pass a function(lambda) to be executed
 		// when the data is available
+		/*this.weatherService.getCurrentWeatherAlbuquerque().subscribe(weather=>this.albuquerqueWeather=weather);*/
 
-		this.route.params.forEach((params: Params)=> {
+
+	/*	this.route.params.forEach((params: Params)=> {
 
 			let zipcode = params["zipcode"];
 
 			// get current and daily weather
-			this.weatherService.getCurrentWeatherAlbuquerque().subscribe(weather=>this.albuquerqueWeather=weather);
 
 			this.weatherService.getCurrentWeatherByZipcode(zipcode).subscribe(weather=>this.currentWeather = weather);
 
 			this.weatherService.getWeekForecastWeatherByZipcode(zipcode).subscribe(weather=>this.dailyWeather.push(weather));
 
-		});
+		});*/
 
-	}*/
+	//}
 
 
 
