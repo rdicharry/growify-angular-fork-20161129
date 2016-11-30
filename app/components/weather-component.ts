@@ -1,6 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {ActivatedRoute, Params} from "@angular/router";
 import {WeatherService} from "../services/weather-service";
+import {Observable} from "rxjs/Observable"
 import {Weather} from "../classes/weather";
 import {Status} from "../classes/status";
 
@@ -9,10 +10,11 @@ import {Status} from "../classes/status";
 	//selector: "weather-component"
 })
 
-export class WeatherComponent implements OnInit {
+export class WeatherComponent /* implements OnInit */{
  // need @ViewChild ??
-	deleted: boolean = false;
+	/*deleted: boolean = false;
 	currentWeather: Weather = new Weather(0, 0, 0, 0, 0, 0, 0, "");
+	albuquerqueWeather: Weather = new Weather(0, 0, 0, 0, 0, 0, 0, "");
 	dailyWeather: Weather[] = [];
 	status: Status = null;
 
@@ -29,14 +31,15 @@ export class WeatherComponent implements OnInit {
 			let zipcode = params["zipcode"];
 
 			// get current and daily weather
+			this.weatherService.getCurrentWeatherAlbuquerque().subscribe(weather=>this.albuquerqueWeather=weather);
 
 			this.weatherService.getCurrentWeatherByZipcode(zipcode).subscribe(weather=>this.currentWeather = weather);
 
-			//this.weatherService.getWeekForecastWeatherByZipcode(zipcode).subscribe(weather=>this.dailyWeather.push(weather));
+			this.weatherService.getWeekForecastWeatherByZipcode(zipcode).subscribe(weather=>this.dailyWeather.push(weather));
 
 		});
 
-	}
+	}*/
 
 
 
